@@ -64,6 +64,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String) {
                                     text = "ИИ",
                                     fontSize = 16.sp,
                                     color = Color.Black,
+                                    fontWeight = FontWeight.Bold,
                                     textAlign = TextAlign.Center
                                 )
                             }
