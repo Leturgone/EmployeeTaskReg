@@ -1,4 +1,4 @@
-package com.example.employeetaskreg.view.logRegScreen
+package com.example.employeetaskreg.ui.screens.logRegScreen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
