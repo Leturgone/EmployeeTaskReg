@@ -1,5 +1,6 @@
 package com.example.employeetaskreg.ui.screens.profileScreen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,12 +24,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
 
 
 @Composable
-@Preview
-fun ProfileScreen(){
+fun ProfileScreen(navController: NavHostController) {
     Column {
         Box(modifier = Modifier.fillMaxWidth()){
             Text(
@@ -43,7 +44,9 @@ fun ProfileScreen(){
             Icon(imageVector = Icons.Default.Settings, contentDescription = "OptButton",
                 Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(end = 32.dp, top = 16.dp))
+                    .padding(end = 32.dp, top = 16.dp).clickable {
+                        navController.navigate("opt")
+                    })
         }
         Box(modifier = Modifier
             .fillMaxWidth()
