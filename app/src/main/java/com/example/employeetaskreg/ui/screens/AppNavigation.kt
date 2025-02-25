@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.employeetaskreg.ui.screens.employeeScreen.EmployeesScreen
 import com.example.employeetaskreg.ui.screens.logRegScreen.LogScreen
+import com.example.employeetaskreg.ui.screens.logRegScreen.RegScreen
 import com.example.employeetaskreg.ui.screens.optScreen.OptScreen
 import com.example.employeetaskreg.ui.screens.profileScreen.ProfileScreen
 import com.example.employeetaskreg.ui.screens.respScreen.RespScreen
@@ -25,8 +26,8 @@ fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController)
         startDestination = "reg",
         modifier = Modifier.padding(innerPadding)
     ) {
-        composable("reg"){ RespScreen()}
-        composable("log"){ LogScreen()}
+        composable("reg"){ RegScreen(navController)}
+        composable("log"){ LogScreen(navController)}
         composable("tasks"){ TaskScreen()}
         composable("new_task") { NewTaskScreen() }
         composable("set_employee") { SetEmployeeScreen()  }

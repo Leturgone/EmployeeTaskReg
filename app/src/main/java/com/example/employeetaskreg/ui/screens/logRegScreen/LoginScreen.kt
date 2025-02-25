@@ -34,12 +34,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.ui.screens.CustomToastMessage
 
-@Preview
 @Composable
-fun LogScreen(){
+fun LogScreen(navController: NavHostController){
     var loginInputText  by remember { mutableStateOf("") }
     var passwordInputText  by remember { mutableStateOf("") }
     var showToast by remember { mutableStateOf(false) }
@@ -102,6 +102,9 @@ fun LogScreen(){
                 Spacer(modifier = Modifier.height(142.dp))
 
                 Button(onClick = {
+                    navController.popBackStack()
+                    navController.popBackStack()
+                    navController.navigate("tasks")
                 },
 
                     ) {

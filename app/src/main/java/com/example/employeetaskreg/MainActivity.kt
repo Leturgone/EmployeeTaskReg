@@ -59,7 +59,7 @@ fun MainScreen(){
     val navController = rememberNavController()
     //Получение текущего состояния экрана
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    val excludedRoutes = setOf("reg","login")
+    val excludedRoutes = setOf("reg","log")
     Scaffold(
         bottomBar = {
             if (currentRoute !in excludedRoutes) {
