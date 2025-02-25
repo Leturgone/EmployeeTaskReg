@@ -34,9 +34,9 @@ fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController)
             val empName = it.arguments?.getString("employeeName")
             NewTaskScreen(navController,employeeName = empName) }
         composable("set_employee") { SetEmployeeScreen(navController)  }
-        composable("options") { OptScreen(navController)}
-        composable("emp_list"){ EmployeesScreen(navController)}
-        composable("resp"){ RespScreen(navController)}
+        composable("opt") { OptScreen(navController)}
+        composable("emp_list"){ EmployeesScreen()}
+        composable("resp"){ RespScreen()}
         composable("profile"){ ProfileScreen(navController)}
     }
 }
