@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun RespCard(respName:String, employeeName:String, initials:String){
+fun RespCard(respName:String, employeeName:String, initials:String, role:Int = 2){
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -109,34 +109,47 @@ fun RespCard(respName:String, employeeName:String, initials:String){
                     modifier = Modifier
                         .width(300.dp)
                 )
-                AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier = Modifier)
-                FileCard(fileFunc = stringResource(id = R.string.download_order))
-                Row(Modifier.fillMaxWidth()) {
-                    Button(onClick = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
-                        }
-                    },
-                        colors = ButtonDefaults.buttonColors(Color.Green), modifier = Modifier.weight(1f)
-                    ) {
-                        Text(text = stringResource(id = R.string.get))
-
-                    }
-                    Spacer(modifier = Modifier.width(50.dp))
-                    Button(onClick = {
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
-                        }
-                    },
-                        colors = ButtonDefaults.buttonColors(Color.Red), modifier = Modifier.weight(1f)) {
-                        Text(text = stringResource(id = R.string.back))
-
-                    }
+                if (role == 1){
+                    AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier = Modifier)
                 }
+                
+                FileCard(fileFunc = stringResource(id = R.string.download_order))
+                when(role){
+                    1->{Row(Modifier.fillMaxWidth()) {
+                        Button(onClick = {
+                            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                if (!sheetState.isVisible) {
+                                    showBottomSheet = false
+                                }
+                            }
+                        },
+                            colors = ButtonDefaults.buttonColors(Color.Green), modifier = Modifier.weight(1f)
+                        ) {
+                            Text(text = stringResource(id = R.string.get))
+
+                        }
+                        Spacer(modifier = Modifier.width(50.dp))
+                        Button(onClick = {
+                            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                if (!sheetState.isVisible) {
+                                    showBottomSheet = false
+                                }
+                            }
+                        },
+                            colors = ButtonDefaults.buttonColors(Color.Red), modifier = Modifier.weight(1f)) {
+                            Text(text = stringResource(id = R.string.back))
+
+                        }
+                    }}
+                    2-> Text(
+                        text = "Ожидание",
+                        color = Color.Yellow,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 15.sp,
+                        modifier = Modifier.padding(bottom = 150.dp)
+                    )
+                }
+                
                 Spacer(modifier = Modifier.height(220.dp))
 
 
