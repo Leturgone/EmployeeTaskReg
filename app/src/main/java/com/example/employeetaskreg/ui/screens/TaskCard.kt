@@ -57,7 +57,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String) {
             .height(90.dp)
             .clickable {showBottomSheet = true },
         colors = CardDefaults.cardColors(
-            containerColor = Color.White  // Set container color
+            containerColor = Color.White
         )
     ) {
         Box(){
