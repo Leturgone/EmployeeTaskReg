@@ -21,6 +21,7 @@
     <string name="new_task">Новая задача</string>
     <string name="task_title">Название задачи</string>
     <string name="task_desc">Описание задачи</string>
+    <string name="worker">Исполнитель</string>
     <string name="upload_file">Загрузить файл</string>
     <string name="download_file">Скачать файл</string>
     <string name="upload_order">Загрузить отчет</string>
