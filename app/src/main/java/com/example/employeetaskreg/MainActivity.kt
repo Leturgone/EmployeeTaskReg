@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.employeetaskreg.ui.screens.employeeScreen.EmployeesScreen
+import com.example.employeetaskreg.ui.screens.tasksScreen.TaskScreen
 import com.example.employeetaskreg.ui.theme.EmployeeTaskRegTheme
 
 class MainActivity : ComponentActivity() {
@@ -32,7 +33,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-    EmployeesScreen()
+    //EmployeesScreen()
+    TaskScreen()
 }
 
 @Preview(showBackground = true)
