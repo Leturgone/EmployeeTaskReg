@@ -128,7 +128,7 @@ fun EmployeeCard(name: String) {
                     modifier = Modifier
                         .width(300.dp)
                 )
-                TaskCard(taskName = "Задача 333", employeeName = "Иванов ИИ", initials = "ИИ")
+                TaskCard(taskName = "Задача 333", employeeName = "Иванов И.И", initials = "ИИ")
                 Spacer(modifier = Modifier.height(220.dp))
 
             }
