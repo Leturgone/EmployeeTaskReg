@@ -46,6 +46,9 @@ import com.example.employeetaskreg.R
 fun NewTaskScreen(){
     var taskTitle  by remember { mutableStateOf("") }
     var taskDesc  by remember { mutableStateOf("") }
+
+    var startDate  by remember { mutableStateOf("") }
+    var endDate  by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -66,8 +69,8 @@ fun NewTaskScreen(){
                     label = { Text(text = stringResource(id = R.string.task_title))}
                 )
                 Spacer(modifier = Modifier.height(20.dp))
-                TextField(value =taskTitle,
-                    onValueChange = {taskTitle = it},
+                TextField(value =taskDesc,
+                    onValueChange = {taskDesc = it},
                     modifier = Modifier.width(300.dp),
                     label = { Text(text = stringResource(id = R.string.task_desc))}
                 )
@@ -77,7 +80,7 @@ fun NewTaskScreen(){
                 Spacer(modifier = Modifier.height(8.dp))
                 Row() {
                     Column() {
-                        Text(text = "С 19.02.25",
+                        Text(text = "С $startDate",
                             fontSize = 16.sp)
                         Spacer(modifier = Modifier.height(8.dp))
                         FloatingActionButton(
@@ -94,7 +97,7 @@ fun NewTaskScreen(){
                     }
                     Spacer(modifier = Modifier.width(90.dp))
                     Column() {
-                        Text(text = "С 19.02.25",fontSize = 16.sp)
+                        Text(text = "До $endDate",fontSize = 16.sp)
                         Spacer(modifier = Modifier.height(8.dp))
                         FloatingActionButton(
                             shape = ShapeDefaults.Large,
