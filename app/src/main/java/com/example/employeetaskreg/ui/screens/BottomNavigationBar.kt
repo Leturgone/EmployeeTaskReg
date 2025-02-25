@@ -28,7 +28,7 @@ fun BottomNavigationBar(navController: NavHostController){
 
     val items = listOf(
         BottomNavigation(
-            route = "employees_list",
+            route = "emp_list",
             icon = Icons.Rounded.PeopleOutline,
             title = stringResource(id = R.string.employees)
         ),
