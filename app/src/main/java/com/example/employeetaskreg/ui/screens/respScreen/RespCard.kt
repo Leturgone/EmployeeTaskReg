@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.ui.screens.employeeScreen.AvatarNameSec
 import com.example.employeetaskreg.ui.screens.tasksScreen.FileCard
+import kotlinx.coroutines.launch
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -111,14 +112,26 @@ fun RespCard(respName:String, employeeName:String, initials:String){
                 AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier = Modifier)
                 FileCard(fileFunc = stringResource(id = R.string.download_order))
                 Row(Modifier.fillMaxWidth()) {
-                    Button(onClick = { /*TODO*/ },
+                    Button(onClick = {
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                showBottomSheet = false
+                            }
+                        }
+                    },
                         colors = ButtonDefaults.buttonColors(Color.Green), modifier = Modifier.weight(1f)
                     ) {
                         Text(text = stringResource(id = R.string.get))
 
                     }
                     Spacer(modifier = Modifier.width(50.dp))
-                    Button(onClick = { /*TODO*/ },
+                    Button(onClick = {
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                showBottomSheet = false
+                            }
+                        }
+                    },
                         colors = ButtonDefaults.buttonColors(Color.Red), modifier = Modifier.weight(1f)) {
                         Text(text = stringResource(id = R.string.back))
 
