@@ -28,12 +28,15 @@ fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController)
     ) {
         composable("reg"){ RegScreen(navController)}
         composable("log"){ LogScreen(navController)}
-        composable("tasks"){ TaskScreen()}
-        composable("new_task") { NewTaskScreen() }
-        composable("set_employee") { SetEmployeeScreen()  }
-        composable("options") { OptScreen()}
-        composable("employees_list"){ EmployeesScreen()}
-        composable("resp"){ RespScreen()}
-        composable("profile"){ ProfileScreen()}
+        composable("tasks"){ TaskScreen(navController)}
+        composable("new_task") { NewTaskScreen(navController) }
+        composable("new_task/{employeeName}") {
+            val empName = it.arguments?.getString("employeeName")
+            NewTaskScreen(navController,employeeName = empName) }
+        composable("set_employee") { SetEmployeeScreen(navController)  }
+        composable("options") { OptScreen(navController)}
+        composable("emp_list"){ EmployeesScreen(navController)}
+        composable("resp"){ RespScreen(navController)}
+        composable("profile"){ ProfileScreen(navController)}
     }
 }
