@@ -1,4 +1,4 @@
-package com.example.employeetaskreg.ui.screens
+package com.example.employeetaskreg.ui.screens.respScreen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,19 +9,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AttachFile
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -36,16 +32,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.ui.screens.employeeScreen.AvatarNameSec
 import com.example.employeetaskreg.ui.screens.tasksScreen.FileCard
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskCard(taskName: String, employeeName: String, initials: String) {
+@OptIn(ExperimentalMaterial3Api::class)
+fun RespCard(respName:String, employeeName:String, initials:String){
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -55,7 +50,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String) {
         modifier = Modifier
             .fillMaxWidth()
             .height(90.dp)
-            .clickable {showBottomSheet = true },
+            .clickable { showBottomSheet = true },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         )
@@ -64,7 +59,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String) {
             Box(modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.TopStart){
                 Text(
-                    text = taskName,
+                    text = respName,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top = 16.dp, start = 16.dp),
                     fontSize = 16.sp
@@ -96,25 +91,16 @@ fun TaskCard(taskName: String, employeeName: String, initials: String) {
                     .padding(16.dp), Arrangement.SpaceEvenly ,
                 Alignment.Start) {
                 Text(
-                    text = "Задача 333",
+                    text = "Ответ по задаче 333",
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
                     textAlign = TextAlign.Start,
                     modifier = Modifier
-                        .width(200.dp)
+                        .width(500.dp)
                 )
                 Text(
-                    text = "Сделать что нибудь",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .width(200.dp)
-                )
-                Text(
-                    text = "Описание",
+                    text = "20.02.25",
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
@@ -122,36 +108,22 @@ fun TaskCard(taskName: String, employeeName: String, initials: String) {
                     modifier = Modifier
                         .width(300.dp)
                 )
-                Text(
-                    text = "Сделать что нибудь",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .width(200.dp)
-                )
-                Text(
-                    text = "Срок: с 19.02.25 по 21.02.25",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .width(400.dp)
-                )
-                FileCard(fileFunc = stringResource(id = R.string.download_file))
+                AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier = Modifier)
+                FileCard(fileFunc = stringResource(id = R.string.download_order))
+                Row(Modifier.fillMaxWidth()) {
+                    Button(onClick = { /*TODO*/ },
+                        colors = ButtonDefaults.buttonColors(Color.Green), modifier = Modifier.weight(1f)
+                    ) {
+                        Text(text = stringResource(id = R.string.get))
 
-                Text(
-                    text = stringResource(id = R.string.worker),
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .width(200.dp)
-                )
-                AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier =Modifier)
+                    }
+                    Spacer(modifier = Modifier.width(50.dp))
+                    Button(onClick = { /*TODO*/ },
+                        colors = ButtonDefaults.buttonColors(Color.Red), modifier = Modifier.weight(1f)) {
+                        Text(text = stringResource(id = R.string.back))
+
+                    }
+                }
                 Spacer(modifier = Modifier.height(220.dp))
 
 
@@ -159,9 +131,5 @@ fun TaskCard(taskName: String, employeeName: String, initials: String) {
 
         }
     }
-}
-@Preview(showBackground = true)
-@Composable
-fun TaskCardPreview() {
-    TaskCard("Задача 333", "Иванов И.И.", "ИИ")
+
 }

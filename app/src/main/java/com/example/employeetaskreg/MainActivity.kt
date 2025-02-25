@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.employeetaskreg.ui.screens.employeeScreen.EmployeesScreen
+import com.example.employeetaskreg.ui.screens.respScreen.RespScreen
 import com.example.employeetaskreg.ui.screens.tasksScreen.TaskScreen
 import com.example.employeetaskreg.ui.theme.EmployeeTaskRegTheme
 
@@ -19,7 +20,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             EmployeeTaskRegTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -34,7 +34,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     //EmployeesScreen()
-    TaskScreen()
+    //TaskScreen()
+    RespScreen()
 }
 
 @Preview(showBackground = true)
