@@ -45,16 +45,11 @@ import com.example.employeetaskreg.ui.screens.TaskCard
 import com.example.employeetaskreg.ui.screens.employeeScreen.EmployeeCard
 import com.example.employeetaskreg.ui.screens.employeeScreen.SearchSec
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun TaskScreen(){
-    val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
-    var showBottomSheet by remember { mutableStateOf(true) }
-    Box(Modifier.clickable {
-        showBottomSheet = true
-    }) {
+
+    Box {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -93,71 +88,6 @@ fun TaskScreen(){
 
         }
     }
-    if (showBottomSheet) {
-        ModalBottomSheet(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            onDismissRequest = {
-                showBottomSheet = false
-            },
-            sheetState = sheetState
-        ) {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .height(700.dp)
-                    .padding(16.dp),Arrangement.SpaceEvenly ,
-                Alignment.Start) {
-                Text(
-                    text = "Задача 333",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .width(200.dp)
-                )
-                Text(
-                    text = "Сделать что нибудь",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .width(200.dp)
-                )
-                Text(
-                    text = "Описание",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .width(300.dp)
-                )
-                Text(
-                    text = "Сделать что нибудь",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .width(200.dp)
-                )
-                Text(
-                    text = "Срок: с 19.02.25 по 21.02.25",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Normal,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .width(400.dp)
-                )
-                FileCard(fileFunc = stringResource(id = R.string.download_file))
-                Spacer(modifier = Modifier.height(220.dp))
 
-            }
-
-        }
-    }
 
 }
