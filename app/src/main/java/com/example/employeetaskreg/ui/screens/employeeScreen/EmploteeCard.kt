@@ -58,37 +58,7 @@ fun EmployeeCard(name: String) {
             containerColor = Color.White  // Set container color
         )
     ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(){
-                Surface(
-                    shape = RoundedCornerShape(50),
-                    color = Color.LightGray, // Adjust color as needed
-                    modifier = Modifier.size(40.dp),
-                    content = {
-                        Box(Modifier.fillMaxWidth(), Alignment.Center) {
-                            Text(
-                                text = "ИИ",
-                                fontSize = 16.sp,
-                                color = Color.Black,
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-
-                    })
-            }
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Text(
-                text = name,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp
-            )
-        }
+        AvatarNameSec(avatar = "ИИ", name = name,Modifier.padding(16.dp))
     }
 
     if (showBottomSheet) {
@@ -99,7 +69,11 @@ fun EmployeeCard(name: String) {
             },
             sheetState = sheetState
         ) {
-            Column(Modifier.fillMaxWidth().height(700.dp).padding(16.dp),Arrangement.SpaceEvenly ,
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .height(700.dp)
+                    .padding(16.dp),Arrangement.SpaceEvenly ,
                 Alignment.Start) {
                 Text(
                     text = "Иванов И.И",
