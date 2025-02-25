@@ -45,8 +45,8 @@ fun NewTaskScreen(navController: NavHostController,employeeName:String? = null) 
     var taskTitle  by remember { mutableStateOf("") }
     var taskDesc  by remember { mutableStateOf("") }
 
-    var startDate  by remember { mutableStateOf("") }
-    var endDate  by remember { mutableStateOf("") }
+    var startDate  by remember { mutableStateOf("19.02.25") }
+    var endDate  by remember { mutableStateOf("21.02.25") }
     Column(
         modifier = Modifier
             .fillMaxSize()
