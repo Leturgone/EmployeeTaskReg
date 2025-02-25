@@ -35,12 +35,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.ui.screens.CustomToastMessage
 
-@Preview
 @Composable
-fun RegScreen(){
+fun RegScreen(navController: NavHostController){
     var loginInputText  by remember { mutableStateOf("") }
     var fioInputText  by remember { mutableStateOf("") }
     var fioDirInputText  by remember { mutableStateOf("") }
@@ -125,7 +125,8 @@ fun RegScreen(){
                 Spacer(modifier = Modifier.height(40.dp))
 
                 Button(onClick = {
-                },
+                    navController.popBackStack()
+                    navController.navigate("tasks")},
 
                 ) {
                     Text(text = stringResource(id = R.string.create_acc),)
@@ -135,6 +136,7 @@ fun RegScreen(){
                     color = MaterialTheme.colorScheme.primary,
                     fontSize = 16.sp,
                     modifier = Modifier.clickable {
+                        navController.navigate("log")
                     })
 
                 Spacer(modifier = Modifier.height(1.dp))

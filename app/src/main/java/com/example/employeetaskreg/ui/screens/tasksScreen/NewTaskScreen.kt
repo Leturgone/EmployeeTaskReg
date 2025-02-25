@@ -1,7 +1,6 @@
 package com.example.employeetaskreg.ui.screens.tasksScreen
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.NavigateNext
 import androidx.compose.material.icons.filled.Today
 import androidx.compose.material3.Button
@@ -36,19 +34,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
+import com.example.employeetaskreg.ui.screens.employeeScreen.EmployeeCard
 
 @Composable
-@Preview
-fun NewTaskScreen(){
+fun NewTaskScreen(navController: NavHostController,employeeName:String? = null) {
     var taskTitle  by remember { mutableStateOf("") }
     var taskDesc  by remember { mutableStateOf("") }
 
-    var startDate  by remember { mutableStateOf("") }
-    var endDate  by remember { mutableStateOf("") }
+    var startDate  by remember { mutableStateOf("19.02.25") }
+    var endDate  by remember { mutableStateOf("21.02.25") }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -117,51 +115,58 @@ fun NewTaskScreen(){
         Spacer(modifier = Modifier.height(20.dp))
         FileCard(fileFunc = "Загрузить файл")
         Spacer(modifier = Modifier.height(20.dp))
-        Card(
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(73.dp)
-                .clickable {
-
-                },
-            colors = CardDefaults.cardColors(
-                containerColor = Color.White
-            )
-        ) {
-            Box(){
-                Box(modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.TopEnd){
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.NavigateNext,
-                            contentDescription = "attachFileButton", Modifier
-                        )
+        if (employeeName ==null){
+            Card(
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(73.dp)
+                    .clickable {
+                        navController.navigate("set_employee")
+                    },
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                )
+            ) {
+                Box(){
+                    Box(modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.TopEnd){
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.NavigateNext,
+                                contentDescription = "attachFileButton", Modifier
+                            )
+                        }
                     }
-                }
-                Box(modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.TopStart){
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.set_emp),
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 16.sp
-                        )
+                    Box(modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.TopStart){
+                        Row(
+                            modifier = Modifier.padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.set_emp),
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 16.sp
+                            )
+                        }
                     }
-                }
 
+                }
             }
+        }else{
+            EmployeeCard(name = employeeName)
         }
+        
 
         Box(Modifier.fillMaxWidth(),contentAlignment = Alignment.Center) {
             Spacer(modifier = Modifier.height(350.dp))
             Button(onClick = {
+                navController.popBackStack()
+                navController.navigate("tasks")
             },
 
                 ) {
