@@ -13,16 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.ui.screens.employeeScreen.EmployeeCard
 import com.example.employeetaskreg.ui.screens.employeeScreen.SearchSec
 
-@Preview
 @Composable
-fun SetEmployeeScreen(){
+fun SetEmployeeScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -44,7 +43,11 @@ fun SetEmployeeScreen(){
         ) {
             items(3) {
                 Spacer(modifier = Modifier.height(30.dp))
-                EmployeeCard(name = "Иванов И.И.")
+                EmployeeCard(name = "Иванов И.И.",true){
+                    navController.popBackStack()
+                    navController.popBackStack()
+                    navController.navigate("new_task/${"Иванов И.И."}")
+                }
 
             }
         }
