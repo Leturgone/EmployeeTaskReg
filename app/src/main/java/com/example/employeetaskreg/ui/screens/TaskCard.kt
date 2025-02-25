@@ -42,15 +42,15 @@ fun TaskCard(taskName: String, employeeName: String, initials: String) {
             containerColor = Color.White  // Set container color
         )
     ) {
-        Column {
+        Column(Modifier.fillMaxWidth()){
             Text(
                 text = taskName,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 16.dp, start = 16.dp),
                 fontSize = 16.sp
             )
             Row(
-                modifier = Modifier.padding(start = 210.dp,end =20.dp),
+                modifier = Modifier.padding(start = 190.dp,end =15.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(){
