@@ -15,43 +15,40 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
+private val LightEmployeeTaskRegTheme = lightColorScheme(
+    primary = BLack,
+    background = Gray,
+    surface = White,
+    secondaryContainer = LightGray,
+    onSecondaryContainer = BLack,
+    onPrimary = White,
+    onPrimaryContainer = Gray3,
+    onTertiary = DarkGray,
+    onBackground = BLack,
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
 )
+private val DarkEmployeeTaskRegTheme = lightColorScheme(
+    primary = White,
+    background = DarkGray,
+    surface = White,
+    secondaryContainer = Gray,
+    onSecondaryContainer = BLack,
+    onPrimary = BLack,
+    onPrimaryContainer = Gray3,
+    onTertiary = DarkGray,
+    onBackground = White,
+
+    )
+
 
 @Composable
 fun EmployeeTaskRegTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> DarkEmployeeTaskRegTheme
+        else -> LightEmployeeTaskRegTheme
     }
     val view = LocalView.current
     if (!view.isInEditMode) {

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +28,7 @@ fun AvatarNameSec(avatar:String,name:String,modifier: Modifier){
         Box(){
             Surface(
                 shape = RoundedCornerShape(50),
-                color = Color.LightGray,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier.size(40.dp),
                 content = {
                     Box(Modifier.fillMaxWidth(), Alignment.Center) {

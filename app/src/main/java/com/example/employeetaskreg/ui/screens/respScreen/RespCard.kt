@@ -37,6 +37,10 @@ import androidx.compose.ui.unit.sp
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.ui.screens.employeeScreen.AvatarNameSec
 import com.example.employeetaskreg.ui.screens.tasksScreen.FileCard
+import com.example.employeetaskreg.ui.theme.DarkGray
+import com.example.employeetaskreg.ui.theme.GreenSoft
+import com.example.employeetaskreg.ui.theme.RedSoft
+import com.example.employeetaskreg.ui.theme.YellowSoft
 import kotlinx.coroutines.launch
 
 @Composable
@@ -128,9 +132,9 @@ fun RespCard(respName:String, employeeName:String, initials:String, role:String)
                                 }
                             }
                         },
-                            colors = ButtonDefaults.buttonColors(Color.Green), modifier = Modifier.weight(1f)
+                            colors = ButtonDefaults.buttonColors(GreenSoft), modifier = Modifier.weight(1f)
                         ) {
-                            Text(text = stringResource(id = R.string.get))
+                            Text(text = stringResource(id = R.string.get),color = DarkGray)
 
                         }
                         Spacer(modifier = Modifier.width(50.dp))
@@ -141,14 +145,14 @@ fun RespCard(respName:String, employeeName:String, initials:String, role:String)
                                 }
                             }
                         },
-                            colors = ButtonDefaults.buttonColors(Color.Red), modifier = Modifier.weight(1f)) {
-                            Text(text = stringResource(id = R.string.back))
+                            colors = ButtonDefaults.buttonColors(RedSoft), modifier = Modifier.weight(1f)) {
+                            Text(text = stringResource(id = R.string.back), color = DarkGray)
 
                         }
                     }}
                     "2"-> Text(
                         text = "Ожидание",
-                        color = Color.Yellow,
+                        color = YellowSoft,
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 15.sp,
                         modifier = Modifier.padding(bottom = 150.dp)
