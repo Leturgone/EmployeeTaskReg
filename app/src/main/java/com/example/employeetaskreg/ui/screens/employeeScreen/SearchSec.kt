@@ -41,7 +41,7 @@ fun SearchSec() {
             leadingIcon = { Icon(
                 Icons.Default.Search,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier = Modifier.clickable {
 
                 }
@@ -49,7 +49,7 @@ fun SearchSec() {
             trailingIcon = { Icon(
                 Icons.Filled.Close,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier = Modifier.clickable {
                     expanded = false
                 }
