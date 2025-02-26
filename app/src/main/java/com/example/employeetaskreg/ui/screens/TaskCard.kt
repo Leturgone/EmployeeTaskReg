@@ -14,10 +14,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachFile
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -42,10 +44,11 @@ import androidx.compose.ui.unit.sp
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.ui.screens.employeeScreen.AvatarNameSec
 import com.example.employeetaskreg.ui.screens.tasksScreen.FileCard
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskCard(taskName: String, employeeName: String, initials: String) {
+fun TaskCard(taskName: String, employeeName: String, initials: String,role:String = "1") {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -55,7 +58,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String) {
         modifier = Modifier
             .fillMaxWidth()
             .height(90.dp)
-            .clickable {showBottomSheet = true },
+            .clickable { showBottomSheet = true },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         )
@@ -76,8 +79,9 @@ fun TaskCard(taskName: String, employeeName: String, initials: String) {
                 .height(90.dp)
                 .padding(bottom = 8.dp),
                 contentAlignment = Alignment.BottomEnd){
-
-                AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier = Modifier.padding(start = 190.dp,end =15.dp))
+                if(role == "1"){
+                    AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier = Modifier.padding(start = 190.dp,end =15.dp))
+                }
             }
         }
     }
@@ -140,18 +144,41 @@ fun TaskCard(taskName: String, employeeName: String, initials: String) {
                     modifier = Modifier
                         .width(400.dp)
                 )
-                FileCard(fileFunc = stringResource(id = R.string.download_file))
+                when(role){
+                    "1"->{
+                        FileCard(fileFunc = stringResource(id = R.string.download_file))
 
-                Text(
-                    text = stringResource(id = R.string.worker),
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .width(200.dp)
-                )
-                AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier =Modifier)
+                        Text(
+                            text = stringResource(id = R.string.worker),
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .width(200.dp)
+                        )
+                        AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier =Modifier)
+                    }
+                    "2"->{
+                        FileCard(fileFunc = stringResource(id = R.string.upload_order))
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
+                            ExtendedFloatingActionButton(
+                                text = { Text(text = stringResource(id = R.string.create_resp)) },
+                                icon = { Icon(imageVector = Icons.Default.MailOutline,
+                                    contentDescription = "createRespButton") },
+                                onClick = {
+                                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                        if (!sheetState.isVisible) {
+                                            showBottomSheet = false
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(220.dp))
 
 
@@ -159,9 +186,4 @@ fun TaskCard(taskName: String, employeeName: String, initials: String) {
 
         }
     }
-}
-@Preview(showBackground = true)
-@Composable
-fun TaskCardPreview() {
-    TaskCard("Задача 333", "Иванов И.И.", "ИИ")
 }

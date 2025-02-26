@@ -29,7 +29,7 @@ import com.example.employeetaskreg.R
 
 
 @Composable
-fun ProfileScreen(navController: NavHostController) {
+fun ProfileScreen(navController: NavHostController,role:String) {
     Column {
         Box(modifier = Modifier.fillMaxWidth()){
             Text(
@@ -82,19 +82,55 @@ fun ProfileScreen(navController: NavHostController) {
                     })
             }
         }
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .height(100.dp)){
-            Text(
-                text = stringResource(id = R.string.director),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Normal,
-                fontSize = 25.sp,
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .padding(start = 16.dp, top = 16.dp)
-            )
+        when(role){
+            "1"->{
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)){
+                    Text(
+                        text = stringResource(id = R.string.director),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 25.sp,
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(start = 16.dp, top = 16.dp)
+                    )
+                }
+            }
+            "2"->{
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)){
+                    Text(
+                        text = stringResource(id = R.string.employee),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 25.sp,
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(start = 16.dp, top = 16.dp)
+                    )
+                }
+            }
         }
+
+        if (role == "2"){
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)){
+                Text(
+                    text = "${stringResource(id = R.string.director)}: Иванов И.И",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 25.sp,
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(start = 16.dp, top = 16.dp)
+                )
+            }
+        }
+
         Box(modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)){

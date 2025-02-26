@@ -19,10 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.employeetaskreg.R
 
-@Preview
 @Composable
-
-fun RespScreen(){
+fun RespScreen(userRole:String){
     Box {
         Column(
             modifier = Modifier
@@ -43,7 +41,7 @@ fun RespScreen(){
             ) {
                 items(2) {
                     Spacer(modifier = Modifier.height(30.dp))
-                    RespCard(respName = "Ответ 333", employeeName = "Иванов И.И", initials ="ИИ" )
+                    RespCard(respName = "Ответ 333", employeeName = "Иванов И.И", initials ="ИИ", role = userRole )
 
                 }
             }
