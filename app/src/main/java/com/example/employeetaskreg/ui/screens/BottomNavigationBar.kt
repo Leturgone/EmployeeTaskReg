@@ -12,10 +12,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -68,34 +70,36 @@ fun BottomNavigationBar(navController: NavHostController, viewModel: MainViewMod
             title = stringResource(id = R.string.profile)
         ),
     )
-    Column {
-        NavigationBar {
+    NavigationBar(containerColor = (MaterialTheme.colorScheme.secondaryContainer)){
 
-            //Отслеживание текушего маршрута
-            val backStackEntry by navController.currentBackStackEntryAsState()
-            val currentRoute = backStackEntry?.destination?.route
-            var items:List<BottomNavigation> = listOf()
-            when(role){
-                "1" -> items = directorItems
-                "2" -> items = empItems
-            }
-            Row(modifier = Modifier.background((MaterialTheme.colorScheme.background)))
-            {
-                items.forEach { item->
-                    NavigationBarItem(selected = currentRoute == item.route, modifier = Modifier.semantics
-                    { contentDescription = item.route },
-                        onClick = {
-                            navController.popBackStack()
-                            navController.navigate(item.route)
-                        },
-                        icon = {
-                            Icon(imageVector = item.icon,
-                                contentDescription =item.route,
-                                tint = MaterialTheme.colorScheme.primary)
-                        },)
-                }
+        //Отслеживание текушего маршрута
+        val backStackEntry by navController.currentBackStackEntryAsState()
+        val currentRoute = backStackEntry?.destination?.route
+        var items:List<BottomNavigation> = listOf()
+        when(role){
+            "1" -> items = directorItems
+            "2" -> items = empItems
+        }
+        Row()
+        {
+            items.forEach { item->
+                NavigationBarItem(selected = currentRoute == item.route, modifier = Modifier.semantics
+                { contentDescription = item.route },
+                    onClick = {
+                        navController.popBackStack()
+                        navController.navigate(item.route)
+                    },
+                    icon = {
+                        Icon(imageVector = item.icon,
+                            contentDescription =item.route,
+                            tint = MaterialTheme.colorScheme.onSecondaryContainer)
+                    },
+                    label = {
+                        Text(text = item.title, color = MaterialTheme.colorScheme.onSecondaryContainer)
+                    })
             }
         }
     }
+
 
 }
