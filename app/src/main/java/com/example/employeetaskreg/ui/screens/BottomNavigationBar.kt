@@ -24,7 +24,7 @@ import com.example.employeetaskreg.R
 import com.example.employeetaskreg.ui.components.BottomNavigation
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController){
+fun BottomNavigationBar(navController: NavHostController,role:String){
 
     val items = listOf(
         BottomNavigation(
@@ -33,17 +33,17 @@ fun BottomNavigationBar(navController: NavHostController){
             title = stringResource(id = R.string.employees)
         ),
         BottomNavigation(
-            route = "tasks",
+            route = "tasks/${role}",
             icon = Icons.Rounded.ModeEditOutline,
             title = stringResource(id = R.string.tasks)
         ),
         BottomNavigation(
-            route = "resp",
+            route = "resp/${role}",
             icon = Icons.Rounded.MailOutline,
             title = stringResource(id = R.string.responds)
         ),
         BottomNavigation(
-            route = "profile",
+            route = "profile/${role}",
             icon = Icons.Rounded.PersonOutline,
             title = stringResource(id = R.string.profile)
         ),
