@@ -74,7 +74,7 @@ fun NewTaskScreen(navController: NavHostController,employeeName:String? = null) 
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(text = stringResource(id = R.string.set_limit),
-                    fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    fontSize = 16.sp, fontWeight = FontWeight.Medium)
                 Spacer(modifier = Modifier.height(8.dp))
                 Row() {
                     Column() {
@@ -82,6 +82,8 @@ fun NewTaskScreen(navController: NavHostController,employeeName:String? = null) 
                             fontSize = 16.sp)
                         Spacer(modifier = Modifier.height(8.dp))
                         FloatingActionButton(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
                             shape = ShapeDefaults.Large,
                             onClick = { /*TODO*/ }
                         ) {
@@ -98,6 +100,8 @@ fun NewTaskScreen(navController: NavHostController,employeeName:String? = null) 
                         Text(text = "До $endDate",fontSize = 16.sp)
                         Spacer(modifier = Modifier.height(8.dp))
                         FloatingActionButton(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
                             shape = ShapeDefaults.Large,
                             onClick = { /*TODO*/ }
                         ) {
@@ -113,7 +117,7 @@ fun NewTaskScreen(navController: NavHostController,employeeName:String? = null) 
             }
         }
         Spacer(modifier = Modifier.height(20.dp))
-        FileCard(fileFunc = "Загрузить файл")
+        FileCard(fileFunc = stringResource(id = R.string.upload_file))
         Spacer(modifier = Modifier.height(20.dp))
         if (employeeName ==null){
             Card(
@@ -170,7 +174,7 @@ fun NewTaskScreen(navController: NavHostController,employeeName:String? = null) 
             },
 
                 ) {
-                Text(text = stringResource(id = R.string.new_task),)
+                Text(text = stringResource(id = R.string.create_task),)
             }
         }
 
