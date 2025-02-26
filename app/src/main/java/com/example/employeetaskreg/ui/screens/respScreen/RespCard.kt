@@ -72,8 +72,13 @@ fun RespCard(respName:String, employeeName:String, initials:String, role:Int = 2
                 .height(90.dp)
                 .padding(bottom = 8.dp),
                 contentAlignment = Alignment.BottomEnd){
-
-                AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier = Modifier.padding(start = 190.dp,end =15.dp))
+                if (role == 1) {
+                    AvatarNameSec(
+                        avatar = "ИИ",
+                        name = "Иванов И.И",
+                        modifier = Modifier.padding(start = 190.dp, end = 15.dp)
+                    )
+                }
             }
         }
     }

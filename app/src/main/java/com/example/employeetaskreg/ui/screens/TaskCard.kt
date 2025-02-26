@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskCard(taskName: String, employeeName: String, initials: String,role:Int = 1) {
+fun TaskCard(taskName: String, employeeName: String, initials: String,role:Int = 2) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -79,8 +79,9 @@ fun TaskCard(taskName: String, employeeName: String, initials: String,role:Int =
                 .height(90.dp)
                 .padding(bottom = 8.dp),
                 contentAlignment = Alignment.BottomEnd){
-
-                AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier = Modifier.padding(start = 190.dp,end =15.dp))
+                if(role == 1){
+                    AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier = Modifier.padding(start = 190.dp,end =15.dp))
+                }
             }
         }
     }
