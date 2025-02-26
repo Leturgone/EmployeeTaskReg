@@ -28,7 +28,9 @@ fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController)
     ) {
         composable("reg"){ RegScreen(navController)}
         composable("log"){ LogScreen(navController)}
-        composable("tasks"){ TaskScreen(navController)}
+        composable("tasks/{role}"){
+            val role = it.arguments?.getString("role")
+            TaskScreen(navController, role!!)}
         composable("new_task") { NewTaskScreen(navController) }
         composable("new_task/{employeeName}") {
             val empName = it.arguments?.getString("employeeName")
@@ -36,7 +38,11 @@ fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController)
         composable("set_employee") { SetEmployeeScreen(navController)  }
         composable("opt") { OptScreen(navController)}
         composable("emp_list"){ EmployeesScreen()}
-        composable("resp"){ RespScreen()}
-        composable("profile"){ ProfileScreen(navController)}
+        composable("resp/{role}"){
+            val role = it.arguments?.getString("role")
+            RespScreen(role!!)}
+        composable("profile/{role}"){
+            val role = it.arguments?.getString("role")
+            ProfileScreen(navController,role!!)}
     }
 }
