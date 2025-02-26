@@ -64,12 +64,14 @@ fun NewTaskScreen(navController: NavHostController,employeeName:String? = null) 
                 TextField(value =taskTitle,
                     onValueChange = {taskTitle = it},
                     modifier = Modifier.width(300.dp),
+                    singleLine = true,
                     label = { Text(text = stringResource(id = R.string.task_title))}
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 TextField(value =taskDesc,
                     onValueChange = {taskDesc = it},
                     modifier = Modifier.width(300.dp),
+                    singleLine = true,
                     label = { Text(text = stringResource(id = R.string.task_desc))}
                 )
                 Spacer(modifier = Modifier.height(20.dp))

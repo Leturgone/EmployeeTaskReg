@@ -79,7 +79,7 @@ fun EmployeeCard(name: String, setListItem:Boolean = false,clickFun: (() -> Unit
                         .width(200.dp)
                 )
                 Text(
-                    text = "Задач решено",
+                    text = "Задач решено: 10",
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Medium,
                     color = Color.Black,
