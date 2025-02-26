@@ -31,15 +31,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.ui.screens.CustomToastMessage
+import com.example.employeetaskreg.viewmodel.MainViewModel
 
 @Composable
-fun LogScreen(navController: NavHostController){
+fun LogScreen(navController: NavHostController, viewModel: MainViewModel){
     var loginInputText  by remember { mutableStateOf("") }
     var passwordInputText  by remember { mutableStateOf("") }
     var showToast by remember { mutableStateOf(false) }
@@ -102,9 +103,10 @@ fun LogScreen(navController: NavHostController){
                 Spacer(modifier = Modifier.height(142.dp))
 
                 Button(onClick = {
+                    viewModel.setRole("1")
                     navController.popBackStack()
                     navController.popBackStack()
-                    navController.navigate("tasks/1")
+                    navController.navigate("tasks")
                 },
 
                     ) {

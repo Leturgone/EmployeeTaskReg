@@ -11,14 +11,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.employeetaskreg.ui.screens.AppNavigation
 import com.example.employeetaskreg.ui.screens.BottomNavigationBar
 import com.example.employeetaskreg.ui.theme.EmployeeTaskRegTheme
+import com.example.employeetaskreg.viewmodel.MainViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
@@ -59,16 +62,20 @@ fun MainScreen(){
     val navController = rememberNavController()
     //Получение текущего состояния экрана
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    val viewModel: MainViewModel = viewModel()
+
+
+
     val excludedRoutes = setOf("reg","log")
     Scaffold(
         bottomBar = {
             if (currentRoute !in excludedRoutes) {
-                BottomNavigationBar(navController,"2")
+                BottomNavigationBar(navController,viewModel)
             }
         }
     ) {
             innerPadding ->
-        AppNavigation(innerPadding = innerPadding, navController = navController)
+        AppNavigation(innerPadding = innerPadding, navController = navController,viewModel)
 
     }
 }

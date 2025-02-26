@@ -14,6 +14,7 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -22,28 +23,47 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.ui.components.BottomNavigation
+import com.example.employeetaskreg.viewmodel.MainViewModel
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController,role:String){
+fun BottomNavigationBar(navController: NavHostController, viewModel: MainViewModel){
+    val role = viewModel.userRole.observeAsState().value!!
 
-    val items = listOf(
+    val directorItems = listOf(
         BottomNavigation(
             route = "emp_list",
             icon = Icons.Rounded.PeopleOutline,
             title = stringResource(id = R.string.employees)
         ),
         BottomNavigation(
-            route = "tasks/${role}",
+            route = "tasks",
             icon = Icons.Rounded.ModeEditOutline,
             title = stringResource(id = R.string.tasks)
         ),
         BottomNavigation(
-            route = "resp/${role}",
+            route = "resp",
             icon = Icons.Rounded.MailOutline,
             title = stringResource(id = R.string.responds)
         ),
         BottomNavigation(
-            route = "profile/${role}",
+            route = "profile",
+            icon = Icons.Rounded.PersonOutline,
+            title = stringResource(id = R.string.profile)
+        ),
+    )
+    val empItems = listOf(
+        BottomNavigation(
+            route = "tasks",
+            icon = Icons.Rounded.ModeEditOutline,
+            title = stringResource(id = R.string.tasks)
+        ),
+        BottomNavigation(
+            route = "resp",
+            icon = Icons.Rounded.MailOutline,
+            title = stringResource(id = R.string.responds)
+        ),
+        BottomNavigation(
+            route = "profile",
             icon = Icons.Rounded.PersonOutline,
             title = stringResource(id = R.string.profile)
         ),
@@ -54,10 +74,14 @@ fun BottomNavigationBar(navController: NavHostController,role:String){
             //Отслеживание текушего маршрута
             val backStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = backStackEntry?.destination?.route
-
+            var items:List<BottomNavigation> = listOf()
+            when(role){
+                "1" -> items = directorItems
+                "2" -> items = empItems
+            }
             Row(modifier = Modifier.background((MaterialTheme.colorScheme.background)))
             {
-                items.forEach{ item->
+                items.forEach { item->
                     NavigationBarItem(selected = currentRoute == item.route, modifier = Modifier.semantics
                     { contentDescription = item.route },
                         onClick = {
