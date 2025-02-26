@@ -72,5 +72,5 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.8.3")
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
 
-    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.8")
 }
