@@ -57,6 +57,8 @@ fun TaskScreen(navController: NavHostController,userRole: String) {
         }
         if (userRole == "1"){
             FloatingActionButton(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
                 shape = ShapeDefaults.Large,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)

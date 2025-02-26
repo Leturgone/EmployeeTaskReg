@@ -164,6 +164,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String,role:Strin
                         Spacer(modifier = Modifier.height(20.dp))
                         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
                             ExtendedFloatingActionButton(
+                                containerColor = MaterialTheme.colorScheme.primary,
                                 text = { Text(text = stringResource(id = R.string.create_resp)) },
                                 icon = { Icon(imageVector = Icons.Default.MailOutline,
                                     contentDescription = "createRespButton") },
