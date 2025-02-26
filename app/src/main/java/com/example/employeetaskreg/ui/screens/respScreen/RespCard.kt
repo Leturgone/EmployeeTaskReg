@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun RespCard(respName:String, employeeName:String, initials:String, role:Int = 2){
+fun RespCard(respName:String, employeeName:String, initials:String, role:String){
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -72,7 +72,7 @@ fun RespCard(respName:String, employeeName:String, initials:String, role:Int = 2
                 .height(90.dp)
                 .padding(bottom = 8.dp),
                 contentAlignment = Alignment.BottomEnd){
-                if (role == 1) {
+                if (role == "1") {
                     AvatarNameSec(
                         avatar = "ИИ",
                         name = "Иванов И.И",
@@ -114,13 +114,13 @@ fun RespCard(respName:String, employeeName:String, initials:String, role:Int = 2
                     modifier = Modifier
                         .width(300.dp)
                 )
-                if (role == 1){
+                if (role == "1"){
                     AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier = Modifier)
                 }
                 
                 FileCard(fileFunc = stringResource(id = R.string.download_order))
                 when(role){
-                    1->{Row(Modifier.fillMaxWidth()) {
+                    "1"->{Row(Modifier.fillMaxWidth()) {
                         Button(onClick = {
                             scope.launch { sheetState.hide() }.invokeOnCompletion {
                                 if (!sheetState.isVisible) {
@@ -146,7 +146,7 @@ fun RespCard(respName:String, employeeName:String, initials:String, role:Int = 2
 
                         }
                     }}
-                    2-> Text(
+                    "2"-> Text(
                         text = "Ожидание",
                         color = Color.Yellow,
                         fontWeight = FontWeight.SemiBold,

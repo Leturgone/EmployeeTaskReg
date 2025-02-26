@@ -63,7 +63,7 @@ fun MainScreen(){
     Scaffold(
         bottomBar = {
             if (currentRoute !in excludedRoutes) {
-                BottomNavigationBar(navController)
+                BottomNavigationBar(navController,"2")
             }
         }
     ) {

@@ -29,7 +29,7 @@ import com.example.employeetaskreg.R
 
 
 @Composable
-fun ProfileScreen(navController: NavHostController,role:Int = 2) {
+fun ProfileScreen(navController: NavHostController,role:String) {
     Column {
         Box(modifier = Modifier.fillMaxWidth()){
             Text(
@@ -83,7 +83,7 @@ fun ProfileScreen(navController: NavHostController,role:Int = 2) {
             }
         }
         when(role){
-            1->{
+            "1"->{
                 Box(modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)){
@@ -98,7 +98,7 @@ fun ProfileScreen(navController: NavHostController,role:Int = 2) {
                     )
                 }
             }
-            2->{
+            "2"->{
                 Box(modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp)){
@@ -115,7 +115,7 @@ fun ProfileScreen(navController: NavHostController,role:Int = 2) {
             }
         }
 
-        if (role == 2){
+        if (role == "2"){
             Box(modifier = Modifier
                 .fillMaxWidth()
                 .height(100.dp)){

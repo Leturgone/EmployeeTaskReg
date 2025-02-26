@@ -28,7 +28,7 @@ import com.example.employeetaskreg.R
 import com.example.employeetaskreg.ui.screens.TaskCard
 
 @Composable
-fun TaskScreen(navController: NavHostController) {
+fun TaskScreen(navController: NavHostController,userRole: String) {
 
     Box {
         Column(
@@ -50,24 +50,27 @@ fun TaskScreen(navController: NavHostController) {
             ) {
                 items(2) {
                     Spacer(modifier = Modifier.height(30.dp))
-                    TaskCard(taskName = "Задача 333", employeeName = "Иванов И.И", initials ="ИИ" )
+                    TaskCard(taskName = "Задача 333", employeeName = "Иванов И.И", initials ="ИИ", role = userRole )
 
                 }
             }
         }
-        FloatingActionButton(
-            shape = ShapeDefaults.Large,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(bottom = 50.dp, end = 40.dp),
-            onClick = {navController.navigate("new_task")}
-        ) {
-            Icon(imageVector =
-            Icons.Default.Add,
-                contentDescription = "addButton",
-                modifier = Modifier.size(20.dp))
+        if (userRole == "1"){
+            FloatingActionButton(
+                shape = ShapeDefaults.Large,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 50.dp, end = 40.dp),
+                onClick = {navController.navigate("new_task")}
+            ) {
+                Icon(imageVector =
+                Icons.Default.Add,
+                    contentDescription = "addButton",
+                    modifier = Modifier.size(20.dp))
 
+            }
         }
+
     }
 
 

@@ -104,7 +104,7 @@ fun LogScreen(navController: NavHostController){
                 Button(onClick = {
                     navController.popBackStack()
                     navController.popBackStack()
-                    navController.navigate("tasks")
+                    navController.navigate("tasks/1")
                 },
 
                     ) {

@@ -126,7 +126,7 @@ fun RegScreen(navController: NavHostController){
 
                 Button(onClick = {
                     navController.popBackStack()
-                    navController.navigate("tasks")},
+                    navController.navigate("tasks/2")},
 
                 ) {
                     Text(text = stringResource(id = R.string.create_acc),)

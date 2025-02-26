@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskCard(taskName: String, employeeName: String, initials: String,role:Int = 2) {
+fun TaskCard(taskName: String, employeeName: String, initials: String,role:String = "1") {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -79,7 +79,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String,role:Int =
                 .height(90.dp)
                 .padding(bottom = 8.dp),
                 contentAlignment = Alignment.BottomEnd){
-                if(role == 1){
+                if(role == "1"){
                     AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier = Modifier.padding(start = 190.dp,end =15.dp))
                 }
             }
@@ -145,7 +145,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String,role:Int =
                         .width(400.dp)
                 )
                 when(role){
-                    1->{
+                    "1"->{
                         FileCard(fileFunc = stringResource(id = R.string.download_file))
 
                         Text(
@@ -159,7 +159,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String,role:Int =
                         )
                         AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier =Modifier)
                     }
-                    2->{
+                    "2"->{
                         FileCard(fileFunc = stringResource(id = R.string.upload_order))
                         Spacer(modifier = Modifier.height(20.dp))
                         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
