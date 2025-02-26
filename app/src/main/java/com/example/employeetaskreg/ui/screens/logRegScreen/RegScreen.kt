@@ -19,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,7 +35,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.ui.screens.CustomToastMessage
@@ -75,6 +75,16 @@ fun RegScreen(navController: NavHostController, viewModel: MainViewModel){
                         modifier = Modifier.size(width = 255.dp,60.dp),
                         label = { Text(stringResource(id = R.string.fio)) },
                         singleLine = true,
+                        colors = TextFieldDefaults
+                            .colors(
+                                focusedTextColor = MaterialTheme.colorScheme.primary,
+                                unfocusedTextColor = MaterialTheme.colorScheme.primary,
+                                focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                unfocusedLabelColor = MaterialTheme.colorScheme.primary,
+                                focusedContainerColor = MaterialTheme.colorScheme.background,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                                unfocusedIndicatorColor = MaterialTheme.colorScheme.primary),
                         keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email),
                         onValueChange = {
                             fioInputText = it
@@ -85,6 +95,16 @@ fun RegScreen(navController: NavHostController, viewModel: MainViewModel){
                         modifier = Modifier.size(width = 255.dp,60.dp),
                         label = { Text(stringResource(id = R.string.director_fio)) },
                         singleLine = true,
+                        colors = TextFieldDefaults
+                            .colors(
+                                focusedTextColor = MaterialTheme.colorScheme.primary,
+                                unfocusedTextColor = MaterialTheme.colorScheme.primary,
+                                focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                unfocusedLabelColor = MaterialTheme.colorScheme.primary,
+                                focusedContainerColor = MaterialTheme.colorScheme.background,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                                unfocusedIndicatorColor = MaterialTheme.colorScheme.primary),
                         keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email),
                         onValueChange = {
                             fioDirInputText = it
@@ -95,6 +115,16 @@ fun RegScreen(navController: NavHostController, viewModel: MainViewModel){
                         modifier = Modifier.size(width = 255.dp,60.dp),
                         label = { Text(stringResource(id = R.string.login_input)) },
                         singleLine = true,
+                        colors = TextFieldDefaults
+                            .colors(
+                                focusedTextColor = MaterialTheme.colorScheme.primary,
+                                unfocusedTextColor = MaterialTheme.colorScheme.primary,
+                                focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                unfocusedLabelColor = MaterialTheme.colorScheme.primary,
+                                focusedContainerColor = MaterialTheme.colorScheme.background,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                                unfocusedIndicatorColor = MaterialTheme.colorScheme.primary),
                         keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email),
                         onValueChange = {
                             loginInputText = it
@@ -105,6 +135,16 @@ fun RegScreen(navController: NavHostController, viewModel: MainViewModel){
                         value = passwordInputText,
                         modifier = Modifier.size(width = 255.dp,60.dp),
                         singleLine = true,
+                        colors = TextFieldDefaults
+                            .colors(
+                                focusedTextColor = MaterialTheme.colorScheme.primary,
+                                unfocusedTextColor = MaterialTheme.colorScheme.primary,
+                                focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                unfocusedLabelColor = MaterialTheme.colorScheme.primary,
+                                focusedContainerColor = MaterialTheme.colorScheme.background,
+                                unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                                unfocusedIndicatorColor = MaterialTheme.colorScheme.primary),
                         label = { Text(stringResource(id = R.string.password)) },
                         visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                         keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -119,7 +159,7 @@ fun RegScreen(navController: NavHostController, viewModel: MainViewModel){
                             val description = if (passwordVisible) "Hide password" else "Show password"
 
                             IconButton(onClick = {passwordVisible = !passwordVisible}){
-                                Icon(imageVector  = image, description)
+                                Icon(imageVector  = image, description, tint = MaterialTheme.colorScheme.primary)
                             }
                         })
                 }
