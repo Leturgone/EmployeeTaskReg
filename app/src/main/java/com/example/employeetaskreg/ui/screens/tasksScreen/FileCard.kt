@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 fun FileCard(fileFunc:String){
     Card(
         shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
         modifier = Modifier
             .fillMaxWidth()
             .height(73.dp)
