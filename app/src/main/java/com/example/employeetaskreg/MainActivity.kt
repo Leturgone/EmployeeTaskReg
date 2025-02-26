@@ -11,7 +11,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
@@ -35,6 +34,7 @@ class MainActivity : ComponentActivity() {
 
         //Делаем цвет иконок нав пнели на светлые
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+
 
         //Чтобы контент рисовался за пределами основного экрана
         window.setFlags(
@@ -82,8 +82,13 @@ fun MainScreen(){
 @Composable
 private fun SetBarColor(color : Color){
     //Функция для изменения цвета статусбара
+    val navColor = MaterialTheme.colorScheme.secondaryContainer
     val systemUiController = rememberSystemUiController()
     SideEffect {
-        systemUiController.setSystemBarsColor(color = color)
+        systemUiController.setStatusBarColor(color = color)
+        systemUiController.setNavigationBarColor(navColor)
+
     }
+
 }
+
