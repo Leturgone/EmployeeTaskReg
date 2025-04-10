@@ -17,10 +17,10 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.employeetaskreg.ui.screens.AppNavigation
-import com.example.employeetaskreg.ui.screens.BottomNavigationBar
-import com.example.employeetaskreg.ui.theme.EmployeeTaskRegTheme
-import com.example.employeetaskreg.viewmodel.MainViewModel
+import com.example.employeetaskreg.presentation.ui.screens.AppNavigation
+import com.example.employeetaskreg.presentation.ui.screens.BottomNavigationBar
+import com.example.employeetaskreg.presentation.ui.theme.EmployeeTaskRegTheme
+import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 class MainActivity : ComponentActivity() {
