@@ -1,7 +1,46 @@
 package com.example.employeetaskreg.data.repsitory
 
+import android.util.Log
 import com.example.employeetaskreg.data.api.EmployeeTaskRegApi
+import com.example.employeetaskreg.data.api.dto.LoginRequest
+import com.example.employeetaskreg.data.api.dto.RegistrationRequest
+import com.example.employeetaskreg.domain.model.CompanyWorker
 import com.example.employeetaskreg.domain.repository.EmployeeTaskRegRepository
+import retrofit2.HttpException
+import javax.inject.Inject
 
-class EmployeeTaskRegRepositoryImpl(api: EmployeeTaskRegApi):EmployeeTaskRegRepository {
+class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegApi) :EmployeeTaskRegRepository {
+    override suspend fun login(login: String, password: String): Result<String> {
+        val request = LoginRequest(login,password)
+        return try {
+            val response = api.login(request).token
+            Log.i("TOKEN",response)
+            Result.success(response)
+        }catch (e: HttpException) {
+            Result.failure(Exception("${e.code()} - ${e.message()}"))
+        }
+        catch (e: Exception) {
+            Log.i("TOKEN",e.toString())
+            Result.failure(Exception("Error during login: ${e.message}"))
+        }
+    }
+
+    override suspend fun register(login: String, password: String, name: String, dirName: String): Result<String> {
+        val request = RegistrationRequest(login,password,name, dirName)
+        return try {
+            val response = api.register(request).token
+            Log.i("TOKEN",response)
+            Result.success(response)
+        }catch (e: HttpException) {
+            Result.failure(Exception("${e.code()} - ${e.message()}"))
+        }
+        catch (e: Exception) {
+            Log.i("TOKEN",e.toString())
+            Result.failure(Exception("Error during registration: ${e.message}"))
+        }
+    }
+
+    override suspend fun getProfile(): CompanyWorker {
+        TODO("Not yet implemented")
+    }
 }
