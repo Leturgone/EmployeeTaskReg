@@ -1,6 +1,13 @@
 package com.example.employeetaskreg.data.api
 
+import com.example.employeetaskreg.data.api.dto.LoginRequest
+import com.example.employeetaskreg.data.api.dto.RegistrationRequest
+import com.example.employeetaskreg.data.api.dto.TokenResponse
+import com.example.employeetaskreg.domain.model.CompanyWorker
+import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -8,7 +15,21 @@ import retrofit2.http.Path
 interface EmployeeTaskRegApi {
 
     @GET("/profile")
-    suspend fun getProfile()
+    suspend fun getProfile(
+        @Header("Authorization") token: String
+    ):CompanyWorker
+
+    @POST("/users/register")
+    suspend fun register(
+        @Body request: RegistrationRequest
+    ): TokenResponse
+
+    @POST("/users/login")
+    suspend fun login(
+        @Body request: LoginRequest
+    ): TokenResponse
+
+
     @POST("/profile/addTask")
     suspend fun addTask()
 
@@ -48,11 +69,6 @@ interface EmployeeTaskRegApi {
     @GET("/getTask/{taskId}/download")
     suspend fun downloadTaskById()
 
-    @POST("/users/register")
-    suspend fun register()
-
-    @POST("/users/login")
-    suspend fun login()
 
 
 
