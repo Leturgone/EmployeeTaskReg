@@ -2,6 +2,7 @@ package com.example.employeetaskreg.di
 
 import com.example.employeetaskreg.data.api.EmployeeTaskRegApi
 import com.example.employeetaskreg.data.repsitory.EmployeeTaskRegRepositoryImpl
+import com.example.employeetaskreg.domain.repository.EmployeeTaskRegRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +20,7 @@ import javax.inject.Singleton
 class AppModule {
     @Provides
     @Singleton
-    fun provideMarvelComicApi():EmployeeTaskRegApi{
+    fun provideEmployeeTaskRegApi():EmployeeTaskRegApi{
         val logging = HttpLoggingInterceptor()
         logging.setLevel(HttpLoggingInterceptor.Level.HEADERS)
 
@@ -30,7 +31,7 @@ class AppModule {
             .addInterceptor(logging)
             .build()
         return Retrofit
-            .Builder().baseUrl("https://gateway.marvel.com/")
+            .Builder().baseUrl(API_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -38,7 +39,7 @@ class AppModule {
     }
     @Provides
     @Singleton
-    fun provideRemoteRepository(api: EmployeeTaskRegApi):EmployeeTaskRegRepositoryImpl{
+    fun provideRemoteRepository(api: EmployeeTaskRegApi): EmployeeTaskRegRepository {
         return EmployeeTaskRegRepositoryImpl(api)
     }
 }
