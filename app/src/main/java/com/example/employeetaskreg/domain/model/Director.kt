@@ -1,0 +1,8 @@
+package com.example.employeetaskreg.domain.model
+
+data class Director(
+    val id:Int,
+    val name:String,
+    val userId:Int,
+    val role:String = "director"
+):CompanyWorker
