@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +21,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
+import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
 import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
 
@@ -45,6 +48,9 @@ fun LogScreen(navController: NavHostController, viewModel: MainViewModel){
     var passwordInputText  by remember { mutableStateOf("") }
     var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
+
+    val loginState = viewModel.loginFlow.collectAsState()
+
     var passwordVisible by remember { mutableStateOf(false) }
     Box(modifier = Modifier.fillMaxWidth()){
         CustomToastMessage(
@@ -123,12 +129,20 @@ fun LogScreen(navController: NavHostController, viewModel: MainViewModel){
                 }
                 Spacer(modifier = Modifier.height(142.dp))
 
-                Button(onClick = {
-                    viewModel.setRole("1")
-                    navController.popBackStack()
-                    navController.popBackStack()
-                    navController.navigate("tasks")
-                },
+                when (loginState.value) {
+                    is EmpTaskRegState.Failure -> {
+                        navController.popBackStack()
+                        navController.popBackStack()
+                        navController.navigate("tasks")
+                    }
+
+                    EmpTaskRegState.Loading -> CircularProgressIndicator()
+                    is EmpTaskRegState.Success -> TODO()
+                }
+
+                Button(
+                    onClick = {
+                        viewModel.login(loginInputText, passwordInputText) },
 
                     ) {
                     Text(text = stringResource(id = R.string.sign_in),)

@@ -166,7 +166,7 @@ fun RegScreen(navController: NavHostController, viewModel: MainViewModel){
                 Spacer(modifier = Modifier.height(40.dp))
 
                 Button(onClick = {
-                    viewModel.setRole("2")
+                    viewModel.register(loginInputText,passwordInputText,fioInputText,fioDirInputText)
                     navController.popBackStack()
                     navController.navigate("tasks")},
 
