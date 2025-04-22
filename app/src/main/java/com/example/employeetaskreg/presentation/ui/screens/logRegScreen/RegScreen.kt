@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +22,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,25 +38,33 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
+import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
 import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
-fun RegScreen(navController: NavHostController, viewModel: MainViewModel){
+fun RegScreen(navController: NavHostController, viewModel: MainViewModel = hiltViewModel()){
     var loginInputText  by remember { mutableStateOf("") }
     var fioInputText  by remember { mutableStateOf("") }
     var fioDirInputText  by remember { mutableStateOf("") }
     var passwordInputText  by remember { mutableStateOf("") }
+
+    val regState = viewModel.regFlow.collectAsState()
+
     var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
+
     var passwordVisible by remember { mutableStateOf(false) }
+
     Box(modifier = Modifier.fillMaxWidth()){
         CustomToastMessage(
             message = errorMessage,
             isVisible = showToast,
-            onDismiss = { showToast = false },
+            onDismiss = { showToast = false }
         )
         Box(Modifier.fillMaxWidth(),contentAlignment = Alignment.Center) {
             Column( modifier = Modifier.fillMaxSize(),
@@ -166,13 +177,31 @@ fun RegScreen(navController: NavHostController, viewModel: MainViewModel){
                 Spacer(modifier = Modifier.height(40.dp))
 
                 Button(onClick = {
-                    viewModel.register(loginInputText,passwordInputText,fioInputText,fioDirInputText)
-                    navController.popBackStack()
-                    navController.navigate("tasks")},
+                    viewModel.register(loginInputText,passwordInputText,fioInputText,fioDirInputText) },
 
                 ) {
                     Text(text = stringResource(id = R.string.create_acc),)
                 }
+
+                when(regState.value){
+                    EmpTaskRegState.Loading -> CircularProgressIndicator()
+                    is EmpTaskRegState.Success -> {
+                        LaunchedEffect(Unit) {
+                            navController.popBackStack()
+                            navController.navigate("tasks")
+                        }
+                    }
+                    is EmpTaskRegState.Failure -> {
+                        LaunchedEffect(Unit) {
+                            showToast = true
+                            errorMessage =
+                                (regState.value as EmpTaskRegState.Failure).exception.message.toString()
+                        }
+                    }
+                    EmpTaskRegState.Waiting -> null
+                }
+
+
                 Spacer(modifier = Modifier.height(55.dp))
                 Text(text = stringResource(id = R.string.already_have),
                     color = MaterialTheme.colorScheme.primary,
