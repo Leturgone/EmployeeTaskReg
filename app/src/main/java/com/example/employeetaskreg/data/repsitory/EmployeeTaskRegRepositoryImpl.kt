@@ -37,11 +37,20 @@ class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: Employe
         }
         catch (e: Exception) {
             Log.i("TOKEN",e.toString())
-            EmpTaskRegState.Failure(Exception("Error during registration: ${e.message}"))
+            EmpTaskRegState.Failure(Exception("Error during login: Check your connection"))
         }
     }
 
     override suspend fun getProfile(): EmpTaskRegState<CompanyWorker> {
-        TODO("Not yet implemented")
+        val token = "" //Токен из бд
+        return try{
+            val response = api.getProfile(token)
+            EmpTaskRegState.Success(response)
+        }catch (e:HttpException){
+            EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
+        }catch(e:Exception){
+            Log.i("PROFILE",e.toString())
+            EmpTaskRegState.Failure(Exception("Error during login: Check your connection"))
+        }
     }
 }
