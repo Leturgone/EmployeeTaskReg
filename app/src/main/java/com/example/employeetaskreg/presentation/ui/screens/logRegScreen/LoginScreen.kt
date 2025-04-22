@@ -21,6 +21,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +47,7 @@ import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
 fun LogScreen(navController: NavHostController, viewModel: MainViewModel){
     var loginInputText  by remember { mutableStateOf("") }
     var passwordInputText  by remember { mutableStateOf("") }
+
     var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
 
@@ -129,23 +131,28 @@ fun LogScreen(navController: NavHostController, viewModel: MainViewModel){
                 }
                 Spacer(modifier = Modifier.height(142.dp))
 
-                when (loginState.value) {
-                    is EmpTaskRegState.Failure -> {
-                        navController.popBackStack()
-                        navController.popBackStack()
-                        navController.navigate("tasks")
-                    }
-
-                    EmpTaskRegState.Loading -> CircularProgressIndicator()
-                    is EmpTaskRegState.Success -> TODO()
-                }
-
                 Button(
                     onClick = {
                         viewModel.login(loginInputText, passwordInputText) },
 
                     ) {
                     Text(text = stringResource(id = R.string.sign_in),)
+                }
+
+                when (loginState.value) {
+                    is EmpTaskRegState.Failure -> {
+                        showToast = true
+                        errorMessage = (loginState.value as EmpTaskRegState.Failure).exception.toString()
+                    }
+
+                    EmpTaskRegState.Loading -> CircularProgressIndicator()
+                    is EmpTaskRegState.Success -> LaunchedEffect(Unit){
+                        navController.popBackStack()
+                        navController.popBackStack()
+                        navController.navigate("tasks")
+                    }
+
+                    EmpTaskRegState.Waiting -> null
                 }
 
 
