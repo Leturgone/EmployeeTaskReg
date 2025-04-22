@@ -22,7 +22,7 @@ class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: Employe
         }
         catch (e: Exception) {
             Log.i("TOKEN",e.toString())
-            EmpTaskRegState.Failure(Exception("Error during login: ${e.message}"))
+            EmpTaskRegState.Failure(Exception("Error during login: Check your connection"))
         }
     }
 

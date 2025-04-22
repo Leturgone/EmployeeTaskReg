@@ -17,11 +17,11 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private val employeeTaskRegRepository: EmployeeTaskRegRepository): ViewModel() {
 
-    private val _loginFlow = MutableStateFlow<EmpTaskRegState<String>>(EmpTaskRegState.Loading)
+    private val _loginFlow = MutableStateFlow<EmpTaskRegState<String>>(EmpTaskRegState.Waiting)
 
     val loginFlow: StateFlow<EmpTaskRegState<String>> = _loginFlow
 
-    private val _regFlow = MutableStateFlow<EmpTaskRegState<String>>(EmpTaskRegState.Loading)
+    private val _regFlow = MutableStateFlow<EmpTaskRegState<String>>(EmpTaskRegState.Waiting)
 
     val regFlow: StateFlow<EmpTaskRegState<String>> = _loginFlow
 
