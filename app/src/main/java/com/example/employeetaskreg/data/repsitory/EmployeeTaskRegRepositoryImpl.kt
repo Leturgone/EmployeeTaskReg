@@ -13,7 +13,9 @@ import javax.inject.Inject
 
 class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegApi,
                                                         private val dataStoreManager: DataStoreManager ) :EmployeeTaskRegRepository {
-
+    override suspend fun getTokenFromDataStorage(): String {
+        return dataStoreManager.tokenFlow.first().toString()
+    }
 
 
     override suspend fun login(login: String, password: String): EmpTaskRegState<String> {
@@ -50,8 +52,7 @@ class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: Employe
 
     override suspend fun getProfile(): EmpTaskRegState<CompanyWorker> {
         return try{
-            val token = dataStoreManager.tokenFlow.first().toString()
-            Log.i("TOKEN",token)
+            val token = getTokenFromDataStorage()
             if (token.isEmpty()) {
                 return EmpTaskRegState.Failure(Exception("No token found. Please login first."))
             }
@@ -68,8 +69,7 @@ class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: Employe
 
     override suspend fun getDirectorNameById(id: Int): EmpTaskRegState<String> {
         return try {
-            val token = dataStoreManager.tokenFlow.first().toString()
-            Log.i("TOKEN",token)
+            val token = getTokenFromDataStorage()
             if (token.isEmpty()) {
                 return EmpTaskRegState.Failure(Exception("No token found. Please login first."))
             }
@@ -86,8 +86,7 @@ class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: Employe
 
     override suspend fun getTaskCount(): EmpTaskRegState<Int> {
         return try {
-            val token = dataStoreManager.tokenFlow.first().toString()
-            Log.i("TOKEN",token)
+            val token = getTokenFromDataStorage()
             if (token.isEmpty()) {
                 return EmpTaskRegState.Failure(Exception("No token found. Please login first."))
             }
