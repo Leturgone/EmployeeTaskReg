@@ -10,4 +10,6 @@ interface EmployeeTaskRegRepository {
     suspend fun getProfile():EmpTaskRegState<CompanyWorker>
 
     suspend fun getDirectorNameById(id: Int):EmpTaskRegState<String>
+
+    suspend fun getTaskCount():EmpTaskRegState<Int>
 }

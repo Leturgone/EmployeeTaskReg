@@ -84,5 +84,23 @@ class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: Employe
         }
     }
 
+    override suspend fun getTaskCount(): EmpTaskRegState<Int> {
+        return try {
+            val token = dataStoreManager.tokenFlow.first().toString()
+            Log.i("TOKEN",token)
+            if (token.isEmpty()) {
+                return EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+            }
+            val response = api.getTaskCount("Bearer $token")
+            EmpTaskRegState.Success(response)
+        }catch (e:HttpException){
+            Log.e("BAR",e.toString())
+            EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
+        }catch(e:Exception){
+            Log.i("PROFILE",e.toString())
+            EmpTaskRegState.Failure(Exception("Error during getting task count: Check your connection"))
+        }
+    }
+
 
 }
