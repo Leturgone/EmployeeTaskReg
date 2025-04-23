@@ -1,5 +1,6 @@
 package com.example.employeetaskreg.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -43,9 +44,9 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
     private val _userRole = MutableLiveData<String>("1")
     val userRole: LiveData<String> = _userRole
 
-    private val _empList  = MutableLiveData<List<Employee>>()
-    val empList:LiveData<List<Employee>> = _empList
-
+    init {
+        getProfile()
+    }
 
 
 
@@ -68,6 +69,12 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
         _profileFlow.value = EmpTaskRegState.Loading
         val result = withContext(Dispatchers.IO){
             employeeTaskRegRepository.getProfile()
+        }
+        if(result is EmpTaskRegState.Success){
+            val token = withContext(Dispatchers.IO){
+                employeeTaskRegRepository.getTokenFromDataStorage()
+            }
+            _regFlow.value = EmpTaskRegState.Success(token)
         }
         _profileFlow.value = result
     }
