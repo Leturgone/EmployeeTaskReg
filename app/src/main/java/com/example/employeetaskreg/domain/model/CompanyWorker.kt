@@ -1,6 +1,18 @@
 package com.example.employeetaskreg.domain.model
 
-interface CompanyWorker {
-    val id:Int
-    val name:String
+sealed class CompanyWorker:CompanyWorkerInterface {
+    data class Director(
+        override val id:Int,
+        override val name:String,
+        val userId:Int,
+        val role:String = "director"
+    ):CompanyWorker()
+
+    data class Employee(
+        override val id:Int,
+        override val name:String,
+        val userId:Int,
+        val directorId:Int?,
+        val role:String = "employee"
+    ):CompanyWorker()
 }
