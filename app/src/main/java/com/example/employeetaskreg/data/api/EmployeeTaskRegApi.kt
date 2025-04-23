@@ -4,7 +4,6 @@ import com.example.employeetaskreg.data.api.dto.LoginRequest
 import com.example.employeetaskreg.data.api.dto.RegistrationRequest
 import com.example.employeetaskreg.data.api.dto.TokenResponse
 import com.example.employeetaskreg.domain.model.CompanyWorker
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -29,6 +28,14 @@ interface EmployeeTaskRegApi {
         @Body request: LoginRequest
     ): TokenResponse
 
+    @GET("/profile/director/{directorId}")
+    suspend fun getDirectorById(
+        @Header("Authorization") token: String,
+        @Path("directorId") directorId: String
+    ):CompanyWorker.Director
+
+    @GET("/profile/myTaskCount")
+    suspend fun getTaskCount()
 
     @POST("/profile/addTask")
     suspend fun addTask()
@@ -51,8 +58,6 @@ interface EmployeeTaskRegApi {
     @GET("/profile/myReports")
     suspend fun getReports()
 
-    @GET("/profile/myTaskCount")
-    suspend fun getTaskCount()
 
     @GET("/getReport/{reportId}")
     suspend fun getReportById()
