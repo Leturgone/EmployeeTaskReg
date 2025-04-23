@@ -35,6 +35,11 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
 
     val dirNameFlow: StateFlow<EmpTaskRegState<String>> = _dirNameFlow
 
+    private val _taskCountFlow = MutableStateFlow<EmpTaskRegState<Int>>(EmpTaskRegState.Waiting)
+
+    val taskCountFlow: StateFlow<EmpTaskRegState<Int>> = _taskCountFlow
+
+
     private val _userRole = MutableLiveData<String>("1")
     val userRole: LiveData<String> = _userRole
 
@@ -73,5 +78,12 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
             employeeTaskRegRepository.getDirectorNameById(id)
         }
         _dirNameFlow.value = result
+    }
+    fun getTaskCount() = viewModelScope.launch {
+        _taskCountFlow.value = EmpTaskRegState.Loading
+        val result = withContext(Dispatchers.IO){
+            employeeTaskRegRepository.getTaskCount()
+        }
+        _taskCountFlow.value = result
     }
 }
