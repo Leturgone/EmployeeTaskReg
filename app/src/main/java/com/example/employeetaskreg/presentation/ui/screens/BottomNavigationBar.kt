@@ -1,5 +1,6 @@
 package com.example.employeetaskreg.presentation.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.MailOutline
@@ -16,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -25,8 +25,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.domain.model.CompanyWorker
-import com.example.employeetaskreg.domain.model.Director
-import com.example.employeetaskreg.domain.model.Employee
+import com.example.employeetaskreg.domain.model.CompanyWorkerInterface
+
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.components.BottomNavigation
 import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
@@ -77,7 +77,10 @@ fun BottomNavigationBar(navController: NavHostController, viewModel: MainViewMod
         viewModel.getProfile()
     }
     when(profileState.value){
-        is EmpTaskRegState.Failure -> null
+        is EmpTaskRegState.Failure -> {
+            Log.e("BAR", (profileState.value as EmpTaskRegState.Failure).exception.message.toString())
+            null
+        }
         EmpTaskRegState.Loading -> CircularProgressIndicator()
         is EmpTaskRegState.Success -> {
             NavigationBar(containerColor = (MaterialTheme.colorScheme.secondaryContainer)){
@@ -86,9 +89,9 @@ fun BottomNavigationBar(navController: NavHostController, viewModel: MainViewMod
                 val backStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = backStackEntry?.destination?.route
                 var items:List<BottomNavigation> = listOf()
-                when((profileState.value as EmpTaskRegState.Success<CompanyWorker>).result){
-                    is Director ->{items = directorItems}
-                    is Employee ->{items = empItems}
+                when((profileState.value as EmpTaskRegState.Success<CompanyWorkerInterface>).result){
+                    is CompanyWorker.Director ->{items = directorItems}
+                    is CompanyWorker.Employee ->{items = empItems}
                 }
                 Row()
                 {
