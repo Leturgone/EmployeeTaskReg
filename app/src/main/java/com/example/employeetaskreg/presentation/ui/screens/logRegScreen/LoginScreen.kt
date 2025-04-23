@@ -140,7 +140,7 @@ fun LogScreen(navController: NavHostController, viewModel: MainViewModel){
                 }
 
                 when (loginState.value) {
-                    is EmpTaskRegState.Failure -> {
+                    is EmpTaskRegState.Failure -> LaunchedEffect(loginState.value) {
                         showToast = true
                         errorMessage = (loginState.value as EmpTaskRegState.Failure).exception.toString()
                     }
