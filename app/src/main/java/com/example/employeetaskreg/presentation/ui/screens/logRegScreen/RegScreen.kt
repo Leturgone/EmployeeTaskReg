@@ -192,7 +192,7 @@ fun RegScreen(navController: NavHostController, viewModel: MainViewModel = hiltV
                         }
                     }
                     is EmpTaskRegState.Failure -> {
-                        LaunchedEffect(Unit) {
+                        LaunchedEffect(regState.value) {
                             showToast = true
                             errorMessage =
                                 (regState.value as EmpTaskRegState.Failure).exception.message.toString()
