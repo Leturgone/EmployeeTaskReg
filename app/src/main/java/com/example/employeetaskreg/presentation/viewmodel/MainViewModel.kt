@@ -45,9 +45,9 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
 
     private val _empList  = MutableLiveData<List<Employee>>()
     val empList:LiveData<List<Employee>> = _empList
-    fun setRole(role: String) {
-        _userRole.value = role
-    }
+
+
+
 
     fun register(login: String, password: String, name: String, dirName: String) = viewModelScope.launch{
        _regFlow.value = EmpTaskRegState.Loading
