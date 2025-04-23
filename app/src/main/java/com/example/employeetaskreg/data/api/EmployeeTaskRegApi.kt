@@ -35,7 +35,9 @@ interface EmployeeTaskRegApi {
     ):CompanyWorker.Director
 
     @GET("/profile/myTaskCount")
-    suspend fun getTaskCount()
+    suspend fun getTaskCount(
+        @Header("Authorization") token: String
+    ):Int
 
     @POST("/profile/addTask")
     suspend fun addTask()
