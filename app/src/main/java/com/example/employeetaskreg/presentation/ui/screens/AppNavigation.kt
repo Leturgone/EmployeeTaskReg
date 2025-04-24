@@ -29,7 +29,7 @@ fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController,
         modifier = Modifier.padding(innerPadding)
     ) {
         composable("reg"){ RegScreen(navController) }
-        composable("log"){ LogScreen(navController,viewModel) }
+        composable("log"){ LogScreen(navController) }
         composable("tasks"){ TaskScreen(navController, role) }
         composable("new_task") { NewTaskScreen(navController) }
         composable("new_task/{employeeName}") {

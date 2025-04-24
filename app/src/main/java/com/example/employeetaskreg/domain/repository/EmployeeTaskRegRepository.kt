@@ -9,6 +9,8 @@ interface EmployeeTaskRegRepository {
 
     suspend fun register(login:String, password:String, name: String, dirName:String):EmpTaskRegState<String>
 
+    suspend fun logout()
+
     suspend fun getProfile():EmpTaskRegState<CompanyWorker>
 
     suspend fun getDirectorNameById(id: Int):EmpTaskRegState<String>

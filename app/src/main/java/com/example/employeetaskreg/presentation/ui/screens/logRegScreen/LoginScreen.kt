@@ -37,6 +37,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
@@ -44,7 +45,7 @@ import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
 import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
 
 @Composable
-fun LogScreen(navController: NavHostController, viewModel: MainViewModel){
+fun LogScreen(navController: NavHostController, viewModel: MainViewModel = hiltViewModel()){
     var loginInputText  by remember { mutableStateOf("") }
     var passwordInputText  by remember { mutableStateOf("") }
 
