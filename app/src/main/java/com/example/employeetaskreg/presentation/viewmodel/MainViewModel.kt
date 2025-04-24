@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.example.employeetaskreg.domain.model.Task
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,6 +41,10 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
     private val _taskCountFlow = MutableStateFlow<EmpTaskRegState<Int>>(EmpTaskRegState.Waiting)
 
     val taskCountFlow: StateFlow<EmpTaskRegState<Int>> = _taskCountFlow
+
+    private val _taskListFlow = MutableStateFlow<EmpTaskRegState<List<Task>>>(EmpTaskRegState.Waiting)
+
+    val taskListFlow: StateFlow<EmpTaskRegState<List<Task>>> = _taskListFlow
 
 
     private val _userRole = MutableLiveData<String>("1")
@@ -95,6 +100,16 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
         }
         _taskCountFlow.value = result
     }
+
+    fun getTaskList() = viewModelScope.launch {
+        _taskListFlow.value = EmpTaskRegState.Loading
+        val result = withContext(Dispatchers.IO){
+            employeeTaskRegRepository.getTaskList()
+        }
+        _taskListFlow.value = result
+
+    }
+
 
     fun logout() = viewModelScope.launch {
         _loginFlow.value = EmpTaskRegState.Waiting
