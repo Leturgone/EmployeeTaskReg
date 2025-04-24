@@ -11,6 +11,7 @@ import com.example.employeetaskreg.domain.repository.EmployeeTaskRegRepository
 import com.example.employeetaskreg.presentation.ui.components.Employee
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -75,6 +76,7 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
                 employeeTaskRegRepository.getTokenFromDataStorage()
             }
             _regFlow.value = EmpTaskRegState.Success(token)
+            _loginFlow.value = EmpTaskRegState.Success(token)
         }
         _profileFlow.value = result
     }
@@ -92,5 +94,14 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
             employeeTaskRegRepository.getTaskCount()
         }
         _taskCountFlow.value = result
+    }
+
+    fun logout() = viewModelScope.launch {
+        _loginFlow.value = EmpTaskRegState.Waiting
+        _regFlow.value = EmpTaskRegState.Waiting
+        async(Dispatchers.IO){
+            employeeTaskRegRepository.logout()
+        }.await()
+
     }
 }
