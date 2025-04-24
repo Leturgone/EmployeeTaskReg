@@ -4,6 +4,7 @@ import com.example.employeetaskreg.data.api.dto.LoginRequest
 import com.example.employeetaskreg.data.api.dto.RegistrationRequest
 import com.example.employeetaskreg.data.api.dto.TokenResponse
 import com.example.employeetaskreg.domain.model.CompanyWorker
+import com.example.employeetaskreg.domain.model.Task
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -39,6 +40,11 @@ interface EmployeeTaskRegApi {
         @Header("Authorization") token: String
     ):Int
 
+    @GET("/profile/myTasks")
+    suspend fun getTasks(
+        @Header("Authorization") token: String
+    ):List<Task>
+
     @POST("/profile/addTask")
     suspend fun addTask()
 
@@ -54,8 +60,7 @@ interface EmployeeTaskRegApi {
     @GET("profile/myEmployees/employee/{employeeId}")
     suspend fun getEmployeeById()
 
-    @GET("/profile/myTasks")
-    suspend fun getTasks()
+
 
     @GET("/profile/myReports")
     suspend fun getReports()
