@@ -50,6 +50,10 @@ class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: Employe
         }
     }
 
+    override suspend fun logout() {
+        dataStoreManager.clearToken()
+    }
+
     override suspend fun getProfile(): EmpTaskRegState<CompanyWorker> {
         return try{
             val token = getTokenFromDataStorage()
