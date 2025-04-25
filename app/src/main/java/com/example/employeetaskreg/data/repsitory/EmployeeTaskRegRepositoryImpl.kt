@@ -72,13 +72,30 @@ class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: Employe
         }
     }
 
-    override suspend fun getDirectorNameById(id: Int): EmpTaskRegState<String> {
+    override suspend fun getDirectorById(id: Int): EmpTaskRegState<CompanyWorker.Director> {
         return try {
             val token = getTokenFromDataStorage()
             if (token.isEmpty()) {
                 return EmpTaskRegState.Failure(Exception("No token found. Please login first."))
             }
-            val response = api.getDirectorById("Bearer $token",id.toString()).name
+            val response = api.getDirectorById("Bearer $token",id.toString())
+            EmpTaskRegState.Success(response)
+        }catch (e:HttpException){
+            Log.e("BAR",e.toString())
+            EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
+        }catch(e:Exception){
+            Log.i("PROFILE",e.toString())
+            EmpTaskRegState.Failure(Exception("Error during getting director: Check your connection"))
+        }
+    }
+
+    override suspend fun getEmployeeById(id: Int): EmpTaskRegState<CompanyWorker.Employee> {
+        return try {
+            val token = getTokenFromDataStorage()
+            if (token.isEmpty()) {
+                return EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+            }
+            val response = api.getEmployeeById("Bearer $token",id.toString())
             EmpTaskRegState.Success(response)
         }catch (e:HttpException){
             Log.e("BAR",e.toString())
@@ -112,7 +129,7 @@ class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: Employe
             if (token.isEmpty()) {
                 return EmpTaskRegState.Failure(Exception("No token found. Please login first."))
             }
-            val response = api.getTasks("Bearer $token")
+            val response = api.getTasks("Bearer $token").sortedBy { it.id }
             Log.d("TASKS",response.toString())
             EmpTaskRegState.Success(response)
         }catch (e:HttpException){
