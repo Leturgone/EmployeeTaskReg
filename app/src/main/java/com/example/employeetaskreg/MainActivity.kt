@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.employeetaskreg.presentation.ui.screens.AppNavigation
@@ -78,7 +77,7 @@ fun MainScreen(){
         }
     ) {
             innerPadding ->
-        AppNavigation(innerPadding = innerPadding, navController = navController,viewModel)
+        AppNavigation(innerPadding = innerPadding, navController = navController)
 
     }
 }

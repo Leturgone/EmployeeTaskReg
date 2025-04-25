@@ -42,7 +42,7 @@ import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
 
 
 @Composable
-fun ProfileScreen(navController: NavHostController,role:String, viewModel: MainViewModel = hiltViewModel()) {
+fun ProfileScreen(navController: NavHostController, viewModel: MainViewModel = hiltViewModel()) {
 
     val profileState = viewModel.profileFlow.collectAsState()
     val dirNameState = viewModel.dirNameFlow.collectAsState()
