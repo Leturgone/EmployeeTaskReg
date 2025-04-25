@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.employeetaskreg.R
+import com.example.employeetaskreg.domain.model.Report
 import com.example.employeetaskreg.presentation.ui.screens.employeeScreen.AvatarNameSec
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.FileCard
 import com.example.employeetaskreg.presentation.ui.theme.DarkGray
@@ -45,7 +46,10 @@ import kotlinx.coroutines.launch
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun RespCard(respName:String, employeeName:String, initials:String, role:String){
+fun RespCard(response:Report,role:String){
+
+    var responseStatusColor by remember { mutableStateOf(Color.Gray) }
+
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -64,7 +68,7 @@ fun RespCard(respName:String, employeeName:String, initials:String, role:String)
             Box(modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.TopStart){
                 Text(
-                    text = respName,
+                    text = "Ответ по задаче ${response.taskId}",
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top = 16.dp, start = 16.dp),
                     fontSize = 16.sp
@@ -77,11 +81,14 @@ fun RespCard(respName:String, employeeName:String, initials:String, role:String)
                 .padding(bottom = 8.dp),
                 contentAlignment = Alignment.BottomEnd){
                 if (role == "1") {
-                    AvatarNameSec(
-                        avatar = "ИИ",
-                        name = "Иванов И.И",
-                        modifier = Modifier.padding(start = 190.dp, end = 15.dp)
-                    )
+                    response.employeeName?.let {
+                        AvatarNameSec(
+                            avatar = it.substringAfter(" ").replace(".",""),
+                                    name = it,
+                            modifier = Modifier.padding(start = 190.dp, end = 15.dp)
+                        )
+                    }
+
                 }
             }
         }
@@ -101,7 +108,7 @@ fun RespCard(respName:String, employeeName:String, initials:String, role:String)
                     .padding(16.dp), Arrangement.SpaceEvenly ,
                 Alignment.Start) {
                 Text(
-                    text = "Ответ по задаче 333",
+                    text = "Ответ по задаче ${response.taskId}",
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
@@ -110,7 +117,7 @@ fun RespCard(respName:String, employeeName:String, initials:String, role:String)
                         .width(500.dp)
                 )
                 Text(
-                    text = "20.02.25",
+                    text = response.reportDate,
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
@@ -118,13 +125,19 @@ fun RespCard(respName:String, employeeName:String, initials:String, role:String)
                     modifier = Modifier
                         .width(300.dp)
                 )
-                if (role == "1"){
-                    AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier = Modifier)
+                if (role == "director"){
+                    response.employeeName?.let {
+                        AvatarNameSec(
+                            avatar = it.substringAfter(" ").replace(".",""),
+                            name = it,
+                            modifier = Modifier
+                        )
+                    }
                 }
                 
                 FileCard(fileFunc = stringResource(id = R.string.download_order))
                 when(role){
-                    "1"->{Row(Modifier.fillMaxWidth()) {
+                    "director"->{Row(Modifier.fillMaxWidth()) {
                         Button(onClick = {
                             scope.launch { sheetState.hide() }.invokeOnCompletion {
                                 if (!sheetState.isVisible) {
@@ -150,13 +163,27 @@ fun RespCard(respName:String, employeeName:String, initials:String, role:String)
 
                         }
                     }}
-                    "2"-> Text(
-                        text = "Ожидание",
-                        color = YellowSoft,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 15.sp,
-                        modifier = Modifier.padding(bottom = 150.dp)
-                    )
+                    "employee"->{
+                        when(response.status){
+                            "Ожидание" ->{
+                                responseStatusColor = YellowSoft
+                            }
+                            "Принято" ->{
+                                responseStatusColor = GreenSoft
+                            }
+                            "Возвращено на доработку" ->{
+                                responseStatusColor = RedSoft
+                            }
+                        }
+                        Text(
+                            text = response.status,
+                            color = responseStatusColor,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 15.sp,
+                            modifier = Modifier.padding(bottom = 150.dp))
+                    }
+
+
                 }
                 
                 Spacer(modifier = Modifier.height(220.dp))
