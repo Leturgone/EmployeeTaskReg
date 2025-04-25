@@ -1,6 +1,7 @@
 package com.example.employeetaskreg.domain.repository
 
 import com.example.employeetaskreg.domain.model.CompanyWorker
+import com.example.employeetaskreg.domain.model.Task
 
 interface EmployeeTaskRegRepository {
 
@@ -13,7 +14,11 @@ interface EmployeeTaskRegRepository {
 
     suspend fun getProfile():EmpTaskRegState<CompanyWorker>
 
-    suspend fun getDirectorNameById(id: Int):EmpTaskRegState<String>
+    suspend fun getDirectorById(id: Int):EmpTaskRegState<CompanyWorker.Director>
+
+    suspend fun getEmployeeById(id: Int):EmpTaskRegState<CompanyWorker.Employee>
 
     suspend fun getTaskCount():EmpTaskRegState<Int>
+
+    suspend fun getTaskList():EmpTaskRegState<List<Task>>
 }
