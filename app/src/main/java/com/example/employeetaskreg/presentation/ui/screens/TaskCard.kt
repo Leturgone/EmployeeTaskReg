@@ -36,13 +36,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.employeetaskreg.R
+import com.example.employeetaskreg.domain.model.Task
 import com.example.employeetaskreg.presentation.ui.screens.employeeScreen.AvatarNameSec
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.FileCard
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskCard(taskName: String, employeeName: String, initials: String,role:String = "1") {
+fun TaskCard(task: Task,role:String) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -61,7 +62,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String,role:Strin
             Box(modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.TopStart){
                 Text(
-                    text = taskName,
+                    text = "Задча ${task.id}",
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top = 16.dp, start = 16.dp),
                     fontSize = 16.sp
@@ -70,11 +71,14 @@ fun TaskCard(taskName: String, employeeName: String, initials: String,role:Strin
             }
             Box(modifier = Modifier
                 .fillMaxWidth()
-                .height(90.dp)
+                .height(90.dp).padding(end = 16.dp)
                 .padding(bottom = 8.dp),
                 contentAlignment = Alignment.BottomEnd){
-                if(role == "1"){
-                    AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier = Modifier.padding(start = 190.dp,end =15.dp))
+                if(role == "director"){
+                    task.employeeName?.let {
+                        AvatarNameSec(avatar = it.substringAfter(" ").replace(".",""),
+                            name = it, modifier =Modifier)
+                    }
                 }
             }
         }
@@ -94,7 +98,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String,role:Strin
                     .padding(16.dp), Arrangement.SpaceEvenly ,
                 Alignment.Start) {
                 Text(
-                    text = "Задача 333",
+                    text = "Задча ${task.id}",
                     fontSize = 25.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
@@ -103,7 +107,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String,role:Strin
                         .width(200.dp)
                 )
                 Text(
-                    text = "Сделать что нибудь",
+                    text = task.title,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Normal,
                     color = Color.Black,
@@ -121,7 +125,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String,role:Strin
                         .width(300.dp)
                 )
                 Text(
-                    text = "Сделать что нибудь",
+                    text = task.taskDesc,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Normal,
                     color = Color.Black,
@@ -130,7 +134,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String,role:Strin
                         .width(200.dp)
                 )
                 Text(
-                    text = "Срок: с 19.02.25 по 21.02.25",
+                    text = "Срок: с ${task.startDate} по ${task.endDate}",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Normal,
                     color = Color.Black,
@@ -139,7 +143,7 @@ fun TaskCard(taskName: String, employeeName: String, initials: String,role:Strin
                         .width(400.dp)
                 )
                 when(role){
-                    "1"->{
+                    "director"->{
                         FileCard(fileFunc = stringResource(id = R.string.download_file))
 
                         Text(
@@ -151,9 +155,13 @@ fun TaskCard(taskName: String, employeeName: String, initials: String,role:Strin
                             modifier = Modifier
                                 .width(200.dp)
                         )
-                        AvatarNameSec(avatar = "ИИ", name = "Иванов И.И", modifier =Modifier)
+                        task.employeeName?.let {
+                            AvatarNameSec(avatar = it.substringAfter(" ").replace(".",""),
+                                name = it, modifier =Modifier)
+                        }
+
                     }
-                    "2"->{
+                    "employee"->{
                         FileCard(fileFunc = stringResource(id = R.string.upload_order))
                         Spacer(modifier = Modifier.height(20.dp))
                         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
