@@ -52,6 +52,7 @@ fun ProfileScreen(navController: NavHostController,role:String, viewModel: MainV
     var taskCount by remember { mutableIntStateOf(0) }
     var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
+
     LaunchedEffect(Unit){
         viewModel.getProfile()
         viewModel.getTaskCount()
@@ -163,7 +164,7 @@ fun ProfileScreen(navController: NavHostController,role:String, viewModel: MainV
                             dirName = when(dirNameState.value){
                                 is EmpTaskRegState.Failure -> ""
                                 EmpTaskRegState.Loading -> "..."
-                                is EmpTaskRegState.Success -> (dirNameState.value as EmpTaskRegState.Success<String>).result
+                                is EmpTaskRegState.Success -> (dirNameState.value as EmpTaskRegState.Success<CompanyWorker.Director>).result.name
                                 EmpTaskRegState.Waiting -> ""
                             }
 
