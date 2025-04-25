@@ -35,6 +35,13 @@ interface EmployeeTaskRegApi {
         @Path("directorId") directorId: String
     ):CompanyWorker.Director
 
+    @GET("profile/myEmployees/employee/{employeeId}")
+    suspend fun getEmployeeById(
+        @Header("Authorization") token: String,
+        @Path("employeeId") employeeId: String
+    ):CompanyWorker.Employee
+
+
     @GET("/profile/myTaskCount")
     suspend fun getTaskCount(
         @Header("Authorization") token: String
@@ -57,8 +64,7 @@ interface EmployeeTaskRegApi {
     @GET("profile/myEmployees/{empName}")
     suspend fun getEmployeeByName()
 
-    @GET("profile/myEmployees/employee/{employeeId}")
-    suspend fun getEmployeeById()
+
 
 
 
