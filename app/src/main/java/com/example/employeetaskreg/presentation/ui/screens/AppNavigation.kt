@@ -21,8 +21,7 @@ import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
 
 
 @Composable
-fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController, viewModel: MainViewModel){
-    val role = viewModel.userRole.observeAsState().value!!
+fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController){
     NavHost(
         navController = navController,
         startDestination = "reg",
@@ -38,7 +37,7 @@ fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController,
         composable("set_employee") { SetEmployeeScreen(navController)  }
         composable("opt") { OptScreen(navController) }
         composable("emp_list"){ EmployeesScreen() }
-        composable("resp"){ RespScreen(role) }
-        composable("profile"){ ProfileScreen(navController,role) }
+        composable("resp"){ RespScreen() }
+        composable("profile"){ ProfileScreen(navController) }
     }
 }
