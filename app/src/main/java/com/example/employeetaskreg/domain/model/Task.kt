@@ -7,9 +7,10 @@ data class Task(
     val title:String,
     val taskDesc:String,
     val documentName:String? = null,
-    val startDate:LocalDate,
-    val endDate:LocalDate,
+    val startDate:String,
+    val endDate:String,
     val employeeId:Int?,
+    val employeeName:String?,
     val directorId:Int?,
     val status:String
 )
