@@ -11,26 +11,54 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
+import com.example.employeetaskreg.domain.model.CompanyWorker
+import com.example.employeetaskreg.domain.model.CompanyWorkerInterface
+import com.example.employeetaskreg.domain.model.Task
+import com.example.employeetaskreg.domain.repository.EmpTaskRegState
+import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
 import com.example.employeetaskreg.presentation.ui.screens.TaskCard
+import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
 
 @Composable
-fun TaskScreen(navController: NavHostController,userRole: String) {
+fun TaskScreen(navController: NavHostController, viewModel: MainViewModel = hiltViewModel()) {
+
+    val profileState = viewModel.profileFlow.collectAsState()
+    val taskListState = viewModel.taskListFlow.collectAsState()
+
+    var showToast by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
+    var taskList by remember { mutableStateOf(emptyList<Task>()) }
+    var role by remember { mutableStateOf("") }
+
 
     Box {
+        CustomToastMessage(
+            message = errorMessage,
+            isVisible = showToast,
+            onDismiss = { showToast = false },
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -48,30 +76,63 @@ fun TaskScreen(navController: NavHostController,userRole: String) {
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(2) {
+                items(taskList.size) {
+                    val task = taskList[it]
                     Spacer(modifier = Modifier.height(30.dp))
-                    TaskCard(taskName = "Задача 333", employeeName = "Иванов И.И", initials ="ИИ", role = userRole )
+                    TaskCard(task,role)
 
                 }
             }
         }
-        if (userRole == "1"){
-            FloatingActionButton(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-                shape = ShapeDefaults.Large,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(bottom = 50.dp, end = 40.dp),
-                onClick = {navController.navigate("new_task")}
-            ) {
-                Icon(imageVector =
-                Icons.Default.Add,
-                    contentDescription = "addButton",
-                    modifier = Modifier.size(20.dp))
+        when(profileState.value){
+            is EmpTaskRegState.Failure -> LaunchedEffect(profileState.value) {
+                showToast = true
+                errorMessage = (profileState.value as EmpTaskRegState.Failure).exception.toString()
+            }
+            EmpTaskRegState.Loading -> CircularProgressIndicator()
+            is EmpTaskRegState.Success -> {
+                when((profileState.value as EmpTaskRegState.Success<CompanyWorkerInterface>).result){
+                    is CompanyWorker.Director ->{
+                        role = "director"
+                        FloatingActionButton(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            shape = ShapeDefaults.Large,
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(bottom = 50.dp, end = 40.dp),
+                            onClick = {navController.navigate("new_task")}
+                        ) {
+                            Icon(imageVector =
+                            Icons.Default.Add,
+                                contentDescription = "addButton",
+                                modifier = Modifier.size(20.dp))
+
+                        }
+                    }
+                    is CompanyWorker.Employee ->{
+                        role = "employee"
+                    }
+                }
+                LaunchedEffect(Unit){
+                    viewModel.getTaskList()
+                }
+
+                when(taskListState.value){
+                    is EmpTaskRegState.Failure -> LaunchedEffect(taskListState.value) {
+                        showToast = true
+                        errorMessage = (taskListState.value as EmpTaskRegState.Failure).exception.toString()
+                    }
+                    EmpTaskRegState.Loading -> CircularProgressIndicator()
+                    is EmpTaskRegState.Success -> taskList = (taskListState.value as EmpTaskRegState.Success<List<Task>>).result
+                    EmpTaskRegState.Waiting -> null
+                }
+
 
             }
+            EmpTaskRegState.Waiting -> null
         }
+
 
     }
 
