@@ -1,6 +1,7 @@
 package com.example.employeetaskreg.domain.repository
 
 import com.example.employeetaskreg.domain.model.CompanyWorker
+import com.example.employeetaskreg.domain.model.Report
 import com.example.employeetaskreg.domain.model.Task
 
 interface EmployeeTaskRegRepository {
@@ -21,4 +22,6 @@ interface EmployeeTaskRegRepository {
     suspend fun getTaskCount():EmpTaskRegState<Int>
 
     suspend fun getTaskList():EmpTaskRegState<List<Task>>
+
+    suspend fun getReportList():EmpTaskRegState<List<Report>>
 }

@@ -5,6 +5,7 @@ import com.example.employeetaskreg.data.api.EmployeeTaskRegApi
 import com.example.employeetaskreg.data.api.dto.LoginRequest
 import com.example.employeetaskreg.data.api.dto.RegistrationRequest
 import com.example.employeetaskreg.domain.model.CompanyWorker
+import com.example.employeetaskreg.domain.model.Report
 import com.example.employeetaskreg.domain.model.Task
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.domain.repository.EmployeeTaskRegRepository
@@ -130,7 +131,6 @@ class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: Employe
                 return EmpTaskRegState.Failure(Exception("No token found. Please login first."))
             }
             val response = api.getTasks("Bearer $token").sortedBy { it.id }
-            Log.d("TASKS",response.toString())
             EmpTaskRegState.Success(response)
         }catch (e:HttpException){
             Log.e("BAR",e.toString())
@@ -138,6 +138,23 @@ class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: Employe
         }catch(e:Exception){
             Log.i("PROFILE",e.toString())
             EmpTaskRegState.Failure(Exception("Error during getting tasks: Check your connection"))
+        }
+    }
+
+    override suspend fun getReportList(): EmpTaskRegState<List<Report>> {
+        return try {
+            val token = getTokenFromDataStorage()
+            if (token.isEmpty()) {
+                return EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+            }
+            val response = api.getReports("Bearer $token").sortedBy { it.id }
+            EmpTaskRegState.Success(response)
+        }catch (e:HttpException){
+            Log.e("BAR",e.toString())
+            EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
+        }catch(e:Exception){
+            Log.i("PROFILE",e.toString())
+            EmpTaskRegState.Failure(Exception("Error during getting reports: Check your connection"))
         }
     }
 
