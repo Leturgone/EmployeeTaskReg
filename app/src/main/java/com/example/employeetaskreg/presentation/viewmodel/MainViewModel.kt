@@ -50,8 +50,6 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
 
     val reportListFlow: StateFlow<EmpTaskRegState<List<Report>>> = _reportListFlow
 
-    private val _userRole = MutableLiveData<String>("1")
-    val userRole: LiveData<String> = _userRole
 
     init {
         getProfile()
