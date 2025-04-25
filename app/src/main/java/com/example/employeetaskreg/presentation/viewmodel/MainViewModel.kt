@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.employeetaskreg.domain.model.CompanyWorker
 import com.example.employeetaskreg.domain.model.CompanyWorkerInterface
+import com.example.employeetaskreg.domain.model.Report
 import com.example.employeetaskreg.domain.model.Task
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.domain.repository.EmployeeTaskRegRepository
@@ -44,6 +45,10 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
     private val _taskListFlow = MutableStateFlow<EmpTaskRegState<List<Task>>>(EmpTaskRegState.Waiting)
 
     val taskListFlow: StateFlow<EmpTaskRegState<List<Task>>> = _taskListFlow
+
+    private val _reportListFlow = MutableStateFlow<EmpTaskRegState<List<Report>>>(EmpTaskRegState.Waiting)
+
+    val reportListFlow: StateFlow<EmpTaskRegState<List<Report>>> = _reportListFlow
 
     private val _userRole = MutableLiveData<String>("1")
     val userRole: LiveData<String> = _userRole
@@ -108,6 +113,14 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
 
     }
 
+    fun getReportList() = viewModelScope.launch {
+        _reportListFlow.value = EmpTaskRegState.Loading
+        val result = withContext(Dispatchers.IO){
+            employeeTaskRegRepository.getReportList()
+        }
+        _reportListFlow.value = result
+
+    }
 
     fun logout() = viewModelScope.launch {
         _loginFlow.value = EmpTaskRegState.Waiting
