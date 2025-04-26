@@ -103,7 +103,7 @@ class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: Employe
             EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
         }catch(e:Exception){
             Log.i("PROFILE",e.toString())
-            EmpTaskRegState.Failure(Exception("Error during getting director: Check your connection"))
+            EmpTaskRegState.Failure(Exception("Error during getting employee: Check your connection"))
         }
     }
 
