@@ -58,23 +58,25 @@ interface EmployeeTaskRegApi {
         @Header("Authorization") token: String
     ):List<Report>
 
+    @GET("/profile/myEmployees")
+    suspend fun getEmployees(
+        @Header("Authorization") token: String
+    ):List<CompanyWorker.Employee>
+
+
+
+
+
     @POST("/profile/addTask")
     suspend fun addTask()
 
     @POST("/profile/addReport")
     suspend fun addReport()
 
-    @GET("/profile/myEmployees")
-    suspend fun getEmployees()
+
 
     @GET("profile/myEmployees/{empName}")
     suspend fun getEmployeeByName()
-
-
-
-
-
-
 
 
     @GET("/getReport/{reportId}")
