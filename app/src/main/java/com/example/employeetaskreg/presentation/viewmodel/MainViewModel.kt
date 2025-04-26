@@ -50,6 +50,9 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
 
     val reportListFlow: StateFlow<EmpTaskRegState<List<Report>>> = _reportListFlow
 
+    private val _employeesListFlow = MutableStateFlow<EmpTaskRegState<List<CompanyWorker.Employee>>>(EmpTaskRegState.Waiting)
+
+    val employeesListFlow : StateFlow<EmpTaskRegState<List<CompanyWorker.Employee>>> = _employeesListFlow
 
     init {
         getProfile()
@@ -118,6 +121,14 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
         }
         _reportListFlow.value = result
 
+    }
+
+    fun getEmployeesList() = viewModelScope.launch {
+        _employeesListFlow.value = EmpTaskRegState.Loading
+        val result = withContext(Dispatchers.IO){
+            employeeTaskRegRepository.getEmployeesList()
+        }
+        _employeesListFlow.value = result
     }
 
     fun logout() = viewModelScope.launch {
