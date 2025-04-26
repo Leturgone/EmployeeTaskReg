@@ -158,5 +158,22 @@ class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: Employe
         }
     }
 
+    override suspend fun getEmployeesList(): EmpTaskRegState<List<CompanyWorker.Employee>> {
+        return try {
+            val token = getTokenFromDataStorage()
+            if (token.isEmpty()) {
+                return EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+            }
+            val response = api.getEmployees("Bearer $token").sortedBy { it.id }
+            EmpTaskRegState.Success(response)
+        }catch (e:HttpException){
+            Log.e("BAR",e.toString())
+            EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
+        }catch(e:Exception){
+            Log.i("PROFILE",e.toString())
+            EmpTaskRegState.Failure(Exception("Error during getting employees: Check your connection"))
+        }
+    }
+
 
 }
