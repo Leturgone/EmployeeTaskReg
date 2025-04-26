@@ -45,7 +45,7 @@ import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
 fun ProfileScreen(navController: NavHostController, viewModel: MainViewModel = hiltViewModel()) {
 
     val profileState = viewModel.profileFlow.collectAsState()
-    val dirNameState = viewModel.dirNameFlow.collectAsState()
+    val dirNameState = viewModel.directorFlow.collectAsState()
     val taskCountState = viewModel.taskCountFlow.collectAsState()
 
     var dirName by remember { mutableStateOf("") }

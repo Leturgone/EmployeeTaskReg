@@ -1,7 +1,5 @@
 package com.example.employeetaskreg.presentation.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.employeetaskreg.domain.model.CompanyWorker
@@ -34,9 +32,9 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
 
     val profileFlow: StateFlow<EmpTaskRegState<CompanyWorkerInterface>> = _profileFlow
 
-    private val _dirNameFlow = MutableStateFlow<EmpTaskRegState<CompanyWorker.Director>>(EmpTaskRegState.Waiting)
+    private val _directorFlow = MutableStateFlow<EmpTaskRegState<CompanyWorker.Director>>(EmpTaskRegState.Waiting)
 
-    val dirNameFlow: StateFlow<EmpTaskRegState<CompanyWorker.Director>> = _dirNameFlow
+    val directorFlow: StateFlow<EmpTaskRegState<CompanyWorker.Director>> = _directorFlow
 
     private val _taskCountFlow = MutableStateFlow<EmpTaskRegState<Int>>(EmpTaskRegState.Waiting)
 
@@ -57,6 +55,7 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
     private val _employeeTaskCountFlow = MutableStateFlow<EmpTaskRegState<Int>>(EmpTaskRegState.Waiting)
 
     val employeeTaskCountFlow: StateFlow<EmpTaskRegState<Int>> = _employeeTaskCountFlow
+
 
     init {
         getProfile()
@@ -95,12 +94,18 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
     }
 
     fun getDirById(id:Int) = viewModelScope.launch {
-        _dirNameFlow.value = EmpTaskRegState.Loading
+        _directorFlow.value = EmpTaskRegState.Loading
         val result = withContext(Dispatchers.IO){
             employeeTaskRegRepository.getDirectorById(id)
         }
-        _dirNameFlow.value = result
+        _directorFlow.value = result
     }
+
+
+    fun getEmployeeById(id:Int) = viewModelScope.launch {
+    }
+
+
     fun getTaskCount() = viewModelScope.launch {
         _taskCountFlow.value = EmpTaskRegState.Loading
         val result = withContext(Dispatchers.IO){
