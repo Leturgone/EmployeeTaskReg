@@ -36,6 +36,10 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
 
     val directorFlow: StateFlow<EmpTaskRegState<CompanyWorker.Director>> = _directorFlow
 
+    private val _employeeFlow = MutableStateFlow<EmpTaskRegState<CompanyWorker.Employee>>(EmpTaskRegState.Waiting)
+
+    val employeeFlow: StateFlow<EmpTaskRegState<CompanyWorker.Employee>> = _employeeFlow
+
     private val _taskCountFlow = MutableStateFlow<EmpTaskRegState<Int>>(EmpTaskRegState.Waiting)
 
     val taskCountFlow: StateFlow<EmpTaskRegState<Int>> = _taskCountFlow
@@ -103,6 +107,11 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
 
 
     fun getEmployeeById(id:Int) = viewModelScope.launch {
+        _employeeFlow.value = EmpTaskRegState.Loading
+        val result = withContext(Dispatchers.IO){
+            employeeTaskRegRepository.getEmployeeById(id)
+        }
+        _employeeFlow.value = result
     }
 
 
