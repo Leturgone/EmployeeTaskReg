@@ -24,4 +24,6 @@ interface EmployeeTaskRegRepository {
     suspend fun getTaskList():EmpTaskRegState<List<Task>>
 
     suspend fun getReportList():EmpTaskRegState<List<Report>>
+
+    suspend fun getEmployeesList():EmpTaskRegState<List<CompanyWorker.Employee>>
 }
