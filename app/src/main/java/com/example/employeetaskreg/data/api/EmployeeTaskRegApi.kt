@@ -63,6 +63,11 @@ interface EmployeeTaskRegApi {
         @Header("Authorization") token: String
     ):List<CompanyWorker.Employee>
 
+    @GET("profile/myEmployees/employee/{employeeId}/taskCount")
+    suspend fun getEmployeeTaskCountById(
+        @Header("Authorization") token: String,
+        @Path("employeeId") employeeId: String
+    ):Int
 
 
 
