@@ -15,7 +15,7 @@ class AuthRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegApi
         return try {
             val token = dataStoreManager.tokenFlow.first().toString()
             if (token.isEmpty()){
-                Result.failure<Exception>(Exception("No token found. Please login first."))
+                Result.failure<Exception>(Exception())
             }
             Result.success(token)
         }catch (e:Exception){
@@ -29,16 +29,14 @@ class AuthRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegApi
         return try {
             val response = api.login(request).token
             dataStoreManager.storeToken(response)
-            Log.i("TOKEN",response)
+            Log.i("login",response)
             Result.success(response)
         }catch (e: HttpException) {
             Result.failure(e)
-            //EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
         }
         catch (e: Exception) {
-            Log.i("TOKEN",e.toString())
+            Log.i("login",e.toString())
             Result.failure(e)
-            //EmpTaskRegState.Failure(Exception("Error during login: Check your connection"))
         }
     }
 
@@ -47,16 +45,14 @@ class AuthRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegApi
         return try {
             val response = api.register(request).token
             dataStoreManager.storeToken(response)
-            Log.i("TOKEN",response)
+            Log.i("register",response)
             Result.success(response)
         }catch (e: HttpException) {
             Result.failure(e)
-            //EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
         }
         catch (e: Exception) {
-            Log.i("TOKEN",e.toString())
+            Log.i("register",e.toString())
             Result.failure(e)
-            //EmpTaskRegState.Failure(Exception("Error during login: Check your connection"))
         }
     }
 
