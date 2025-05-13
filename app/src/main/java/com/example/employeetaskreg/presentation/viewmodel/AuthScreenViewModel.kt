@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class AuthScreenViewModel @Inject constructor(val authRepository: AuthRepository):ViewModel(){
+class AuthScreenViewModel @Inject constructor(private val authRepository: AuthRepository):ViewModel(){
 
     private val _loginFlow = MutableStateFlow<EmpTaskRegState<String>>(EmpTaskRegState.Waiting)
 
