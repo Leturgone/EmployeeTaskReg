@@ -9,6 +9,7 @@ import com.example.employeetaskreg.domain.repository.DirectorRepository
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.domain.repository.ProfileRepository
 import com.example.employeetaskreg.domain.repository.TaskRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +18,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import javax.inject.Inject
 
+@HiltViewModel
 class ProfileScreenViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val directorRepository: DirectorRepository,
@@ -55,13 +57,6 @@ class ProfileScreenViewModel @Inject constructor(
         }.onFailure {
             _profileFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
-//        if (result is EmpTaskRegState.Success) {
-//            val token = withContext(Dispatchers.IO) {
-//                employeeTaskRegRepository.getTokenFromDataStorage()
-//            }
-//            _regFlow.value = EmpTaskRegState.Success(token)
-//            _loginFlow.value = EmpTaskRegState.Success(token)
-//        }
     }
 
     fun getProfileTaskCount() = viewModelScope.launch {

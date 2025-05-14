@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.employeetaskreg.domain.repository.AuthRepository
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +14,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import javax.inject.Inject
 
+@HiltViewModel
 class AuthScreenViewModel @Inject constructor(private val authRepository: AuthRepository):ViewModel(){
 
     private val _loginFlow = MutableStateFlow<EmpTaskRegState<String>>(EmpTaskRegState.Waiting)

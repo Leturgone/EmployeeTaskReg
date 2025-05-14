@@ -7,6 +7,7 @@ import com.example.employeetaskreg.domain.repository.AuthRepository
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.domain.repository.EmployeeRepository
 import com.example.employeetaskreg.domain.repository.TaskRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,6 +16,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import javax.inject.Inject
 
+@HiltViewModel
 class EmployeesScreenViewModel @Inject constructor(
     private val employeeRepository: EmployeeRepository,
     private val taskRepository: TaskRepository,
