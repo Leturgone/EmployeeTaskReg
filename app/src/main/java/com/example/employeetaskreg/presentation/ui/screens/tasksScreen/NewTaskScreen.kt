@@ -47,7 +47,6 @@ import com.example.employeetaskreg.R
 import com.example.employeetaskreg.presentation.ui.screens.employeeScreen.EmployeeCard
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -68,7 +67,7 @@ fun LocalDate.localDateToMillis(): Long {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewTaskScreen(navController: NavHostController,employeeName:String? = null) {
+fun NewTaskScreen(navController: NavHostController,employeeName:String? = null, employeeId:Int? = null) {
     var taskTitle  by remember { mutableStateOf("") }
     var taskDesc  by remember { mutableStateOf("") }
 
@@ -77,7 +76,7 @@ fun NewTaskScreen(navController: NavHostController,employeeName:String? = null) 
     var startDatePickerShow by remember { mutableStateOf(false) }
     var endDatePickerShow by remember { mutableStateOf(false) }
 
-    var startDateMills by remember { mutableStateOf(LocalDate.now().localDateToMillis()) }
+    var startDateMills by remember { mutableLongStateOf(LocalDate.now().localDateToMillis()) }
 
     var endDateMills by remember { mutableLongStateOf(LocalDate.now().localDateToMillis()) }
 
@@ -192,7 +191,7 @@ fun NewTaskScreen(navController: NavHostController,employeeName:String? = null) 
         Spacer(modifier = Modifier.height(20.dp))
         FileCard(fileFunc = stringResource(id = R.string.upload_file))
         Spacer(modifier = Modifier.height(20.dp))
-        if (employeeName ==null){
+        if ((employeeName == null) || (employeeId == null)){
             Card(
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
@@ -235,7 +234,7 @@ fun NewTaskScreen(navController: NavHostController,employeeName:String? = null) 
                 }
             }
         }else{
-            EmployeeCard(name = employeeName)
+            EmployeeCard(employeeName,employeeId)
         }
         
 
