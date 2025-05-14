@@ -12,15 +12,12 @@ class ReportRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegA
         return try {
             val response = api.getReports("Bearer $authToken").sortedBy { it.id }
             Result.success(response)
-            //EmpTaskRegState.Success(response)
         }catch (e: HttpException){
             Log.e("getReportList",e.toString())
             Result.failure(e)
-        //EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
         }catch(e:Exception){
             Log.i("getReportList",e.toString())
             Result.failure(e)
-            //EmpTaskRegState.Failure(Exception("Error during getting reports: Check your connection"))
         }
     }
 
