@@ -41,7 +41,7 @@ fun EmployeesScreen() {
         ) {
             items(3) {
                 Spacer(modifier = Modifier.height(30.dp))
-                EmployeeCard(name = "Иванов И.И.")
+                //EmployeeCard(name = "Иванов И.И.")
 
             }
         }

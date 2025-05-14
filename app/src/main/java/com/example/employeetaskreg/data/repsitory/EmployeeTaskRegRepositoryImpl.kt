@@ -1,20 +1,20 @@
 package com.example.employeetaskreg.data.repsitory
 
-import android.util.Log
-import com.example.employeetaskreg.data.api.EmployeeTaskRegApi
-import com.example.employeetaskreg.data.api.dto.LoginRequest
-import com.example.employeetaskreg.data.api.dto.RegistrationRequest
-import com.example.employeetaskreg.domain.model.CompanyWorker
-import com.example.employeetaskreg.domain.model.Report
-import com.example.employeetaskreg.domain.model.Task
-import com.example.employeetaskreg.domain.repository.EmpTaskRegState
-import com.example.employeetaskreg.domain.repository.EmployeeTaskRegRepository
-import kotlinx.coroutines.flow.first
-import retrofit2.HttpException
-import javax.inject.Inject
+//import android.util.Log
+//import com.example.employeetaskreg.data.api.EmployeeTaskRegApi
+//import com.example.employeetaskreg.data.api.dto.LoginRequest
+//import com.example.employeetaskreg.data.api.dto.RegistrationRequest
+//import com.example.employeetaskreg.domain.model.CompanyWorker
+//import com.example.employeetaskreg.domain.model.Report
+//import com.example.employeetaskreg.domain.model.Task
+//import com.example.employeetaskreg.domain.repository.EmpTaskRegState
+//import com.example.employeetaskreg.domain.repository.EmployeeTaskRegRepository
+//import kotlinx.coroutines.flow.first
+//import retrofit2.HttpException
+//import javax.inject.Inject
 
-class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegApi,
-                                                        private val dataStoreManager: DataStoreManager ) :EmployeeTaskRegRepository {
+//class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegApi,
+//                                                        private val dataStoreManager: DataStoreManager ) :EmployeeTaskRegRepository {
 //    override suspend fun getTokenFromDataStorage(): String {
 //        return dataStoreManager.tokenFlow.first().toString()
 //    }
@@ -193,4 +193,4 @@ class EmployeeTaskRegRepositoryImpl @Inject constructor(private val api: Employe
 //    }
 
 
-}
+//}
