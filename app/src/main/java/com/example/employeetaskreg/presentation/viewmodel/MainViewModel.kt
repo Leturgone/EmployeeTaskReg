@@ -20,45 +20,45 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private val employeeTaskRegRepository: EmployeeTaskRegRepository): ViewModel() {
 
-    private val _loginFlow = MutableStateFlow<EmpTaskRegState<String>>(EmpTaskRegState.Waiting)
+//    private val _loginFlow = MutableStateFlow<EmpTaskRegState<String>>(EmpTaskRegState.Waiting)
+//
+//    val loginFlow: StateFlow<EmpTaskRegState<String>> = _loginFlow
+//
+//    private val _regFlow = MutableStateFlow<EmpTaskRegState<String>>(EmpTaskRegState.Waiting)
+//
+//    val regFlow: StateFlow<EmpTaskRegState<String>> = _regFlow
+//
+//    private val _profileFlow = MutableStateFlow<EmpTaskRegState<CompanyWorkerInterface>>(EmpTaskRegState.Waiting)
+//
+//    val profileFlow: StateFlow<EmpTaskRegState<CompanyWorkerInterface>> = _profileFlow
 
-    val loginFlow: StateFlow<EmpTaskRegState<String>> = _loginFlow
+//    private val _directorFlow = MutableStateFlow<EmpTaskRegState<CompanyWorker.Director>>(EmpTaskRegState.Waiting)
 
-    private val _regFlow = MutableStateFlow<EmpTaskRegState<String>>(EmpTaskRegState.Waiting)
+//    val directorFlow: StateFlow<EmpTaskRegState<CompanyWorker.Director>> = _directorFlow
 
-    val regFlow: StateFlow<EmpTaskRegState<String>> = _regFlow
+//    private val _employeeFlow = MutableStateFlow<EmpTaskRegState<CompanyWorker.Employee>>(EmpTaskRegState.Waiting)
+//
+//    val employeeFlow: StateFlow<EmpTaskRegState<CompanyWorker.Employee>> = _employeeFlow
 
-    private val _profileFlow = MutableStateFlow<EmpTaskRegState<CompanyWorkerInterface>>(EmpTaskRegState.Waiting)
+//    private val _taskCountFlow = MutableStateFlow<EmpTaskRegState<Int>>(EmpTaskRegState.Waiting)
+//
+//    val taskCountFlow: StateFlow<EmpTaskRegState<Int>> = _taskCountFlow
 
-    val profileFlow: StateFlow<EmpTaskRegState<CompanyWorkerInterface>> = _profileFlow
+//    private val _taskListFlow = MutableStateFlow<EmpTaskRegState<List<Task>>>(EmpTaskRegState.Waiting)
+//
+//    val taskListFlow: StateFlow<EmpTaskRegState<List<Task>>> = _taskListFlow
 
-    private val _directorFlow = MutableStateFlow<EmpTaskRegState<CompanyWorker.Director>>(EmpTaskRegState.Waiting)
+    //private val _reportListFlow = MutableStateFlow<EmpTaskRegState<List<Report>>>(EmpTaskRegState.Waiting)
 
-    val directorFlow: StateFlow<EmpTaskRegState<CompanyWorker.Director>> = _directorFlow
+    //val reportListFlow: StateFlow<EmpTaskRegState<List<Report>>> = _reportListFlow
 
-    private val _employeeFlow = MutableStateFlow<EmpTaskRegState<CompanyWorker.Employee>>(EmpTaskRegState.Waiting)
-
-    val employeeFlow: StateFlow<EmpTaskRegState<CompanyWorker.Employee>> = _employeeFlow
-
-    private val _taskCountFlow = MutableStateFlow<EmpTaskRegState<Int>>(EmpTaskRegState.Waiting)
-
-    val taskCountFlow: StateFlow<EmpTaskRegState<Int>> = _taskCountFlow
-
-    private val _taskListFlow = MutableStateFlow<EmpTaskRegState<List<Task>>>(EmpTaskRegState.Waiting)
-
-    val taskListFlow: StateFlow<EmpTaskRegState<List<Task>>> = _taskListFlow
-
-    private val _reportListFlow = MutableStateFlow<EmpTaskRegState<List<Report>>>(EmpTaskRegState.Waiting)
-
-    val reportListFlow: StateFlow<EmpTaskRegState<List<Report>>> = _reportListFlow
-
-    private val _employeesListFlow = MutableStateFlow<EmpTaskRegState<List<CompanyWorker.Employee>>>(EmpTaskRegState.Waiting)
-
-    val employeesListFlow : StateFlow<EmpTaskRegState<List<CompanyWorker.Employee>>> = _employeesListFlow
-
-    private val _employeeTaskCountFlow = MutableStateFlow<EmpTaskRegState<Int>>(EmpTaskRegState.Waiting)
-
-    val employeeTaskCountFlow: StateFlow<EmpTaskRegState<Int>> = _employeeTaskCountFlow
+//    private val _employeesListFlow = MutableStateFlow<EmpTaskRegState<List<CompanyWorker.Employee>>>(EmpTaskRegState.Waiting)
+//
+//    val employeesListFlow : StateFlow<EmpTaskRegState<List<CompanyWorker.Employee>>> = _employeesListFlow
+//
+//    private val _employeeTaskCountFlow = MutableStateFlow<EmpTaskRegState<Int>>(EmpTaskRegState.Waiting)
+//
+//    val employeeTaskCountFlow: StateFlow<EmpTaskRegState<Int>> = _employeeTaskCountFlow
 
 
     init {
@@ -67,35 +67,35 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
 
 
 
-    fun register(login: String, password: String, name: String, dirName: String) = viewModelScope.launch{
-       _regFlow.value = EmpTaskRegState.Loading
-        val result = withContext(Dispatchers.IO){
-            employeeTaskRegRepository.register(login, password, name, dirName)
-        }
-        _regFlow.value = result
-    }
-    fun login(login: String, password: String) = viewModelScope.launch{
-        _loginFlow.value = EmpTaskRegState.Loading
-        val result = withContext(Dispatchers.IO){
-            employeeTaskRegRepository.login(login, password)
-        }
-        _loginFlow.value = result
-    }
+//    !!!fun register(login: String, password: String, name: String, dirName: String) = viewModelScope.launch{
+//       _regFlow.value = EmpTaskRegState.Loading
+//        val result = withContext(Dispatchers.IO){
+//            employeeTaskRegRepository.register(login, password, name, dirName)
+//        }
+//        _regFlow.value = result
+//    }
+//    !!!fun login(login: String, password: String) = viewModelScope.launch{
+//        _loginFlow.value = EmpTaskRegState.Loading
+//        val result = withContext(Dispatchers.IO){
+//            employeeTaskRegRepository.login(login, password)
+//        }
+//        _loginFlow.value = result
+//    }
 
-    fun getProfile() = viewModelScope.launch {
-        _profileFlow.value = EmpTaskRegState.Loading
-        val result = withContext(Dispatchers.IO){
-            employeeTaskRegRepository.getProfile()
-        }
-        if(result is EmpTaskRegState.Success){
-            val token = withContext(Dispatchers.IO){
-                employeeTaskRegRepository.getTokenFromDataStorage()
-            }
-            _regFlow.value = EmpTaskRegState.Success(token)
-            _loginFlow.value = EmpTaskRegState.Success(token)
-        }
-        _profileFlow.value = result
-    }
+//    !!!fun getProfile() = viewModelScope.launch {
+//        _profileFlow.value = EmpTaskRegState.Loading
+//        val result = withContext(Dispatchers.IO){
+//            employeeTaskRegRepository.getProfile()
+//        }
+//        if(result is EmpTaskRegState.Success){
+//            val token = withContext(Dispatchers.IO){
+//                employeeTaskRegRepository.getTokenFromDataStorage()
+//            }
+//            _regFlow.value = EmpTaskRegState.Success(token)
+//            _loginFlow.value = EmpTaskRegState.Success(token)
+//        }
+//        _profileFlow.value = result
+//    }
 
     fun getDirById(id:Int) = viewModelScope.launch {
         _directorFlow.value = EmpTaskRegState.Loading
@@ -106,63 +106,63 @@ class MainViewModel @Inject constructor(private val employeeTaskRegRepository: E
     }
 
 
-    fun getEmployeeById(id:Int) = viewModelScope.launch {
-        _employeeFlow.value = EmpTaskRegState.Loading
-        val result = withContext(Dispatchers.IO){
-            employeeTaskRegRepository.getEmployeeById(id)
-        }
-        _employeeFlow.value = result
-    }
+//    fun getEmployeeById(id:Int) = viewModelScope.launch {
+//        _employeeFlow.value = EmpTaskRegState.Loading
+//        val result = withContext(Dispatchers.IO){
+//            employeeTaskRegRepository.getEmployeeById(id)
+//        }
+//        _employeeFlow.value = result
+//    }
 
 
-    fun getTaskCount() = viewModelScope.launch {
-        _taskCountFlow.value = EmpTaskRegState.Loading
-        val result = withContext(Dispatchers.IO){
-            employeeTaskRegRepository.getTaskCount()
-        }
-        _taskCountFlow.value = result
-    }
+//    fun getTaskCount() = viewModelScope.launch {
+//        _taskCountFlow.value = EmpTaskRegState.Loading
+//        val result = withContext(Dispatchers.IO){
+//            employeeTaskRegRepository.getTaskCount()
+//        }
+//        _taskCountFlow.value = result
+//    }
 
-    fun getTaskList() = viewModelScope.launch {
-        _taskListFlow.value = EmpTaskRegState.Loading
-        val result = withContext(Dispatchers.IO){
-            employeeTaskRegRepository.getTaskList()
-        }
-        _taskListFlow.value = result
+//    fun getTaskList() = viewModelScope.launch {
+//        _taskListFlow.value = EmpTaskRegState.Loading
+//        val result = withContext(Dispatchers.IO){
+//            employeeTaskRegRepository.getTaskList()
+//        }
+//        _taskListFlow.value = result
+//
+//    }
 
-    }
+//    fun getReportList() = viewModelScope.launch {
+//        _reportListFlow.value = EmpTaskRegState.Loading
+//        val result = withContext(Dispatchers.IO){
+//            employeeTaskRegRepository.getReportList()
+//        }
+//        _reportListFlow.value = result
+//
+//    }
 
-    fun getReportList() = viewModelScope.launch {
-        _reportListFlow.value = EmpTaskRegState.Loading
-        val result = withContext(Dispatchers.IO){
-            employeeTaskRegRepository.getReportList()
-        }
-        _reportListFlow.value = result
+//    fun getEmployeesList() = viewModelScope.launch {
+//        _employeesListFlow.value = EmpTaskRegState.Loading
+//        val result = withContext(Dispatchers.IO){
+//            employeeTaskRegRepository.getEmployeesList()
+//        }
+//        _employeesListFlow.value = result
+//    }
+//
+//    fun getEmployeeTaskCount(id:Int) = viewModelScope.launch {
+//        _employeeTaskCountFlow.value =EmpTaskRegState.Loading
+//        val result = withContext(Dispatchers.IO){
+//            employeeTaskRegRepository.getEmployeeTaskCount(id)
+//        }
+//        _employeeTaskCountFlow.value = result
+//    }
 
-    }
-
-    fun getEmployeesList() = viewModelScope.launch {
-        _employeesListFlow.value = EmpTaskRegState.Loading
-        val result = withContext(Dispatchers.IO){
-            employeeTaskRegRepository.getEmployeesList()
-        }
-        _employeesListFlow.value = result
-    }
-
-    fun getEmployeeTaskCount(id:Int) = viewModelScope.launch {
-        _employeeTaskCountFlow.value =EmpTaskRegState.Loading
-        val result = withContext(Dispatchers.IO){
-            employeeTaskRegRepository.getEmployeeTaskCount(id)
-        }
-        _employeeTaskCountFlow.value = result
-    }
-
-    fun logout() = viewModelScope.launch {
-        _loginFlow.value = EmpTaskRegState.Waiting
-        _regFlow.value = EmpTaskRegState.Waiting
-        async(Dispatchers.IO){
-            employeeTaskRegRepository.logout()
-        }.await()
-
-    }
+//    fun logout() = viewModelScope.launch {
+//        _loginFlow.value = EmpTaskRegState.Waiting
+//        _regFlow.value = EmpTaskRegState.Waiting
+//        async(Dispatchers.IO){
+//            employeeTaskRegRepository.logout()
+//        }.await()
+//
+//    }
 }
