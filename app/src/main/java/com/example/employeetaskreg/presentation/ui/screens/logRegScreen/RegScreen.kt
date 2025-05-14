@@ -43,11 +43,12 @@ import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
+import com.example.employeetaskreg.presentation.viewmodel.AuthScreenViewModel
 import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
-fun RegScreen(navController: NavHostController, viewModel: MainViewModel = hiltViewModel()){
+fun RegScreen(navController: NavHostController, viewModel: AuthScreenViewModel = hiltViewModel()){
     var loginInputText  by remember { mutableStateOf("") }
     var fioInputText  by remember { mutableStateOf("") }
     var fioDirInputText  by remember { mutableStateOf("") }
