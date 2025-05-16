@@ -48,11 +48,6 @@ class TasksScreenViewModel @Inject constructor(
         }.onFailure {
             _taskListFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
-//
-//        val result = withContext(Dispatchers.IO){
-//            taskRepository.getTaskList()
-//        }
-//        _taskListFlow.value = result
 
     }
 }
