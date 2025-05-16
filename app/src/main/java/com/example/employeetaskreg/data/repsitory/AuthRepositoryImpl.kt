@@ -19,6 +19,7 @@ class AuthRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegApi
             }
             Result.success(token)
         }catch (e:Exception){
+            Log.e("getTokenFromDataStorage",e.toString())
             Result.failure(e)
         }
 
@@ -35,7 +36,7 @@ class AuthRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegApi
             Result.failure(e)
         }
         catch (e: Exception) {
-            Log.i("login",e.toString())
+            Log.e("login",e.toString())
             Result.failure(e)
         }
     }
@@ -51,7 +52,7 @@ class AuthRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegApi
             Result.failure(e)
         }
         catch (e: Exception) {
-            Log.i("register",e.toString())
+            Log.e("register",e.toString())
             Result.failure(e)
         }
     }
@@ -61,6 +62,7 @@ class AuthRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegApi
             val res = dataStoreManager.clearToken()
             Result.success(res)
         }catch (e:Exception){
+            Log.e("logout",e.toString())
             Result.failure(e)
         }
     }
