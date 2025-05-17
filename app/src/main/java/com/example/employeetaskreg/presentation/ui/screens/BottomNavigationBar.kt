@@ -1,5 +1,6 @@
 package com.example.employeetaskreg.presentation.ui.screens
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
@@ -14,7 +15,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -26,13 +26,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.domain.model.CompanyWorker
 import com.example.employeetaskreg.domain.model.CompanyWorkerInterface
-
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.components.BottomNavigation
-import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ProfileScreenViewModel
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun BottomNavigationBar(navController: NavHostController, viewModel: MainViewModel){
+fun BottomNavigationBar(navController: NavHostController,
+                        viewModel: ProfileScreenViewModel) {
+
     val profileState = viewModel.profileFlow.collectAsState()
     val directorItems = listOf(
         BottomNavigation(
@@ -73,13 +75,10 @@ fun BottomNavigationBar(navController: NavHostController, viewModel: MainViewMod
             title = stringResource(id = R.string.profile)
         ),
     )
-    LaunchedEffect(Unit){
-        viewModel.getProfile()
-    }
+
     when(profileState.value){
         is EmpTaskRegState.Failure -> {
             Log.e("BAR", (profileState.value as EmpTaskRegState.Failure).exception.message.toString())
-            null
         }
         EmpTaskRegState.Loading -> CircularProgressIndicator()
         is EmpTaskRegState.Success -> {
@@ -116,7 +115,5 @@ fun BottomNavigationBar(navController: NavHostController, viewModel: MainViewMod
         }
         EmpTaskRegState.Waiting -> null
     }
-
-
 
 }
