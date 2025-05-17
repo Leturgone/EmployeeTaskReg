@@ -30,10 +30,10 @@ import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
 import com.example.employeetaskreg.presentation.ui.screens.employeeScreen.EmployeeCard
 import com.example.employeetaskreg.presentation.ui.screens.employeeScreen.SearchSec
-import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
+import com.example.employeetaskreg.presentation.viewmodel.EmployeesScreenViewModel
 
 @Composable
-fun SetEmployeeScreen(navController: NavHostController, viewModel: MainViewModel = hiltViewModel()) {
+fun SetEmployeeScreen(navController: NavHostController, viewModel: EmployeesScreenViewModel = hiltViewModel(navController.currentBackStackEntry!!)) {
 
     val employeeListState = viewModel.employeesListFlow.collectAsState()
 
@@ -89,7 +89,7 @@ fun SetEmployeeScreen(navController: NavHostController, viewModel: MainViewModel
                     employeeId = employee.id,
                     setListItem = true
                 ){
-                    viewModel.selectEmployeeForTask(employee)
+                    //viewModel.selectEmployeeForTask(employee)
                     navController.popBackStack()
                     navController.popBackStack()
                     navController.navigate("new_task/${employee.name}/${employee.id}")
