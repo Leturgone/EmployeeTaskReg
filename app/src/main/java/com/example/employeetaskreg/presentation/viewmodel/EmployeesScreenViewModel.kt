@@ -55,11 +55,6 @@ class EmployeesScreenViewModel @Inject constructor(
         }.onFailure {
             _employeeFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
-//
-//        val result = withContext(Dispatchers.IO){
-//            employeeTaskRegRepository.getEmployeeById(id)
-//        }
-//        _employeeFlow.value = result
     }
 
     fun getEmployeesList() = viewModelScope.launch {
@@ -84,11 +79,6 @@ class EmployeesScreenViewModel @Inject constructor(
         }.onFailure {
             _employeeFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
-//
-//        val result = withContext(Dispatchers.IO){
-//            employeeRepository.getEmployeesList()
-//        }
-//        _employeesListFlow.value = result
     }
 
     fun getEmployeeTaskCount(id:Int) = viewModelScope.launch {
@@ -111,10 +101,6 @@ class EmployeesScreenViewModel @Inject constructor(
         }.onFailure {
             _employeeFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
-//        val result = withContext(Dispatchers.IO){
-//            employeeTaskRegRepository.getEmployeeTaskCount(id)
-//        }
-//        _employeeTaskCountFlow.value = result
     }
 
 }
