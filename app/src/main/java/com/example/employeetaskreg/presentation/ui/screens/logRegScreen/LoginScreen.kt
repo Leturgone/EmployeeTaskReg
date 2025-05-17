@@ -43,7 +43,6 @@ import com.example.employeetaskreg.R
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
 import com.example.employeetaskreg.presentation.viewmodel.AuthScreenViewModel
-import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
 
 @Composable
 fun LogScreen(navController: NavHostController, viewModel: AuthScreenViewModel = hiltViewModel()){
@@ -151,7 +150,7 @@ fun LogScreen(navController: NavHostController, viewModel: AuthScreenViewModel =
                     is EmpTaskRegState.Success -> LaunchedEffect(Unit){
                         navController.popBackStack()
                         navController.popBackStack()
-                        navController.navigate("tasks")
+                        navController.navigate("profile")
                     }
 
                     EmpTaskRegState.Waiting -> null
