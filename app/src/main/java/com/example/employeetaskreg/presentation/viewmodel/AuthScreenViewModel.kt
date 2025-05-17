@@ -51,7 +51,7 @@ class AuthScreenViewModel @Inject constructor(private val authRepository: AuthRe
         }.onFailure {
             _regFlow.value = when(it){
                 is HttpException ->EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
-                else -> EmpTaskRegState.Failure(Exception("Error during login: Check your connection"))
+                else -> EmpTaskRegState.Failure(Exception("Error during register: Check your connection"))
             }
         }
     }
