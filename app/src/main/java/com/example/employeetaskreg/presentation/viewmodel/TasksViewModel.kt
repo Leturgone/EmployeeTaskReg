@@ -16,7 +16,7 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
-class TasksScreenViewModel @Inject constructor(
+class TasksViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val taskRepository: TaskRepository):ViewModel() {
 
@@ -46,6 +46,5 @@ class TasksScreenViewModel @Inject constructor(
         }.onFailure {
             _taskListFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
-
     }
 }

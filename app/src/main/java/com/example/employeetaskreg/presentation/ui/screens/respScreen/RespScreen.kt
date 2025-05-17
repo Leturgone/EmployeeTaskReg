@@ -30,13 +30,13 @@ import com.example.employeetaskreg.domain.model.CompanyWorkerInterface
 import com.example.employeetaskreg.domain.model.Report
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
-import com.example.employeetaskreg.presentation.viewmodel.ProfileScreenViewModel
-import com.example.employeetaskreg.presentation.viewmodel.RespScreenViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ReportViewModel
 
 @Composable
 fun RespScreen(
-    profileViewModel:ProfileScreenViewModel,
-    respViewModel: RespScreenViewModel = hiltViewModel()){
+    profileViewModel:ProfileViewModel,
+    respViewModel: ReportViewModel = hiltViewModel()){
 
     val profileState = profileViewModel.profileFlow.collectAsState()
     val respListState = respViewModel.reportListFlow.collectAsState()

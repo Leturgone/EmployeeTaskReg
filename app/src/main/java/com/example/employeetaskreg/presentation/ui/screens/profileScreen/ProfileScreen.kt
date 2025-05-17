@@ -37,12 +37,12 @@ import com.example.employeetaskreg.domain.model.CompanyWorker
 import com.example.employeetaskreg.domain.model.CompanyWorkerInterface
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
-import com.example.employeetaskreg.presentation.viewmodel.ProfileScreenViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
 
 
 @Composable
 fun ProfileScreen(navController: NavHostController,
-                  viewModel: ProfileScreenViewModel) {
+                  viewModel: ProfileViewModel) {
 
     val profileState = viewModel.profileFlow.collectAsState()
     val dirNameState = viewModel.directorFlow.collectAsState()

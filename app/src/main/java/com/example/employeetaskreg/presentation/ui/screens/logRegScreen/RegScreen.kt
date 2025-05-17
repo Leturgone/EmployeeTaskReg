@@ -43,13 +43,13 @@ import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
-import com.example.employeetaskreg.presentation.viewmodel.AuthScreenViewModel
-import com.example.employeetaskreg.presentation.viewmodel.ProfileScreenViewModel
+import com.example.employeetaskreg.presentation.viewmodel.AuthViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
 
 @Composable
 fun RegScreen(navController: NavHostController,
-              profileViewModel:ProfileScreenViewModel = hiltViewModel(),
-              authViewModel: AuthScreenViewModel = hiltViewModel()){
+              profileViewModel:ProfileViewModel = hiltViewModel(),
+              authViewModel: AuthViewModel = hiltViewModel()){
     var loginInputText  by remember { mutableStateOf("") }
     var fioInputText  by remember { mutableStateOf("") }
     var fioDirInputText  by remember { mutableStateOf("") }

@@ -39,13 +39,13 @@ import com.example.employeetaskreg.domain.model.Task
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
 import com.example.employeetaskreg.presentation.ui.screens.TaskCard
-import com.example.employeetaskreg.presentation.viewmodel.ProfileScreenViewModel
-import com.example.employeetaskreg.presentation.viewmodel.TasksScreenViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
+import com.example.employeetaskreg.presentation.viewmodel.TasksViewModel
 
 @Composable
 fun TaskScreen(navController: NavHostController,
-               profileViewModel:ProfileScreenViewModel,
-               tasksViewModel: TasksScreenViewModel = hiltViewModel()) {
+               profileViewModel:ProfileViewModel,
+               tasksViewModel: TasksViewModel = hiltViewModel()) {
 
     val profileState = profileViewModel.profileFlow.collectAsState()
     val taskListState = tasksViewModel.taskListFlow.collectAsState()

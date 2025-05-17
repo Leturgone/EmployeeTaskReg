@@ -42,10 +42,10 @@ import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
-import com.example.employeetaskreg.presentation.viewmodel.AuthScreenViewModel
+import com.example.employeetaskreg.presentation.viewmodel.AuthViewModel
 
 @Composable
-fun LogScreen(navController: NavHostController, viewModel: AuthScreenViewModel = hiltViewModel()){
+fun LogScreen(navController: NavHostController, viewModel: AuthViewModel = hiltViewModel()){
     var loginInputText  by remember { mutableStateOf("") }
     var passwordInputText  by remember { mutableStateOf("") }
 

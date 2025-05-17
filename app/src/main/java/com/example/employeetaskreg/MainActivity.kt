@@ -22,7 +22,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.employeetaskreg.presentation.ui.screens.AppNavigation
 import com.example.employeetaskreg.presentation.ui.screens.BottomNavigationBar
 import com.example.employeetaskreg.presentation.ui.theme.EmployeeTaskRegTheme
-import com.example.employeetaskreg.presentation.viewmodel.ProfileScreenViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -66,7 +66,7 @@ fun MainScreen(){
     val navController = rememberNavController()
     //Получение текущего состояния экрана
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    val profileViewModel:ProfileScreenViewModel = hiltViewModel(LocalContext.current as ViewModelStoreOwner)
+    val profileViewModel:ProfileViewModel = hiltViewModel(LocalContext.current as ViewModelStoreOwner)
     val excludedRoutes = setOf("reg","log")
     Scaffold(
         bottomBar = {

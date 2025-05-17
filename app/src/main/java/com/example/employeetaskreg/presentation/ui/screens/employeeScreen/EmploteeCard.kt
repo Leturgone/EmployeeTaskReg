@@ -34,12 +34,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
-import com.example.employeetaskreg.presentation.viewmodel.EmployeesScreenViewModel
+import com.example.employeetaskreg.presentation.viewmodel.EmployeesViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EmployeeCard(employeeName:String,employeeId:Int, setListItem:Boolean = false,viewModel: EmployeesScreenViewModel = hiltViewModel(),
+fun EmployeeCard(employeeName:String, employeeId:Int, setListItem:Boolean = false, viewModel: EmployeesViewModel = hiltViewModel(),
                  clickFun: (() -> Unit)? = null) {
 
     val sheetState = rememberModalBottomSheetState()

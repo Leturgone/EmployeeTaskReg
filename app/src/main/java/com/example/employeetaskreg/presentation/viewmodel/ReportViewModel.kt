@@ -16,7 +16,7 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
-class RespScreenViewModel @Inject constructor(
+class ReportViewModel @Inject constructor(
     private val reportRepository: ReportRepository,private val authRepository: AuthRepository): ViewModel() {
 
     private val _reportListFlow = MutableStateFlow<EmpTaskRegState<List<Report>>>(EmpTaskRegState.Waiting)

@@ -28,12 +28,12 @@ import com.example.employeetaskreg.domain.model.CompanyWorker
 import com.example.employeetaskreg.domain.model.CompanyWorkerInterface
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.components.BottomNavigation
-import com.example.employeetaskreg.presentation.viewmodel.ProfileScreenViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun BottomNavigationBar(navController: NavHostController,
-                        viewModel: ProfileScreenViewModel) {
+                        viewModel: ProfileViewModel) {
 
     val profileState = viewModel.profileFlow.collectAsState()
     val directorItems = listOf(

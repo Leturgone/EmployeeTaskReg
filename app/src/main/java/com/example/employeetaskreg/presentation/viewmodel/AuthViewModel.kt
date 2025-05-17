@@ -15,7 +15,7 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthScreenViewModel @Inject constructor(private val authRepository: AuthRepository):ViewModel(){
+class AuthViewModel @Inject constructor(private val authRepository: AuthRepository):ViewModel(){
 
     private val _loginFlow = MutableStateFlow<EmpTaskRegState<String>>(EmpTaskRegState.Waiting)
 

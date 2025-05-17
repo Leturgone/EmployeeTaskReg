@@ -19,7 +19,7 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileScreenViewModel @Inject constructor(
+class ProfileViewModel @Inject constructor(
     private val profileRepository: ProfileRepository,
     private val directorRepository: DirectorRepository,
     private val authRepository: AuthRepository, private val taskRepository: TaskRepository) : ViewModel() {

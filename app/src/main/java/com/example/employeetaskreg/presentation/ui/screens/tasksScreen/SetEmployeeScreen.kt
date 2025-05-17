@@ -30,10 +30,10 @@ import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
 import com.example.employeetaskreg.presentation.ui.screens.employeeScreen.EmployeeCard
 import com.example.employeetaskreg.presentation.ui.screens.employeeScreen.SearchSec
-import com.example.employeetaskreg.presentation.viewmodel.EmployeesScreenViewModel
+import com.example.employeetaskreg.presentation.viewmodel.EmployeesViewModel
 
 @Composable
-fun SetEmployeeScreen(navController: NavHostController, viewModel: EmployeesScreenViewModel = hiltViewModel(navController.currentBackStackEntry!!)) {
+fun SetEmployeeScreen(navController: NavHostController, viewModel: EmployeesViewModel = hiltViewModel(navController.currentBackStackEntry!!)) {
 
     val employeeListState = viewModel.employeesListFlow.collectAsState()
 

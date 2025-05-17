@@ -16,11 +16,11 @@ import com.example.employeetaskreg.presentation.ui.screens.respScreen.RespScreen
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.NewTaskScreen
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.SetEmployeeScreen
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.TaskScreen
-import com.example.employeetaskreg.presentation.viewmodel.ProfileScreenViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
 
 
 @Composable
-fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController,profileScreenViewModel: ProfileScreenViewModel){
+fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController, profileViewModel: ProfileViewModel){
     NavHost(
         navController = navController,
         startDestination = "reg",
@@ -30,7 +30,7 @@ fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController,
             RegScreen(navController) }
         composable("log"){ LogScreen(navController) }
         composable("tasks"){
-            TaskScreen(navController, profileViewModel = profileScreenViewModel)
+            TaskScreen(navController, profileViewModel = profileViewModel)
         }
         composable("new_task") { NewTaskScreen(navController) }
         composable("new_task/{employeeName}/{employeeId}") {
@@ -38,9 +38,9 @@ fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController,
             val empId = it.arguments?.getString("employeeId")?.toInt()
             NewTaskScreen(navController,employeeName = empName,employeeId =empId) }
         composable("set_employee") { SetEmployeeScreen(navController)  }
-        composable("opt") { OptScreen(navController, profileViewModel = profileScreenViewModel) }
+        composable("opt") { OptScreen(navController, profileViewModel = profileViewModel) }
         composable("emp_list"){ EmployeesScreen() }
-        composable("resp"){ RespScreen(profileScreenViewModel) }
-        composable("profile"){ ProfileScreen(navController,profileScreenViewModel) }
+        composable("resp"){ RespScreen(profileViewModel) }
+        composable("profile"){ ProfileScreen(navController,profileViewModel) }
     }
 }

@@ -67,7 +67,9 @@ fun LocalDate.localDateToMillis(): Long {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NewTaskScreen(navController: NavHostController,employeeName:String? = null, employeeId:Int? = null) {
+fun NewTaskScreen(navController: NavHostController,
+                  employeeName:String? = null,
+                  employeeId:Int? = null, ) {
     var taskTitle  by remember { mutableStateOf("") }
     var taskDesc  by remember { mutableStateOf("") }
 
