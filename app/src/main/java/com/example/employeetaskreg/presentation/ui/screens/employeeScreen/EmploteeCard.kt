@@ -33,15 +33,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.employeetaskreg.domain.model.CompanyWorker
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
-import com.example.employeetaskreg.presentation.ui.screens.TaskCard
-import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
+import com.example.employeetaskreg.presentation.viewmodel.EmployeesScreenViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EmployeeCard(employeeName:String,employeeId:Int, setListItem:Boolean = false,viewModel: MainViewModel = hiltViewModel(),
+fun EmployeeCard(employeeName:String,employeeId:Int, setListItem:Boolean = false,viewModel: EmployeesScreenViewModel = hiltViewModel(),
                  clickFun: (() -> Unit)? = null) {
 
     val sheetState = rememberModalBottomSheetState()
@@ -74,6 +72,7 @@ fun EmployeeCard(employeeName:String,employeeId:Int, setListItem:Boolean = false
         LaunchedEffect(Unit){
             viewModel.getEmployeeById(employeeId)
             viewModel.getEmployeeTaskCount(employeeId)
+            //viewModel.getEmployeeCurrentTask(employeeId)
         }
         ModalBottomSheet(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -136,7 +135,7 @@ fun EmployeeCard(employeeName:String,employeeId:Int, setListItem:Boolean = false
                             modifier = Modifier
                                 .width(300.dp)
                         )
-                        TaskCard(taskName = "Задача 333", employeeName = "Иванов И.И", initials = "ИИ")
+                        //TaskCard(taskName = "Задача 333", employeeName = "Иванов И.И", initials = "ИИ")
                     }
                     EmpTaskRegState.Waiting -> null
                 }
