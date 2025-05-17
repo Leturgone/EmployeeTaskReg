@@ -36,7 +36,6 @@ class ProfileScreenViewModel @Inject constructor(
 
     val directorFlow: StateFlow<EmpTaskRegState<CompanyWorker.Director>> = _directorFlow
 
-
     fun getProfile() = viewModelScope.launch {
         _profileFlow.value = EmpTaskRegState.Loading
         val authResult = withContext(Dispatchers.IO){
@@ -59,6 +58,9 @@ class ProfileScreenViewModel @Inject constructor(
         }
     }
 
+    fun clearProfile() = viewModelScope.launch {
+        _profileFlow.value = EmpTaskRegState.Waiting
+    }
     fun getProfileTaskCount() = viewModelScope.launch {
         _taskCountFlow.value = EmpTaskRegState.Loading
         val authResult = withContext(Dispatchers.IO){
