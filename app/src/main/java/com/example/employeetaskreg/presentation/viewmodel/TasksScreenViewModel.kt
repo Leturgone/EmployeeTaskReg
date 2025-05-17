@@ -24,8 +24,6 @@ class TasksScreenViewModel @Inject constructor(
 
     val taskListFlow: StateFlow<EmpTaskRegState<List<Task>>> = _taskListFlow
 
-
-
     fun getTaskList() = viewModelScope.launch {
         _taskListFlow.value = EmpTaskRegState.Loading
         val authResult = withContext(Dispatchers.IO){
