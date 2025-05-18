@@ -33,10 +33,11 @@ fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController,
             TaskScreen(navController, profileViewModel = profileViewModel)
         }
         composable("new_task") { NewTaskScreen(navController) }
-        composable("new_task/{employeeName}/{employeeId}") {
+        composable("new_task/{employeeName}/{employeeId}/{directorId}") {
             val empName = it.arguments?.getString("employeeName")
             val empId = it.arguments?.getString("employeeId")?.toInt()
-            NewTaskScreen(navController,employeeName = empName,employeeId =empId) }
+            val dirId = it.arguments?.getString("directorId")?.toInt()
+            NewTaskScreen(navController,employeeName = empName,employeeId =empId, directorId = dirId) }
         composable("set_employee") { SetEmployeeScreen(navController)  }
         composable("opt") { OptScreen(navController, profileViewModel = profileViewModel) }
         composable("emp_list"){ EmployeesScreen() }
