@@ -6,11 +6,15 @@ import com.example.employeetaskreg.data.api.dto.TokenResponse
 import com.example.employeetaskreg.domain.model.CompanyWorker
 import com.example.employeetaskreg.domain.model.Report
 import com.example.employeetaskreg.domain.model.Task
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface EmployeeTaskRegApi {
@@ -69,11 +73,13 @@ interface EmployeeTaskRegApi {
         @Path("employeeId") employeeId: String
     ):Int
 
-
-
-
+    @Multipart
     @POST("/profile/addTask")
-    suspend fun addTask()
+    suspend fun addTask(
+        @Header("Authorization") token: String,
+        @Part("taskJson")task: RequestBody,
+        @Part file: MultipartBody.Part?
+    )
 
     @POST("/profile/addReport")
     suspend fun addReport()
