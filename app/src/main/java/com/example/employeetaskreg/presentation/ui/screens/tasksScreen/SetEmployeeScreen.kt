@@ -89,10 +89,9 @@ fun SetEmployeeScreen(navController: NavHostController, viewModel: EmployeesView
                     employeeId = employee.id,
                     setListItem = true
                 ){
-                    //viewModel.selectEmployeeForTask(employee)
                     navController.popBackStack()
                     navController.popBackStack()
-                    navController.navigate("new_task/${employee.name}/${employee.id}")
+                    navController.navigate("new_task/${employee.name}/${employee.id}/${employee.directorId}")
                 }
 
             }
