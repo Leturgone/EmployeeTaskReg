@@ -12,15 +12,12 @@ class TaskRepositoryImpl @Inject constructor(private val api:EmployeeTaskRegApi)
         return try {
             val response = api.getTaskCount("Bearer $authToken")
             Result.success(response)
-        //EmpTaskRegState.Success(response)
         }catch (e: HttpException){
             Log.e("getTaskCount",e.toString())
             Result.failure(e)
-            //EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
         }catch(e:Exception){
             Log.e("getTaskCount",e.toString())
             Result.failure(e)
-        //EmpTaskRegState.Failure(Exception("Error during getting task count: Check your connection"))
         }
     }
 
@@ -28,15 +25,12 @@ class TaskRepositoryImpl @Inject constructor(private val api:EmployeeTaskRegApi)
         return try {
             val response = api.getTasks("Bearer $authToken").sortedBy { it.id }
             Result.success(response)
-            //EmpTaskRegState.Success(response)
         }catch (e:HttpException){
             Log.e("getTaskList",e.toString())
             Result.failure(e)
-            //EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
         }catch(e:Exception){
             Log.e("getTaskList",e.toString())
             Result.failure(e)
-            //EmpTaskRegState.Failure(Exception("Error during getting tasks: Check your connection"))
         }
     }
 
@@ -44,15 +38,12 @@ class TaskRepositoryImpl @Inject constructor(private val api:EmployeeTaskRegApi)
         return try {
             val response = api.getEmployeeTaskCountById("Bearer $authToken",id.toString())
             Result.success(response)
-        //EmpTaskRegState.Success(response)
         }catch (e:HttpException){
             Log.e("getEmployeeTaskCount",e.toString())
             Result.failure(e)
-            //EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
         }catch(e:Exception){
             Log.e("getEmployeeTaskCount",e.toString())
             Result.failure(e)
-           // EmpTaskRegState.Failure(Exception("Error during getting employee task count: Check your connection"))
         }
     }
 
