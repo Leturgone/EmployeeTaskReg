@@ -2,9 +2,19 @@ package com.example.employeetaskreg.data.repsitory
 
 import android.util.Log
 import com.example.employeetaskreg.data.api.EmployeeTaskRegApi
+import com.example.employeetaskreg.data.api.dto.AddTaskRequest
 import com.example.employeetaskreg.domain.model.Task
 import com.example.employeetaskreg.domain.repository.TaskRepository
+import com.google.gson.Gson
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
+import java.io.File
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class TaskRepositoryImpl @Inject constructor(private val api:EmployeeTaskRegApi):TaskRepository {
@@ -19,6 +29,12 @@ class TaskRepositoryImpl @Inject constructor(private val api:EmployeeTaskRegApi)
             Log.e("getTaskCount",e.toString())
             Result.failure(e)
         }
+    }
+
+    private fun convertMillisToDate(millis: Long): String {
+        val formatter = DateTimeFormatter.ofPattern("yyy-MM-dd")
+            .withZone(ZoneId.systemDefault())
+        return formatter.format(Instant.ofEpochMilli(millis))
     }
 
     override suspend fun getTaskList(authToken: String): Result<List<Task>> {
@@ -43,6 +59,32 @@ class TaskRepositoryImpl @Inject constructor(private val api:EmployeeTaskRegApi)
             Result.failure(e)
         }catch(e:Exception){
             Log.e("getEmployeeTaskCount",e.toString())
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun addTask(task: AddTaskRequest, filePath: String?, authToken:String): Result<Unit> {
+        return try{
+            val startDateFormat = convertMillisToDate(task.startDate.toLong())
+            val endDateFormat = convertMillisToDate(task.endDate.toLong())
+            val taskWithDates = task.copy(startDate = startDateFormat, endDate = endDateFormat )
+            val taskJson = Gson().toJson(taskWithDates)
+            val taskRequestBody = taskJson.toRequestBody("application/json".toMediaTypeOrNull())
+            Log.d("TaskJson",taskJson)
+            val file = filePath?.let { File(it) }
+            val requestFile = file?.asRequestBody("application/pdf".toMediaTypeOrNull())
+            val filePart = file?.let {
+                requestFile?.let {
+                    MultipartBody.Part.createFormData("file",file.name,requestFile)
+                }
+            }
+            val response = api.addTask("Bearer $authToken",taskRequestBody,filePart)
+            Result.success(response)
+        }catch (e:HttpException){
+            Log.e("addTask",e.toString())
+            Result.failure(e)
+        }catch(e:Exception){
+            Log.e("addTask",e.toString())
             Result.failure(e)
         }
     }
