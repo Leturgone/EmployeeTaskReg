@@ -135,7 +135,7 @@ fun RespCard(response:Report,role:String){
                     }
                 }
                 
-                FileCard(fileFunc = stringResource(id = R.string.download_order))
+                FileCard(fileFunc = stringResource(id = R.string.download_order)){}
                 when(role){
                     "director"->{Row(Modifier.fillMaxWidth()) {
                         Button(onClick = {
