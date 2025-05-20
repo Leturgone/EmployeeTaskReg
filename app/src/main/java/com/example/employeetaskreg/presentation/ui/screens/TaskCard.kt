@@ -39,7 +39,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.domain.model.Task
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
@@ -191,7 +190,7 @@ fun TaskCard(task: Task,role:String,reportViewModel: ReportViewModel = hiltViewM
                             .width(400.dp)
                     )
                     task.documentName?.let {
-                        FileCard(fileFunc = task.documentName) {
+                        FileCard(fileFunc = task.documentName, download = true) {
                             //download
                         }
                     }
@@ -216,7 +215,7 @@ fun TaskCard(task: Task,role:String,reportViewModel: ReportViewModel = hiltViewM
                         }
 
                         "employee" -> {
-                            FileCard(fileFunc = fileTitle) {
+                            FileCard(fileFunc = fileTitle, download = false) {
                                 it?.let { fileTitle = it.lastPathSegment ?: loadFile }
                                 reportViewModel.setSelectedReportFileUri(it)
                             }
