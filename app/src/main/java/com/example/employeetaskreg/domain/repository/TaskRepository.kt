@@ -2,6 +2,7 @@ package com.example.employeetaskreg.domain.repository
 
 import com.example.employeetaskreg.data.api.dto.AddTaskRequest
 import com.example.employeetaskreg.domain.model.Task
+import java.io.File
 
 interface TaskRepository {
 
@@ -11,6 +12,6 @@ interface TaskRepository {
 
     suspend fun getEmployeeTaskCount(id:Int,authToken:String):Result<Int>
 
-    suspend fun addTask(task:AddTaskRequest,filePath: String?,authToken:String):Result<Unit>
+    suspend fun addTask(task:AddTaskRequest, file: File?, authToken:String):Result<Unit>
 
 }

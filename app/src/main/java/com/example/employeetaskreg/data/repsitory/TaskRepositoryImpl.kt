@@ -63,15 +63,14 @@ class TaskRepositoryImpl @Inject constructor(private val api:EmployeeTaskRegApi)
         }
     }
 
-    override suspend fun addTask(task: AddTaskRequest, filePath: String?, authToken:String): Result<Unit> {
+    override suspend fun addTask(task: AddTaskRequest, file: File?, authToken:String): Result<Unit> {
         return try{
             val startDateFormat = convertMillisToDate(task.startDate.toLong())
             val endDateFormat = convertMillisToDate(task.endDate.toLong())
-            val taskWithDates = task.copy(startDate = startDateFormat, endDate = endDateFormat )
+            val taskWithDates = task.copy(documentName = file?.name, startDate = startDateFormat, endDate = endDateFormat )
             val taskJson = Gson().toJson(taskWithDates)
             val taskRequestBody = taskJson.toRequestBody("application/json".toMediaTypeOrNull())
             Log.d("TaskJson",taskJson)
-            val file = filePath?.let { File(it) }
             val requestFile = file?.asRequestBody("application/pdf".toMediaTypeOrNull())
             val filePart = file?.let {
                 requestFile?.let {
