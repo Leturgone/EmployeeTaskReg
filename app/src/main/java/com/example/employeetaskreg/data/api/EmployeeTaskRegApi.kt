@@ -89,10 +89,10 @@ interface EmployeeTaskRegApi {
         @Part file: MultipartBody.Part?
     )
 
-
-
     @GET("profile/myEmployees/{empName}")
-    suspend fun getEmployeeByName()
+    suspend fun getEmployeeByName(
+        @Header("Authorization") token: String,
+    ):List<CompanyWorker.Employee>
 
 
     @GET("/getReport/{reportId}")
