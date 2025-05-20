@@ -34,10 +34,16 @@ class EmployeeRepositoryImpl @Inject constructor(private val api: EmployeeTaskRe
         }
     }
 
-    override suspend fun getEmployeeByName(
-        name: String,
-        authToken: String
-    ): Result<List<CompanyWorker.Employee>> {
-        TODO("Not yet implemented")
+    override suspend fun getEmployeeByName(name: String, authToken: String): Result<List<CompanyWorker.Employee>> {
+        return try {
+            val response = api.getEmployeeByName("Bearer $authToken",name)
+            Result.success(response)
+        }catch (e: HttpException){
+            Log.e("getEmployeeByName",e.toString())
+            Result.failure(e)
+        }catch(e:Exception){
+            Log.i("getEmployeeByName",e.toString())
+            Result.failure(e)
+        }
     }
 }
