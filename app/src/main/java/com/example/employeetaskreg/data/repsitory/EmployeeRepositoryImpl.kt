@@ -12,15 +12,12 @@ class EmployeeRepositoryImpl @Inject constructor(private val api: EmployeeTaskRe
         return try {
             val response = api.getEmployees("Bearer $authToken").sortedBy { it.id }
             Result.success(response)
-            //EmpTaskRegState.Success(response)
         }catch (e:HttpException){
             Log.e("getEmployeesList",e.toString())
             Result.failure(e)
-        //EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
         }catch(e:Exception){
             Log.e("getEmployeesList",e.toString())
             Result.failure(e)
-            //EmpTaskRegState.Failure(Exception("Error during getting employees: Check your connection"))
         }
     }
 
@@ -31,11 +28,16 @@ class EmployeeRepositoryImpl @Inject constructor(private val api: EmployeeTaskRe
         }catch (e: HttpException){
             Log.e("getEmployeeById",e.toString())
             Result.failure(e)
-            //EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
         }catch(e:Exception){
             Log.i("getEmployeeById",e.toString())
             Result.failure(e)
-            //EmpTaskRegState.Failure(Exception("Error during getting employee: Check your connection"))
         }
+    }
+
+    override suspend fun getEmployeeByName(
+        name: String,
+        authToken: String
+    ): Result<List<CompanyWorker.Employee>> {
+        TODO("Not yet implemented")
     }
 }
