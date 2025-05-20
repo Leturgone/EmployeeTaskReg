@@ -85,7 +85,7 @@ interface EmployeeTaskRegApi {
     @POST("/profile/addReport")
     suspend fun addReport(
         @Header("Authorization") token: String,
-        @Part("taskJson")task: RequestBody,
+        @Part("reportJson")report: RequestBody,
         @Part file: MultipartBody.Part?
     )
 
