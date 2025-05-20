@@ -80,8 +80,13 @@ fun NewTaskScreen(navController: NavHostController,
                   directorId:Int? = null,
                   tasksViewModel: TasksViewModel = hiltViewModel()) {
 
+    val loadFile = stringResource(id = R.string.upload_file)
+
     var taskTitle  by remember { mutableStateOf("") }
+
     var taskDesc  by remember { mutableStateOf("") }
+
+    var fileTitle by remember { mutableStateOf(loadFile) }
 
     val addTaskState = tasksViewModel.addTaskFlow.collectAsState()
 
@@ -225,7 +230,10 @@ fun NewTaskScreen(navController: NavHostController,
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
-            FileCard(fileFunc = stringResource(id = R.string.upload_file))
+            FileCard(fileFunc = fileTitle){
+                it?.let { fileTitle = it.lastPathSegment?: loadFile}
+                tasksViewModel.setSelectedTaskFileUri(it)
+            }
             Spacer(modifier = Modifier.height(20.dp))
             if ((employeeName == null) || (employeeId == null)){
                 Card(
@@ -282,12 +290,15 @@ fun NewTaskScreen(navController: NavHostController,
                             tasksViewModel.addTask(
                                 title = taskTitle,
                                 taskDesc = taskDesc,
-                                documentName = null,
+                                documentName = when(fileTitle){
+                                    loadFile -> null
+                                    else -> fileTitle
+                                                              },
+
                                 startDate = startDateMills.toString(),
                                 endDate = endDateMills.toString(),
                                 employeeId = employeeId,
                                 directorId = directorId,
-                                filePath = null
                             )
                         }
                     },
