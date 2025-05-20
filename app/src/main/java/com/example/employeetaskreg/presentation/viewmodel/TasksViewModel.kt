@@ -1,11 +1,14 @@
 package com.example.employeetaskreg.presentation.viewmodel
 
+import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.employeetaskreg.data.api.dto.AddTaskRequest
 import com.example.employeetaskreg.domain.model.Task
 import com.example.employeetaskreg.domain.repository.AuthRepository
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
+import com.example.employeetaskreg.domain.repository.FileRepository
 import com.example.employeetaskreg.domain.repository.TaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TasksViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val fileRepository: FileRepository,
+    private val application: Application,
     private val taskRepository: TaskRepository):ViewModel() {
 
     private val _taskListFlow = MutableStateFlow<EmpTaskRegState<List<Task>>>(EmpTaskRegState.Waiting)
@@ -28,6 +33,11 @@ class TasksViewModel @Inject constructor(
     private val _addTaskFlow = MutableStateFlow<EmpTaskRegState<Unit>>(EmpTaskRegState.Waiting)
     val addTaskFlow: StateFlow<EmpTaskRegState<Unit>> = _addTaskFlow
 
+    private val _selectedFileUri = MutableStateFlow<Uri?>(null)
+
+    fun setSelectedTaskFileUri(uri: Uri?) {
+        _selectedFileUri.value = uri
+    }
 
 
     fun getTaskList() = viewModelScope.launch {
@@ -56,7 +66,7 @@ class TasksViewModel @Inject constructor(
 
     fun addTask(title:String, taskDesc:String, documentName:String?,
                 startDate:String, endDate:String,
-                employeeId:Int, directorId:Int,filePath:String?) = viewModelScope.launch{
+                employeeId:Int, directorId:Int) = viewModelScope.launch{
         _addTaskFlow.value = EmpTaskRegState.Loading
 
         val authResult = withContext(Dispatchers.IO){
@@ -64,8 +74,13 @@ class TasksViewModel @Inject constructor(
         }
         authResult.onSuccess {token ->
             val result = withContext(Dispatchers.IO){
+                val file = _selectedFileUri.value?.let {
+                    fileRepository.uriToFile(application.applicationContext,it)
+                }
+
                 val task = AddTaskRequest(title, taskDesc, documentName,startDate, endDate, employeeId, directorId)
-                taskRepository.addTask(task,filePath,token)
+
+                taskRepository.addTask(task,file,token)
             }
             result.onSuccess {
                 _addTaskFlow.value = EmpTaskRegState.Success(it)
