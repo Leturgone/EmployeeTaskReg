@@ -11,12 +11,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,33 +32,48 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.employeetaskreg.presentation.ui.screens.TaskCard
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.employeetaskreg.domain.repository.EmpTaskRegState
+import com.example.employeetaskreg.presentation.viewmodel.EmployeesViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EmployeeCard(name: String, setListItem:Boolean = false,clickFun: (() -> Unit)? = null) {
+fun EmployeeCard(employeeName:String, employeeId:Int, setListItem:Boolean = false, viewModel: EmployeesViewModel = hiltViewModel(),
+                 clickFun: (() -> Unit)? = null) {
+
     val sheetState = rememberModalBottomSheetState()
+    val taskCount = viewModel.employeeTaskCountFlow.collectAsState()
+    val employee = viewModel.employeeFlow.collectAsState()
+
+    var taskCountText by remember { mutableStateOf("Задач решено: ") }
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
     Card(
         shape = RoundedCornerShape(8.dp),
-        modifier =  Modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .height(73.dp).let {
-                when(setListItem){
-                    true-> it.clickable(onClick = clickFun!!)
-                    false-> it.clickable { showBottomSheet = true }
+            .height(73.dp)
+            .let {
+                when (setListItem) {
+                    true -> it.clickable(onClick = clickFun!!)
+                    false -> it.clickable { showBottomSheet = true }
                 }
             },
         colors = CardDefaults.cardColors(
-            containerColor = Color.White  // Set container color
+            containerColor = Color.White
         )
     ) {
-        AvatarNameSec(avatar = "ИИ", name = name,Modifier.padding(16.dp))
+        AvatarNameSec(avatar = employeeName.substringAfter(" ").replace(".",""),
+            name = employeeName,Modifier.padding(16.dp))
     }
 
     if (showBottomSheet) {
+        LaunchedEffect(Unit){
+            viewModel.getEmployeeById(employeeId)
+            viewModel.getEmployeeTaskCount(employeeId)
+            //viewModel.getEmployeeCurrentTask(employeeId)
+        }
         ModalBottomSheet(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             onDismissRequest = {
@@ -69,34 +87,60 @@ fun EmployeeCard(name: String, setListItem:Boolean = false,clickFun: (() -> Unit
                     .height(700.dp)
                     .padding(16.dp),Arrangement.SpaceEvenly ,
                 Alignment.Start) {
-                Text(
-                    text = "Иванов И.И",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .width(200.dp)
-                )
-                Text(
-                    text = "Задач решено: 10",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .width(300.dp)
-                )
-                Text(
-                    text = "Текущая задача",
-                    fontSize = 25.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color.Black,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier
-                        .width(300.dp)
-                )
-                //TaskCard(taskName = "Задача 333", employeeName = "Иванов И.И", initials = "ИИ")
+
+                when(employee.value){
+                    is EmpTaskRegState.Failure -> {
+                        Text(
+                            text = "Не удалось загрузить данные о сотруднике: $employeeName",
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.Black,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .width(200.dp)
+                        )
+                    }
+                    EmpTaskRegState.Loading -> CircularProgressIndicator()
+                    is EmpTaskRegState.Success -> {
+                        Text(
+                            text = employeeName,
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.Black,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .width(200.dp)
+                        )
+                        taskCountText = when(taskCount.value){
+                            is EmpTaskRegState.Failure -> "Не найдено количество решенных задач"
+                            EmpTaskRegState.Loading -> "Загрузка..."
+                            is EmpTaskRegState.Success -> "Задач решено: ${(taskCount.value as EmpTaskRegState.Success<Int>).result}"
+                            EmpTaskRegState.Waiting -> "Задач решено: "
+                        }
+                        Text(
+                            text = taskCountText,
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.Black,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .width(300.dp)
+                        )
+                        Text(
+                            text = "Текущая задача",
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.Black,
+                            textAlign = TextAlign.Start,
+                            modifier = Modifier
+                                .width(300.dp)
+                        )
+                        //TaskCard(taskName = "Задача 333", employeeName = "Иванов И.И", initials = "ИИ")
+                    }
+                    EmpTaskRegState.Waiting -> null
+                }
+
+
                 Spacer(modifier = Modifier.height(220.dp))
 
             }

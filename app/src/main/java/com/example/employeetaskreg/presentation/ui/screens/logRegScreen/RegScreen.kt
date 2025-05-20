@@ -43,22 +43,26 @@ import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
-import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.employeetaskreg.presentation.viewmodel.AuthViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
 
 @Composable
-fun RegScreen(navController: NavHostController, viewModel: MainViewModel = hiltViewModel()){
+fun RegScreen(navController: NavHostController,
+              profileViewModel:ProfileViewModel = hiltViewModel(),
+              authViewModel: AuthViewModel = hiltViewModel()){
     var loginInputText  by remember { mutableStateOf("") }
     var fioInputText  by remember { mutableStateOf("") }
     var fioDirInputText  by remember { mutableStateOf("") }
     var passwordInputText  by remember { mutableStateOf("") }
 
-    val regState = viewModel.regFlow.collectAsState()
+    val regState = authViewModel.regFlow.collectAsState()
+    val profileState = profileViewModel.profileFlow.collectAsState()
 
     var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
 
     var passwordVisible by remember { mutableStateOf(false) }
+
 
     Box(modifier = Modifier.fillMaxWidth()){
         CustomToastMessage(
@@ -67,151 +71,170 @@ fun RegScreen(navController: NavHostController, viewModel: MainViewModel = hiltV
             onDismiss = { showToast = false }
         )
         Box(Modifier.fillMaxWidth(),contentAlignment = Alignment.Center) {
-            Column( modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Spacer(modifier = Modifier.height(60.dp))
-                    Text(
-                        text = stringResource(id = R.string.create_acc),
-                        fontSize = 26.sp,
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(16.dp),
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.height(30.dp))
+                when(profileState.value){
+                is EmpTaskRegState.Failure -> {
+                    Column( modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Spacer(modifier = Modifier.height(60.dp))
+                            Text(
+                                text = stringResource(id = R.string.create_acc),
+                                fontSize = 26.sp,
+                                color = MaterialTheme.colorScheme.onBackground,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(16.dp),
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(30.dp))
 
-                    OutlinedTextField(
-                        value = fioInputText,
-                        modifier = Modifier.size(width = 255.dp,60.dp),
-                        label = { Text(stringResource(id = R.string.fio)) },
-                        singleLine = true,
-                        colors = TextFieldDefaults
-                            .colors(
-                                focusedTextColor = MaterialTheme.colorScheme.primary,
-                                unfocusedTextColor = MaterialTheme.colorScheme.primary,
-                                focusedLabelColor = MaterialTheme.colorScheme.primary,
-                                unfocusedLabelColor = MaterialTheme.colorScheme.primary,
-                                focusedContainerColor = MaterialTheme.colorScheme.background,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                                unfocusedIndicatorColor = MaterialTheme.colorScheme.primary),
-                        keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email),
-                        onValueChange = {
-                            fioInputText = it
-                        })
-                    Spacer(modifier = Modifier.height(41.dp))
-                    OutlinedTextField(
-                        value = fioDirInputText,
-                        modifier = Modifier.size(width = 255.dp,60.dp),
-                        label = { Text(stringResource(id = R.string.director_fio)) },
-                        singleLine = true,
-                        colors = TextFieldDefaults
-                            .colors(
-                                focusedTextColor = MaterialTheme.colorScheme.primary,
-                                unfocusedTextColor = MaterialTheme.colorScheme.primary,
-                                focusedLabelColor = MaterialTheme.colorScheme.primary,
-                                unfocusedLabelColor = MaterialTheme.colorScheme.primary,
-                                focusedContainerColor = MaterialTheme.colorScheme.background,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                                unfocusedIndicatorColor = MaterialTheme.colorScheme.primary),
-                        keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email),
-                        onValueChange = {
-                            fioDirInputText = it
-                        })
-                    Spacer(modifier = Modifier.height(41.dp))
-                    OutlinedTextField(
-                        value = loginInputText,
-                        modifier = Modifier.size(width = 255.dp,60.dp),
-                        label = { Text(stringResource(id = R.string.login_input)) },
-                        singleLine = true,
-                        colors = TextFieldDefaults
-                            .colors(
-                                focusedTextColor = MaterialTheme.colorScheme.primary,
-                                unfocusedTextColor = MaterialTheme.colorScheme.primary,
-                                focusedLabelColor = MaterialTheme.colorScheme.primary,
-                                unfocusedLabelColor = MaterialTheme.colorScheme.primary,
-                                focusedContainerColor = MaterialTheme.colorScheme.background,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                                unfocusedIndicatorColor = MaterialTheme.colorScheme.primary),
-                        keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email),
-                        onValueChange = {
-                            loginInputText = it
-                        })
-                    Spacer(modifier = Modifier.height(41.dp))
+                            OutlinedTextField(
+                                value = fioInputText,
+                                modifier = Modifier.size(width = 255.dp,60.dp),
+                                label = { Text(stringResource(id = R.string.fio)) },
+                                singleLine = true,
+                                colors = TextFieldDefaults
+                                    .colors(
+                                        focusedTextColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedTextColor = MaterialTheme.colorScheme.primary,
+                                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedLabelColor = MaterialTheme.colorScheme.primary,
+                                        focusedContainerColor = MaterialTheme.colorScheme.background,
+                                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedIndicatorColor = MaterialTheme.colorScheme.primary),
+                                keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email),
+                                onValueChange = {
+                                    fioInputText = it
+                                })
+                            Spacer(modifier = Modifier.height(41.dp))
+                            OutlinedTextField(
+                                value = fioDirInputText,
+                                modifier = Modifier.size(width = 255.dp,60.dp),
+                                label = { Text(stringResource(id = R.string.director_fio)) },
+                                singleLine = true,
+                                colors = TextFieldDefaults
+                                    .colors(
+                                        focusedTextColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedTextColor = MaterialTheme.colorScheme.primary,
+                                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedLabelColor = MaterialTheme.colorScheme.primary,
+                                        focusedContainerColor = MaterialTheme.colorScheme.background,
+                                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedIndicatorColor = MaterialTheme.colorScheme.primary),
+                                keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email),
+                                onValueChange = {
+                                    fioDirInputText = it
+                                })
+                            Spacer(modifier = Modifier.height(41.dp))
+                            OutlinedTextField(
+                                value = loginInputText,
+                                modifier = Modifier.size(width = 255.dp,60.dp),
+                                label = { Text(stringResource(id = R.string.login_input)) },
+                                singleLine = true,
+                                colors = TextFieldDefaults
+                                    .colors(
+                                        focusedTextColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedTextColor = MaterialTheme.colorScheme.primary,
+                                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedLabelColor = MaterialTheme.colorScheme.primary,
+                                        focusedContainerColor = MaterialTheme.colorScheme.background,
+                                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedIndicatorColor = MaterialTheme.colorScheme.primary),
+                                keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Email),
+                                onValueChange = {
+                                    loginInputText = it
+                                })
+                            Spacer(modifier = Modifier.height(41.dp))
 
-                    OutlinedTextField(
-                        value = passwordInputText,
-                        modifier = Modifier.size(width = 255.dp,60.dp),
-                        singleLine = true,
-                        colors = TextFieldDefaults
-                            .colors(
-                                focusedTextColor = MaterialTheme.colorScheme.primary,
-                                unfocusedTextColor = MaterialTheme.colorScheme.primary,
-                                focusedLabelColor = MaterialTheme.colorScheme.primary,
-                                unfocusedLabelColor = MaterialTheme.colorScheme.primary,
-                                focusedContainerColor = MaterialTheme.colorScheme.background,
-                                unfocusedContainerColor = MaterialTheme.colorScheme.background,
-                                focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                                unfocusedIndicatorColor = MaterialTheme.colorScheme.primary),
-                        label = { Text(stringResource(id = R.string.password)) },
-                        visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Password),
-                        onValueChange = {
-                            passwordInputText = it
-                        },
-                        trailingIcon = {
-                            val image = if (passwordVisible)
-                                Icons.Filled.Visibility
-                            else Icons.Filled.VisibilityOff
+                            OutlinedTextField(
+                                value = passwordInputText,
+                                modifier = Modifier.size(width = 255.dp,60.dp),
+                                singleLine = true,
+                                colors = TextFieldDefaults
+                                    .colors(
+                                        focusedTextColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedTextColor = MaterialTheme.colorScheme.primary,
+                                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedLabelColor = MaterialTheme.colorScheme.primary,
+                                        focusedContainerColor = MaterialTheme.colorScheme.background,
+                                        unfocusedContainerColor = MaterialTheme.colorScheme.background,
+                                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedIndicatorColor = MaterialTheme.colorScheme.primary),
+                                label = { Text(stringResource(id = R.string.password)) },
+                                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                                keyboardOptions =  KeyboardOptions(keyboardType = KeyboardType.Password),
+                                onValueChange = {
+                                    passwordInputText = it
+                                },
+                                trailingIcon = {
+                                    val image = if (passwordVisible)
+                                        Icons.Filled.Visibility
+                                    else Icons.Filled.VisibilityOff
 
-                            val description = if (passwordVisible) "Hide password" else "Show password"
+                                    val description = if (passwordVisible) "Hide password" else "Show password"
 
-                            IconButton(onClick = {passwordVisible = !passwordVisible}){
-                                Icon(imageVector  = image, description, tint = MaterialTheme.colorScheme.primary)
+                                    IconButton(onClick = {passwordVisible = !passwordVisible}){
+                                        Icon(imageVector  = image, description, tint = MaterialTheme.colorScheme.primary)
+                                    }
+                                })
+                        }
+                        Spacer(modifier = Modifier.height(40.dp))
+
+                        Button(onClick = {
+                            authViewModel.register(loginInputText,passwordInputText,fioInputText,fioDirInputText) },
+
+                            ) {
+                            Text(text = stringResource(id = R.string.create_acc),)
+                        }
+
+                        when(regState.value){
+                            EmpTaskRegState.Loading -> CircularProgressIndicator()
+                            is EmpTaskRegState.Success -> {
+                                LaunchedEffect(Unit) {
+                                    navController.popBackStack()
+                                    navController.popBackStack()
+                                    navController.navigate("profile")
+                                }
                             }
-                        })
+                            is EmpTaskRegState.Failure -> {
+                                LaunchedEffect(regState.value) {
+                                    showToast = true
+                                    errorMessage =
+                                        (regState.value as EmpTaskRegState.Failure).exception.message.toString()
+                                }
+                            }
+                            EmpTaskRegState.Waiting -> null
+                        }
+
+
+                        Spacer(modifier = Modifier.height(55.dp))
+                        Text(text = stringResource(id = R.string.already_have),
+                            color = MaterialTheme.colorScheme.primary,
+                            fontSize = 16.sp,
+                            modifier = Modifier.clickable {
+                                navController.navigate("log")
+                            })
+
+                        Spacer(modifier = Modifier.height(1.dp))
+                    }
                 }
-                Spacer(modifier = Modifier.height(40.dp))
-
-                Button(onClick = {
-                    viewModel.register(loginInputText,passwordInputText,fioInputText,fioDirInputText) },
-
-                ) {
-                    Text(text = stringResource(id = R.string.create_acc),)
-                }
-
-                when(regState.value){
-                    EmpTaskRegState.Loading -> CircularProgressIndicator()
-                    is EmpTaskRegState.Success -> {
+                EmpTaskRegState.Loading -> CircularProgressIndicator()
+                is EmpTaskRegState.Success -> {
+                    if (regState.value is EmpTaskRegState.Waiting) {
                         LaunchedEffect(Unit) {
                             navController.popBackStack()
-                            navController.navigate("tasks")
+                            navController.popBackStack()
+                            navController.navigate("profile")
                         }
                     }
-                    is EmpTaskRegState.Failure -> {
-                        LaunchedEffect(regState.value) {
-                            showToast = true
-                            errorMessage =
-                                (regState.value as EmpTaskRegState.Failure).exception.message.toString()
-                        }
-                    }
-                    EmpTaskRegState.Waiting -> null
                 }
-
-
-                Spacer(modifier = Modifier.height(55.dp))
-                Text(text = stringResource(id = R.string.already_have),
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 16.sp,
-                    modifier = Modifier.clickable {
-                        navController.navigate("log")
-                    })
-
-                Spacer(modifier = Modifier.height(1.dp))
+                EmpTaskRegState.Waiting -> LaunchedEffect(Unit){
+                    profileViewModel.getProfile()
+                }
             }
+
         }
     }
 }

@@ -144,7 +144,9 @@ fun TaskCard(task: Task,role:String) {
                 )
                 when(role){
                     "director"->{
-                        FileCard(fileFunc = stringResource(id = R.string.download_file))
+                        FileCard(fileFunc = stringResource(id = R.string.download_file)){
+
+                        }
 
                         Text(
                             text = stringResource(id = R.string.worker),
@@ -162,7 +164,8 @@ fun TaskCard(task: Task,role:String) {
 
                     }
                     "employee"->{
-                        FileCard(fileFunc = stringResource(id = R.string.upload_order))
+                        FileCard(fileFunc = stringResource(id = R.string.upload_order)){
+                        }
                         Spacer(modifier = Modifier.height(20.dp))
                         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
                             ExtendedFloatingActionButton(

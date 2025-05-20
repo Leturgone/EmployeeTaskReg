@@ -3,11 +3,27 @@ package com.example.employeetaskreg.di
 import android.content.Context
 import com.example.employeetaskreg.data.api.CompanyWorkerDeserializer
 import com.example.employeetaskreg.data.api.EmployeeTaskRegApi
-import com.example.employeetaskreg.data.repsitory.EmployeeTaskRegRepositoryImpl
-import com.example.employeetaskreg.domain.repository.EmployeeTaskRegRepository
+import com.example.employeetaskreg.data.repsitory.AuthRepositoryImpl
+import com.example.employeetaskreg.data.repsitory.DataStoreManager
+import com.example.employeetaskreg.data.repsitory.DirectorRepositoryImpl
+import com.example.employeetaskreg.data.repsitory.EmployeeRepositoryImpl
+import com.example.employeetaskreg.data.repsitory.FileRepositoryImpl
+import com.example.employeetaskreg.data.repsitory.ProfileRepositoryImpl
+import com.example.employeetaskreg.data.repsitory.ReportRepositoryImpl
+import com.example.employeetaskreg.data.repsitory.TaskRepositoryImpl
+import com.example.employeetaskreg.domain.model.CompanyWorker
+import com.example.employeetaskreg.domain.repository.AuthRepository
+import com.example.employeetaskreg.domain.repository.DirectorRepository
+import com.example.employeetaskreg.domain.repository.EmployeeRepository
+import com.example.employeetaskreg.domain.repository.FileRepository
+import com.example.employeetaskreg.domain.repository.ProfileRepository
+import com.example.employeetaskreg.domain.repository.ReportRepository
+import com.example.employeetaskreg.domain.repository.TaskRepository
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -15,10 +31,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
-import com.example.employeetaskreg.data.repsitory.DataStoreManager
-import com.example.employeetaskreg.domain.model.CompanyWorker
-import com.google.gson.GsonBuilder
-import dagger.hilt.android.qualifiers.ApplicationContext
 
 
 @Module
@@ -52,9 +64,46 @@ class AppModule {
     fun provideDataStoreManager(@ApplicationContext context: Context): DataStoreManager {
         return DataStoreManager(context)
     }
+
     @Provides
     @Singleton
-    fun provideRemoteRepository(api: EmployeeTaskRegApi,dataStoreManager: DataStoreManager): EmployeeTaskRegRepository {
-        return EmployeeTaskRegRepositoryImpl(api,dataStoreManager)
+    fun provideAuthRepository(api: EmployeeTaskRegApi,dataStoreManager: DataStoreManager):AuthRepository{
+        return AuthRepositoryImpl(api, dataStoreManager)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDirectorRepository(api: EmployeeTaskRegApi):DirectorRepository{
+        return DirectorRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideEmployeeRepository(api: EmployeeTaskRegApi): EmployeeRepository {
+        return EmployeeRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProfileRepository(api: EmployeeTaskRegApi): ProfileRepository {
+        return ProfileRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTaskRepository(api: EmployeeTaskRegApi): TaskRepository {
+        return TaskRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideReportRepository(api: EmployeeTaskRegApi): ReportRepository {
+        return ReportRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFileRepository(): FileRepository {
+        return FileRepositoryImpl()
     }
 }

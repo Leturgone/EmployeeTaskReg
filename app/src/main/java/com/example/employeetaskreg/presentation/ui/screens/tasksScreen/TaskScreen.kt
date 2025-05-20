@@ -39,19 +39,21 @@ import com.example.employeetaskreg.domain.model.Task
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
 import com.example.employeetaskreg.presentation.ui.screens.TaskCard
-import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
+import com.example.employeetaskreg.presentation.viewmodel.TasksViewModel
 
 @Composable
-fun TaskScreen(navController: NavHostController, viewModel: MainViewModel = hiltViewModel()) {
+fun TaskScreen(navController: NavHostController,
+               profileViewModel:ProfileViewModel,
+               tasksViewModel: TasksViewModel = hiltViewModel()) {
 
-    val profileState = viewModel.profileFlow.collectAsState()
-    val taskListState = viewModel.taskListFlow.collectAsState()
+    val profileState = profileViewModel.profileFlow.collectAsState()
+    val taskListState = tasksViewModel.taskListFlow.collectAsState()
 
     var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
     var taskList by remember { mutableStateOf(emptyList<Task>()) }
     var role by remember { mutableStateOf("") }
-
 
     Box {
         CustomToastMessage(
@@ -115,7 +117,7 @@ fun TaskScreen(navController: NavHostController, viewModel: MainViewModel = hilt
                     }
                 }
                 LaunchedEffect(Unit){
-                    viewModel.getTaskList()
+                    tasksViewModel.getTaskList()
                 }
 
                 when(taskListState.value){

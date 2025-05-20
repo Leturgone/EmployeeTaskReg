@@ -13,14 +13,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.employeetaskreg.presentation.ui.screens.AppNavigation
 import com.example.employeetaskreg.presentation.ui.screens.BottomNavigationBar
 import com.example.employeetaskreg.presentation.ui.theme.EmployeeTaskRegTheme
-import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -64,20 +66,17 @@ fun MainScreen(){
     val navController = rememberNavController()
     //Получение текущего состояния экрана
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    val viewModel: MainViewModel = hiltViewModel()
-
-
-
+    val profileViewModel:ProfileViewModel = hiltViewModel(LocalContext.current as ViewModelStoreOwner)
     val excludedRoutes = setOf("reg","log")
     Scaffold(
         bottomBar = {
             if (currentRoute !in excludedRoutes) {
-                BottomNavigationBar(navController,viewModel)
+                BottomNavigationBar(navController,profileViewModel)
             }
         }
     ) {
             innerPadding ->
-        AppNavigation(innerPadding = innerPadding, navController = navController)
+        AppNavigation(innerPadding = innerPadding, navController = navController,profileViewModel)
 
     }
 }

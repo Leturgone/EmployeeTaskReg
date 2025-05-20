@@ -30,13 +30,16 @@ import com.example.employeetaskreg.domain.model.CompanyWorkerInterface
 import com.example.employeetaskreg.domain.model.Report
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
-import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ReportViewModel
 
 @Composable
-fun RespScreen(viewModel: MainViewModel = hiltViewModel()){
+fun RespScreen(
+    profileViewModel:ProfileViewModel,
+    respViewModel: ReportViewModel = hiltViewModel()){
 
-    val profileState = viewModel.profileFlow.collectAsState()
-    val respListState = viewModel.reportListFlow.collectAsState()
+    val profileState = profileViewModel.profileFlow.collectAsState()
+    val respListState = respViewModel.reportListFlow.collectAsState()
 
     var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
@@ -74,9 +77,6 @@ fun RespScreen(viewModel: MainViewModel = hiltViewModel()){
                     RespCard(resp, role = role )
                 }
             }
-
-
-
         }
         when(profileState.value){
             is EmpTaskRegState.Failure -> LaunchedEffect(profileState.value) {
@@ -95,7 +95,7 @@ fun RespScreen(viewModel: MainViewModel = hiltViewModel()){
                     }
                 }
                 LaunchedEffect(Unit){
-                    viewModel.getReportList()
+                    respViewModel.getReportList()
                 }
 
                 when(respListState.value){

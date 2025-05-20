@@ -31,21 +31,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.domain.model.CompanyWorker
 import com.example.employeetaskreg.domain.model.CompanyWorkerInterface
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
-import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
 
 
 @Composable
-fun ProfileScreen(navController: NavHostController, viewModel: MainViewModel = hiltViewModel()) {
+fun ProfileScreen(navController: NavHostController,
+                  viewModel: ProfileViewModel) {
 
     val profileState = viewModel.profileFlow.collectAsState()
-    val dirNameState = viewModel.dirNameFlow.collectAsState()
+    val dirNameState = viewModel.directorFlow.collectAsState()
     val taskCountState = viewModel.taskCountFlow.collectAsState()
 
     var dirName by remember { mutableStateOf("") }
@@ -55,7 +55,7 @@ fun ProfileScreen(navController: NavHostController, viewModel: MainViewModel = h
 
     LaunchedEffect(Unit){
         viewModel.getProfile()
-        viewModel.getTaskCount()
+        viewModel.getProfileTaskCount()
     }
     CustomToastMessage(
         message = errorMessage,

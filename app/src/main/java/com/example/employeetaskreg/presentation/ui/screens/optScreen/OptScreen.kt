@@ -26,10 +26,13 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
-import com.example.employeetaskreg.presentation.viewmodel.MainViewModel
+import com.example.employeetaskreg.presentation.viewmodel.AuthViewModel
+import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
 
 @Composable
-fun OptScreen(navController: NavHostController,viewModel: MainViewModel = hiltViewModel()) {
+fun OptScreen(navController: NavHostController,
+              profileViewModel:ProfileViewModel,
+              authViewModel: AuthViewModel = hiltViewModel()) {
     var switchState by remember { mutableStateOf(true) }
     Column {
         Box(modifier = Modifier.fillMaxWidth()){
@@ -55,7 +58,9 @@ fun OptScreen(navController: NavHostController,viewModel: MainViewModel = hiltVi
                     .align(Alignment.BottomStart)
                     .padding(start = 16.dp, top = 16.dp)
                     .clickable {
-                        viewModel.logout()
+                        profileViewModel.clearProfile()
+                        authViewModel.logout()
+                        navController.popBackStack()
                         navController.popBackStack()
                         navController.popBackStack()
                         navController.navigate("reg")
