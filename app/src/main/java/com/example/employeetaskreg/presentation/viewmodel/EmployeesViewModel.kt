@@ -72,7 +72,7 @@ class EmployeesViewModel @Inject constructor(
             }.onFailure {
                 _employeesListFlow.value = when(it){
                     is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
-                    else -> EmpTaskRegState.Failure(Exception("Error during getting employee: Check your connection"))
+                    else -> EmpTaskRegState.Failure(Exception("Error during getting employees: Check your connection"))
                 }
             }
 
