@@ -12,6 +12,8 @@ interface TaskRepository {
 
     suspend fun getEmployeeTaskCount(id:Int,authToken:String):Result<Int>
 
+    suspend fun getEmployeeCurrentTask(id:Int,authToken:String):Result<Task>
+
     suspend fun addTask(task:AddTaskRequest, file: File?, authToken:String):Result<Unit>
 
 }
