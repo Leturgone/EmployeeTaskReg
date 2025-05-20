@@ -67,10 +67,9 @@ class TaskRepositoryImpl @Inject constructor(private val api:EmployeeTaskRegApi)
         return try{
             val startDateFormat = convertMillisToDate(task.startDate.toLong())
             val endDateFormat = convertMillisToDate(task.endDate.toLong())
-            val taskWithDates = task.copy(documentName = file?.name, startDate = startDateFormat, endDate = endDateFormat )
-            val taskJson = Gson().toJson(taskWithDates)
+            val taskWithDatesAndFile = task.copy(documentName = file?.name, startDate = startDateFormat, endDate = endDateFormat )
+            val taskJson = Gson().toJson(taskWithDatesAndFile)
             val taskRequestBody = taskJson.toRequestBody("application/json".toMediaTypeOrNull())
-            Log.d("TaskJson",taskJson)
             val requestFile = file?.asRequestBody("application/pdf".toMediaTypeOrNull())
             val filePart = file?.let {
                 requestFile?.let {
