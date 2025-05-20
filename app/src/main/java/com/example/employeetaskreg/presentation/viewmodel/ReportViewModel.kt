@@ -78,7 +78,6 @@ class ReportViewModel @Inject constructor(
                 val report = AddReportRequest(
                     reportDate = reportDate,
                     documentName = documentName,
-                    status = null,
                     taskId = taskId,
                     employeeId = employeeId,
                     directorId = directorId
