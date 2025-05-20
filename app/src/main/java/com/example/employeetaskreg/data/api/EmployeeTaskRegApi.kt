@@ -95,6 +95,11 @@ interface EmployeeTaskRegApi {
         @Path("empName") employeeName: String
     ):List<CompanyWorker.Employee>
 
+    @GET("profile/myEmployees/employee/{employeeId}/currentTask")
+    suspend fun getEmployeeCurrentTaskById(
+        @Header("Authorization") token: String,
+        @Path("employeeId") employeeId: String
+    ):Task
 
     @GET("/getReport/{reportId}")
     suspend fun getReportById()
