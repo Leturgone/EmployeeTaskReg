@@ -7,6 +7,7 @@
     <string name="login_input">Логин</string>
     <string name="password">Пароль</string>
     <string name="employees">Сотрудники</string>
+    <string name="employees_not_found">Сотрудников не найдено</string>
     <string name="employee">Сотрудник</string>
     <string name="director">Начальник</string>
     <string name="tasks">Задачи</string>
