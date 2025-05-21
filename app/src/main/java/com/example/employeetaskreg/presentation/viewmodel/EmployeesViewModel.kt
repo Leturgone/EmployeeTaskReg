@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.example.employeetaskreg.domain.model.Task
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -29,6 +30,10 @@ class EmployeesViewModel @Inject constructor(
     private val _employeeTaskCountFlow = MutableStateFlow<EmpTaskRegState<Int>>(EmpTaskRegState.Waiting)
 
     val employeeTaskCountFlow: StateFlow<EmpTaskRegState<Int>> = _employeeTaskCountFlow
+
+    private val _employeeCurrentTaskFlow = MutableStateFlow<EmpTaskRegState<Task>>(EmpTaskRegState.Waiting)
+
+    val employeeCurrentTaskFlow: StateFlow<EmpTaskRegState<Task>> = _employeeCurrentTaskFlow
 
     private val _employeeFlow = MutableStateFlow<EmpTaskRegState<CompanyWorker.Employee>>(EmpTaskRegState.Waiting)
 
@@ -104,6 +109,28 @@ class EmployeesViewModel @Inject constructor(
             }
         }.onFailure {
             _employeeFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+        }
+    }
+
+    fun getEmployeeCurrentTask(id:Int) = viewModelScope.launch {
+        _employeeCurrentTaskFlow.value = EmpTaskRegState.Loading
+        val authResult = withContext(Dispatchers.IO){
+            authRepository.getTokenFromDataStorage()
+        }
+        authResult.onSuccess {token ->
+            val result = withContext(Dispatchers.IO){
+                taskRepository.getEmployeeCurrentTask(id,token)
+            }
+            result.onSuccess {
+                _employeeCurrentTaskFlow.value = EmpTaskRegState.Success(it)
+            }.onFailure {
+                _employeeCurrentTaskFlow.value = when(it){
+                    is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
+                    else -> EmpTaskRegState.Failure(Exception("Error during getting task count: Check your connection"))
+                }
+            }
+        }.onFailure {
+            _employeeCurrentTaskFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
     }
 

@@ -20,6 +20,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.currentCompositionErrors
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
+import com.example.employeetaskreg.presentation.ui.screens.TaskCard
 import com.example.employeetaskreg.presentation.viewmodel.EmployeesViewModel
 
 
@@ -45,6 +47,8 @@ fun EmployeeCard(employeeName:String, employeeId:Int, setListItem:Boolean = fals
     val sheetState = rememberModalBottomSheetState()
     val taskCount = viewModel.employeeTaskCountFlow.collectAsState()
     val employee = viewModel.employeeFlow.collectAsState()
+
+    val employeeCurrentTask = viewModel.employeeCurrentTaskFlow.collectAsState()
 
     var taskCountText by remember { mutableStateOf("Задач решено: ") }
     val scope = rememberCoroutineScope()
@@ -72,7 +76,7 @@ fun EmployeeCard(employeeName:String, employeeId:Int, setListItem:Boolean = fals
         LaunchedEffect(Unit){
             viewModel.getEmployeeById(employeeId)
             viewModel.getEmployeeTaskCount(employeeId)
-            //viewModel.getEmployeeCurrentTask(employeeId)
+            viewModel.getEmployeeCurrentTask(employeeId)
         }
         ModalBottomSheet(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -135,7 +139,17 @@ fun EmployeeCard(employeeName:String, employeeId:Int, setListItem:Boolean = fals
                             modifier = Modifier
                                 .width(300.dp)
                         )
-                        //TaskCard(taskName = "Задача 333", employeeName = "Иванов И.И", initials = "ИИ")
+                        when(employeeCurrentTask.value){
+                            is EmpTaskRegState.Failure -> {
+
+                            }
+                            EmpTaskRegState.Loading -> CircularProgressIndicator()
+                            is EmpTaskRegState.Success -> {
+                                TaskCard()
+                            }
+                            EmpTaskRegState.Waiting -> null
+                        }
+
                     }
                     EmpTaskRegState.Waiting -> null
                 }
