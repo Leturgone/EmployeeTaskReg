@@ -23,7 +23,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,7 +50,7 @@ fun EmployeeCard(employeeName:String, employeeId:Int, setListItem:Boolean = fals
     val employeeCurrentTask = viewModel.employeeCurrentTaskFlow.collectAsState()
 
     var taskCountText by remember { mutableStateOf("Задач решено: ") }
-    val scope = rememberCoroutineScope()
+
     var showBottomSheet by remember { mutableStateOf(false) }
     Card(
         shape = RoundedCornerShape(8.dp),
