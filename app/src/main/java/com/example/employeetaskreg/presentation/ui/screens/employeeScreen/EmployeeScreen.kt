@@ -72,23 +72,39 @@ fun EmployeesScreen(viewModel: EmployeesViewModel = hiltViewModel()) {
                         (employeeListState.value as EmpTaskRegState.Failure).exception.toString()
                 }
                 EmpTaskRegState.Loading -> CircularProgressIndicator()
-                is EmpTaskRegState.Success -> employeeList = (employeeListState.value as EmpTaskRegState.Success<List<CompanyWorker.Employee>>).result
+                is EmpTaskRegState.Success -> {
+                    employeeList = (employeeListState.value as EmpTaskRegState.Success<List<CompanyWorker.Employee>>).result
+                    if (employeeList.isEmpty()){
+                        Text(
+                            text = stringResource(id = R.string.employees_not_found),
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 25.sp,
+                            modifier = Modifier.padding(bottom = 16.dp, top = 16.dp)
+                        )
+                    }
+                }
                 EmpTaskRegState.Waiting -> null
             }
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(employeeList.size) {
-                    val employee = employeeList[it]
-                    Spacer(modifier = Modifier.height(30.dp))
-                    EmployeeCard(
-                        employeeName = employee.name,
-                        employeeId = employee.id,
-                        viewModel = viewModel
-                    )
+
+
+            if (employeeList.isNotEmpty()){
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(employeeList.size) {
+                        val employee = employeeList[it]
+                        Spacer(modifier = Modifier.height(30.dp))
+                        EmployeeCard(
+                            employeeName = employee.name,
+                            employeeId = employee.id,
+                            viewModel = viewModel
+                        )
+                    }
                 }
             }
+
         }
     }
 
