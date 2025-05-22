@@ -31,9 +31,12 @@ import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
 import com.example.employeetaskreg.presentation.ui.screens.employeeScreen.EmployeeCard
 import com.example.employeetaskreg.presentation.ui.screens.employeeScreen.SearchSec
 import com.example.employeetaskreg.presentation.viewmodel.EmployeesViewModel
+import com.example.employeetaskreg.presentation.viewmodel.SearchViewModel
 
 @Composable
-fun SetEmployeeScreen(navController: NavHostController, viewModel: EmployeesViewModel = hiltViewModel(navController.currentBackStackEntry!!)) {
+fun SetEmployeeScreen(navController: NavHostController,
+                      searchViewModel: SearchViewModel = hiltViewModel(),
+                      viewModel: EmployeesViewModel = hiltViewModel(navController.currentBackStackEntry!!)) {
 
     val employeeListState = viewModel.employeesListFlow.collectAsState()
 
@@ -58,7 +61,7 @@ fun SetEmployeeScreen(navController: NavHostController, viewModel: EmployeesView
             modifier = Modifier.padding(bottom = 16.dp, top = 16.dp)
         )
 
-        SearchSec()
+        SearchSec(searchViewModel)
 
         CustomToastMessage(
             message = errorMessage,
