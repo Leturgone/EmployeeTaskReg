@@ -39,4 +39,5 @@
     <string name="dark">Темная</string>
     <string name="light">Светлая</string>
     <string name="already_have">Уже есть аккаунт?</string>
+    <string name="update_search">Обновить</string>
 </resources>
