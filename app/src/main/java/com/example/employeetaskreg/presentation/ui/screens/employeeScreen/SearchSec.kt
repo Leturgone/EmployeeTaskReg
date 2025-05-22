@@ -20,29 +20,32 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.presentation.viewmodel.EmployeesViewModel
+import com.example.employeetaskreg.presentation.viewmodel.SearchViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchSec(viewModel: EmployeesViewModel = hiltViewModel()) {
+fun SearchSec(searchViewModel: SearchViewModel,
+              viewModel: EmployeesViewModel = hiltViewModel()) {
     val textFieldState = rememberTextFieldState()
 
     var expanded by rememberSaveable { mutableStateOf(false) }
 
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     SearchBar(
         inputField = { SearchBarDefaults.InputField(
             state = textFieldState,
             shape = RoundedCornerShape(20.dp),
             onSearch = {
-                expanded = false
-
+                if (textFieldState.text.isNotEmpty()){
+                    expanded = false
+                    searchViewModel.setSearchTest(textFieldState.text.toString())
+                    viewModel.searchEmployeeByName(textFieldState.text.toString())
+                }
                        },
             expanded = expanded,
             onExpandedChange = {expanded = it},
@@ -52,8 +55,11 @@ fun SearchSec(viewModel: EmployeesViewModel = hiltViewModel()) {
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSecondaryContainer,
                 modifier = Modifier.clickable {
-                    expanded = false
-                    viewModel.searchEmployeeByName(textFieldState.text.toString())
+                    if (textFieldState.text.isNotEmpty()){
+                        expanded = false
+                        searchViewModel.setSearchTest(textFieldState.text.toString())
+                        viewModel.searchEmployeeByName(textFieldState.text.toString())
+                    }
                 }
             ) },
             trailingIcon = {
