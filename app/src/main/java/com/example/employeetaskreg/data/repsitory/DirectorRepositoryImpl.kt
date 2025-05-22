@@ -18,11 +18,9 @@ class DirectorRepositoryImpl@Inject constructor(private val api: EmployeeTaskReg
         }catch (e: HttpException){
             Log.e("getDirectorById",e.toString())
             Result.failure(e)
-        //EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
         }catch(e:Exception){
             Log.e("getDirectorById",e.toString())
             Result.failure(e)
-        //EmpTaskRegState.Failure(Exception("Error during getting director: Check your connection"))
         }
     }
 

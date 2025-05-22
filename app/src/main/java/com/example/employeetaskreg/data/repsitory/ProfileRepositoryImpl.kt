@@ -12,15 +12,12 @@ class ProfileRepositoryImpl @Inject constructor(private val api: EmployeeTaskReg
         return try{
             val response = api.getProfile("Bearer $authToken")
             Result.success(response)
-        //EmpTaskRegState.Success(response)
         }catch (e: HttpException){
             Log.e("getProfile",e.toString())
             Result.failure(e)
-        //EmpTaskRegState.Failure(Exception("${e.code()} - ${e.message()}"))
         }catch(e:Exception){
             Log.e("getProfile",e.toString())
             Result.failure(e)
-            //EmpTaskRegState.Failure(Exception("Error during login: Check your connection"))
         }
     }
 }
