@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,6 +40,7 @@ fun SetEmployeeScreen(navController: NavHostController,
                       viewModel: EmployeesViewModel = hiltViewModel(navController.currentBackStackEntry!!)) {
 
     val employeeListState = viewModel.employeesListFlow.collectAsState()
+    val searchText = searchViewModel.searchText.collectAsState()
 
     var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
@@ -70,13 +72,33 @@ fun SetEmployeeScreen(navController: NavHostController,
         )
 
         when(employeeListState.value){
-            is EmpTaskRegState.Failure -> LaunchedEffect(employeeListState.value) {
-                showToast = true
-                errorMessage =
-                    (employeeListState.value as EmpTaskRegState.Failure).exception.toString()
+            is EmpTaskRegState.Failure -> {
+                LaunchedEffect(employeeListState.value) {
+                    showToast = true
+                    errorMessage =
+                        (employeeListState.value as EmpTaskRegState.Failure).exception.toString()
+
+                }
+                Column {
+                    Text(text = errorMessage)
+                    Button(onClick = { viewModel.searchEmployeeByName(searchText.value) }, ) {
+                        Text(text = stringResource(id = R.string.update_search))
+                    }
+                }
             }
             EmpTaskRegState.Loading -> CircularProgressIndicator()
-            is EmpTaskRegState.Success -> employeeList = (employeeListState.value as EmpTaskRegState.Success<List<CompanyWorker.Employee>>).result
+            is EmpTaskRegState.Success -> {
+                employeeList = (employeeListState.value as EmpTaskRegState.Success<List<CompanyWorker.Employee>>).result
+                if (employeeList.isEmpty()){
+                    Text(
+                        text = stringResource(id = R.string.employees_not_found),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 25.sp,
+                        modifier = Modifier.padding(bottom = 16.dp, top = 16.dp)
+                    )
+                }
+            }
             EmpTaskRegState.Waiting -> null
         }
 
@@ -92,6 +114,7 @@ fun SetEmployeeScreen(navController: NavHostController,
                     employeeId = employee.id,
                     setListItem = true
                 ){
+                    searchViewModel.addToSearchHistory(employee.name)
                     navController.popBackStack()
                     navController.popBackStack()
                     navController.navigate("new_task/${employee.name}/${employee.id}/${employee.directorId}")
