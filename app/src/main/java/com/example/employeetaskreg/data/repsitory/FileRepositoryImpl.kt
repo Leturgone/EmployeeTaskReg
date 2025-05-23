@@ -35,7 +35,6 @@ class FileRepositoryImpl(): FileRepository {
     }
 
     private fun createTempFile(context: Context): File? {
-        //  val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)
         val storageDir: File? = context.cacheDir
         return try {
             File.createTempFile("pdf_", ".pdf", storageDir)

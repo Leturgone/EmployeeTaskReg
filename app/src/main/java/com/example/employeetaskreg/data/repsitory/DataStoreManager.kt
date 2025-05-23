@@ -12,22 +12,46 @@ import kotlinx.coroutines.flow.map
 class DataStoreManager(private val context: Context) {
 
     private val TOKEN_KEY = stringPreferencesKey("jwt_token")
+    private val SEARCH_HISTORY_KEY = stringPreferencesKey("search_history")
     val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "employee_task_reg")
-    suspend fun storeToken(token: String) {
-
-        context.dataStore.edit { preferences ->
-            preferences[TOKEN_KEY] = token
-        }
-    }
 
     val tokenFlow: Flow<String?> = context.dataStore.data
         .map { preferences ->
             preferences[TOKEN_KEY] ?: ""
         }
 
+    val searchHistoryFlow: Flow<List<String>> = context.dataStore.data
+        .map { preferences ->
+            val historyString = preferences[SEARCH_HISTORY_KEY] ?: ""
+            if (historyString.isNotEmpty()) {
+                historyString.split(",").toList()
+            } else {
+                emptyList()
+            }
+        }
+
+    suspend fun storeToken(token: String) {
+        context.dataStore.edit { preferences ->
+            preferences[TOKEN_KEY] = token
+        }
+    }
+
+
     suspend fun clearToken() {
         context.dataStore.edit { preferences ->
             preferences.remove(TOKEN_KEY)
+        }
+    }
+
+    suspend fun storeSearchHistory(searchHistory: List<String>){
+        context.dataStore.edit {preferences ->
+            preferences[SEARCH_HISTORY_KEY] = searchHistory.joinToString(",")
+        }
+    }
+
+    suspend fun clearSearchHistory(){
+        context.dataStore.edit {preferences ->
+            preferences.remove(SEARCH_HISTORY_KEY)
         }
     }
 }

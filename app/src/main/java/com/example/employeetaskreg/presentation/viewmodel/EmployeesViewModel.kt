@@ -3,6 +3,7 @@ package com.example.employeetaskreg.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.employeetaskreg.domain.model.CompanyWorker
+import com.example.employeetaskreg.domain.model.Task
 import com.example.employeetaskreg.domain.repository.AuthRepository
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.domain.repository.EmployeeRepository
@@ -29,6 +30,10 @@ class EmployeesViewModel @Inject constructor(
     private val _employeeTaskCountFlow = MutableStateFlow<EmpTaskRegState<Int>>(EmpTaskRegState.Waiting)
 
     val employeeTaskCountFlow: StateFlow<EmpTaskRegState<Int>> = _employeeTaskCountFlow
+
+    private val _employeeCurrentTaskFlow = MutableStateFlow<EmpTaskRegState<Task>>(EmpTaskRegState.Waiting)
+
+    val employeeCurrentTaskFlow: StateFlow<EmpTaskRegState<Task>> = _employeeCurrentTaskFlow
 
     private val _employeeFlow = MutableStateFlow<EmpTaskRegState<CompanyWorker.Employee>>(EmpTaskRegState.Waiting)
 
@@ -72,7 +77,7 @@ class EmployeesViewModel @Inject constructor(
             }.onFailure {
                 _employeesListFlow.value = when(it){
                     is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
-                    else -> EmpTaskRegState.Failure(Exception("Error during getting employee: Check your connection"))
+                    else -> EmpTaskRegState.Failure(Exception("Error during getting employees: Check your connection"))
                 }
             }
 
@@ -100,6 +105,50 @@ class EmployeesViewModel @Inject constructor(
             }
         }.onFailure {
             _employeeFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+        }
+    }
+
+    fun getEmployeeCurrentTask(id:Int) = viewModelScope.launch {
+        _employeeCurrentTaskFlow.value = EmpTaskRegState.Loading
+        val authResult = withContext(Dispatchers.IO){
+            authRepository.getTokenFromDataStorage()
+        }
+        authResult.onSuccess {token ->
+            val result = withContext(Dispatchers.IO){
+                taskRepository.getEmployeeCurrentTask(id,token)
+            }
+            result.onSuccess {
+                _employeeCurrentTaskFlow.value = EmpTaskRegState.Success(it)
+            }.onFailure {
+                _employeeCurrentTaskFlow.value = when(it){
+                    is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
+                    else -> EmpTaskRegState.Failure(Exception("Error during getting current task: Check your connection"))
+                }
+            }
+        }.onFailure {
+            _employeeCurrentTaskFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+        }
+    }
+
+    fun searchEmployeeByName(employeeName:String) = viewModelScope.launch {
+        _employeesListFlow.value = EmpTaskRegState.Loading
+        val authResult = withContext(Dispatchers.IO){
+            authRepository.getTokenFromDataStorage()
+        }
+        authResult.onSuccess {token ->
+            val result = withContext(Dispatchers.IO){
+                employeeRepository.getEmployeeByName(employeeName,token)
+            }
+            result.onSuccess {
+                _employeesListFlow.value = EmpTaskRegState.Success(it)
+            }.onFailure {
+                _employeesListFlow.value = when(it){
+                    is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
+                    else -> EmpTaskRegState.Failure(Exception("Error during getting search result: Check your connection"))
+                }
+            }
+        }.onFailure {
+            _employeesListFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
     }
 

@@ -6,4 +6,6 @@ interface EmployeeRepository {
     suspend fun getEmployeesList(authToken:String):Result<List<CompanyWorker.Employee>>
 
     suspend fun getEmployeeById(id: Int, authToken: String):Result<CompanyWorker.Employee>
+
+    suspend fun getEmployeeByName(name:String,authToken: String):Result<List<CompanyWorker.Employee>>
 }

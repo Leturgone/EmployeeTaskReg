@@ -63,6 +63,19 @@ class TaskRepositoryImpl @Inject constructor(private val api:EmployeeTaskRegApi)
         }
     }
 
+    override suspend fun getEmployeeCurrentTask(id: Int, authToken: String): Result<Task> {
+        return try {
+            val response = api.getEmployeeCurrentTaskById("Bearer $authToken",id.toString())
+            Result.success(response)
+        }catch (e:HttpException){
+            Log.e("getEmployeeCurrentTask",e.toString())
+            Result.failure(e)
+        }catch(e:Exception){
+            Log.e("getEmployeeCurrentTask",e.toString())
+            Result.failure(e)
+        }
+    }
+
     override suspend fun addTask(task: AddTaskRequest, file: File?, authToken:String): Result<Unit> {
         return try{
             val startDateFormat = convertMillisToDate(task.startDate.toLong())
