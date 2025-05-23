@@ -112,7 +112,9 @@ fun EmployeesScreen(viewModel: EmployeesViewModel = hiltViewModel(),searchViewMo
                             employeeName = employee.name,
                             employeeId = employee.id,
                             viewModel = viewModel
-                        )
+                        ){
+                            searchViewModel.addToSearchHistory(employee.name)
+                        }
                     }
                 }
             }
