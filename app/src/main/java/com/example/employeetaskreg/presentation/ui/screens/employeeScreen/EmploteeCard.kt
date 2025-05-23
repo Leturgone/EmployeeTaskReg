@@ -58,10 +58,15 @@ fun EmployeeCard(employeeName:String, employeeId:Int, setListItem:Boolean = fals
             .fillMaxWidth()
             .height(73.dp)
             .let {
-                when (setListItem) {
-                    true -> it.clickable(onClick = clickFun!!)
-                    false -> it.clickable { showBottomSheet = true }
+                it.clickable {
+                    clickFun?.let {
+                        clickFun.invoke()
+                    }
+                    if (!setListItem){
+                        showBottomSheet = true
+                    }
                 }
+
             },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
