@@ -10,6 +10,7 @@ import com.example.employeetaskreg.data.repsitory.EmployeeRepositoryImpl
 import com.example.employeetaskreg.data.repsitory.FileRepositoryImpl
 import com.example.employeetaskreg.data.repsitory.ProfileRepositoryImpl
 import com.example.employeetaskreg.data.repsitory.ReportRepositoryImpl
+import com.example.employeetaskreg.data.repsitory.SearchHistoryRepositoryImpl
 import com.example.employeetaskreg.data.repsitory.TaskRepositoryImpl
 import com.example.employeetaskreg.domain.model.CompanyWorker
 import com.example.employeetaskreg.domain.repository.AuthRepository
@@ -18,6 +19,7 @@ import com.example.employeetaskreg.domain.repository.EmployeeRepository
 import com.example.employeetaskreg.domain.repository.FileRepository
 import com.example.employeetaskreg.domain.repository.ProfileRepository
 import com.example.employeetaskreg.domain.repository.ReportRepository
+import com.example.employeetaskreg.domain.repository.SearchHistoryRepository
 import com.example.employeetaskreg.domain.repository.TaskRepository
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -105,5 +107,11 @@ class AppModule {
     @Singleton
     fun provideFileRepository(): FileRepository {
         return FileRepositoryImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchHistoryRepository(dataStoreManager: DataStoreManager): SearchHistoryRepository {
+        return SearchHistoryRepositoryImpl(dataStoreManager)
     }
 }
