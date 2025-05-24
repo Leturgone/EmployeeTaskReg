@@ -121,6 +121,12 @@ interface EmployeeTaskRegApi {
         @Path("status") status: Boolean
     )
 
+    @GET("/getReportByTaskId/{taskId}")
+    suspend fun getReportByTaskId(
+        @Header("Authorization") token: String,
+        @Path("taskId") taskId: String,
+    ): Report
+
     @GET("/getReport/{reportId}")
     suspend fun getReportById()
 
