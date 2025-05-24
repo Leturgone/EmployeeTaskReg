@@ -8,9 +8,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.Card
@@ -41,15 +43,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.employeetaskreg.R
+import com.example.employeetaskreg.domain.model.Report
 import com.example.employeetaskreg.domain.model.Task
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.employeeScreen.AvatarNameSec
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.DownloadFileCard
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.FileCard
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.localDateToMillis
+import com.example.employeetaskreg.presentation.ui.theme.GreenSoft
 import com.example.employeetaskreg.presentation.viewmodel.ReportViewModel
 import com.example.employeetaskreg.presentation.viewmodel.TasksViewModel
-import kotlinx.coroutines.launch
 import java.io.File
 import java.time.LocalDate
 
@@ -125,6 +128,7 @@ fun TaskCard(task: Task,
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             onDismissRequest = {
                 taskViewModel.resetDownloadState()
+                reportViewModel.resetAddReportState()
                 showBottomSheet = false
             },
             sheetState = sheetState
@@ -151,13 +155,12 @@ fun TaskCard(task: Task,
                         }
                         EmpTaskRegState.Loading -> CircularProgressIndicator()
                         is EmpTaskRegState.Success -> {
-                            LaunchedEffect(Unit) {
-                                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                    if (!sheetState.isVisible) {
-                                        showBottomSheet = false
-                                    }
-                                }
-                            }
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = "okIcon",
+                                modifier = Modifier.size(35.dp),
+                                tint = GreenSoft
+                            )
                         }
 
                         EmpTaskRegState.Waiting -> null
@@ -286,16 +289,9 @@ fun TaskCard(task: Task,
                                                 )
                                             },
                                             onClick = {
-                                                if (task.directorId != null && task.employeeId != null) {
-                                                    reportViewModel.addReport(
-                                                        reportDate = LocalDate.now().localDateToMillis()
-                                                            .toString(),
-                                                        documentName = null,
-                                                        taskId = task.id,
-                                                        directorId = task.directorId,
-                                                        employeeId = task.employeeId
-                                                    )
-                                                }
+                                                reportViewModel.updateReport(
+                                                    (reportByTask.value as EmpTaskRegState.Success<Report>).result.id
+                                                )
                                             }
                                         )
                                     }
