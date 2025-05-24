@@ -10,11 +10,15 @@ import java.io.IOException
 import java.io.InputStream
 
 class FileRepositoryImpl(): FileRepository {
-    override suspend fun uriToFile(context: Context, uri: Uri): File? {
+    override suspend fun uriToFile(context: Context, uri: Uri): Result<File> {
         val inputStream: InputStream? = context.contentResolver.openInputStream(uri)
-        val file: File? = createTempFile(context)
+        if (inputStream == null) {
+            Log.e("uriToFile", "Error: Could not open InputStream for URI: $uri")
+            return Result.failure(Exception())
+        }
+        val file: File = createTempFile(context)?: return Result.failure(Exception())
         return try {
-            inputStream?.use { input ->
+            inputStream.use { input ->
                 FileOutputStream(file).use { output ->
                     val buffer = ByteArray(4 * 1024)
                     while (true) {
@@ -25,13 +29,14 @@ class FileRepositoryImpl(): FileRepository {
                     output.flush()
                 }
             }
-            file
+            Result.success(file)
+
         } catch (e: Exception) {
-            Log.e("FileRepository", "Error converting URI to file: ${e.message}")
-            file?.delete()
-            null
+            Log.e("uriToFile", "Error converting URI to file: ${e.message}")
+            file.delete()
+            Result.failure(e)
         } finally {
-            inputStream?.close()
+            inputStream.close()
         }
     }
 
@@ -45,7 +50,7 @@ class FileRepositoryImpl(): FileRepository {
                 Result.success(destinationFile)
             }
         }catch (e: IOException) {
-            Log.e("FileRepository", "Error saving ByteArray to file: ${e.message}")
+            Log.e("byteArrayToFile", "Error saving ByteArray to file: ${e.message}")
             Result.failure(e)
         }
     }
@@ -55,6 +60,7 @@ class FileRepositoryImpl(): FileRepository {
         return try {
             File.createTempFile("pdf_", ".pdf", storageDir)
         }catch (e: IOException){
+            Log.e("createTempFile", "Error while creating temp file: ${e.message}")
             null
         }
     }

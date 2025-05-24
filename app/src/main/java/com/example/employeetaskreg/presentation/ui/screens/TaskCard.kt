@@ -47,12 +47,16 @@ import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.DownloadF
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.FileCard
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.localDateToMillis
 import com.example.employeetaskreg.presentation.viewmodel.ReportViewModel
+import com.example.employeetaskreg.presentation.viewmodel.TasksViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskCard(task: Task,role:String,reportViewModel: ReportViewModel = hiltViewModel()) {
+fun TaskCard(task: Task,role:String,
+             taskViewModel: TasksViewModel = hiltViewModel(),
+             reportViewModel: ReportViewModel = hiltViewModel()) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
@@ -63,6 +67,10 @@ fun TaskCard(task: Task,role:String,reportViewModel: ReportViewModel = hiltViewM
 
     val addReportState = reportViewModel.addReportFlow.collectAsState()
 
+    val downloadFile = stringResource(id = R.string.download_file)
+    var downloadFileTitle by remember { mutableStateOf(downloadFile) }
+
+    val downloadTask = taskViewModel.downloadTask.collectAsState()
 
     var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
@@ -108,6 +116,7 @@ fun TaskCard(task: Task,role:String,reportViewModel: ReportViewModel = hiltViewM
         ModalBottomSheet(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             onDismissRequest = {
+                taskViewModel.resetDownloadState()
                 showBottomSheet = false
             },
             sheetState = sheetState
@@ -191,9 +200,16 @@ fun TaskCard(task: Task,role:String,reportViewModel: ReportViewModel = hiltViewM
                             .width(400.dp)
                     )
                     task.documentName?.let {
-                        DownloadFileCard(fileFunc = task.documentName){
-                            //download
+                        DownloadFileCard(fileFunc = downloadFileTitle){
+                            taskViewModel.downloadTask(task.id)
                         }
+                    }
+
+                    downloadFileTitle = when(downloadTask.value){
+                        is EmpTaskRegState.Failure -> "Произошла ошибка при загрузке"
+                        EmpTaskRegState.Loading -> "Загрузка..."
+                        is EmpTaskRegState.Success -> (downloadTask.value as EmpTaskRegState.Success<File>).result.absolutePath
+                        EmpTaskRegState.Waiting -> downloadFile
                     }
                     when (role) {
                         "director" -> {
