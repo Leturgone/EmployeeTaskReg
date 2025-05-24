@@ -43,6 +43,8 @@ class ReportViewModel @Inject constructor(
     private val _markReport = MutableStateFlow<EmpTaskRegState<Unit>>(EmpTaskRegState.Waiting)
     val markReport: StateFlow<EmpTaskRegState<Unit>> = _markReport
 
+    private val _reportByTaskIdFlow = MutableStateFlow<EmpTaskRegState<Report>>(EmpTaskRegState.Waiting)
+    val reportByTaskIdFlow:StateFlow<EmpTaskRegState<Report>> = _reportByTaskIdFlow
 
     fun setSelectedReportFileUri(uri: Uri?)  = viewModelScope.launch{
         _selectedFileUri.value = uri
@@ -174,6 +176,30 @@ class ReportViewModel @Inject constructor(
                 _markReport.value = when(it){
                     is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
                     else -> EmpTaskRegState.Failure(Exception("Error during mark reports: Check your connection"))
+                }
+            }
+        }.onFailure {
+            _markReport.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+        }
+    }
+
+    fun getReportByTaskId(taskId: Int) = viewModelScope.launch {
+        _reportByTaskIdFlow.value = EmpTaskRegState.Loading
+
+        val authResult = withContext(Dispatchers.IO){
+            authRepository.getTokenFromDataStorage()
+        }
+
+        authResult.onSuccess {token ->
+            val result = withContext(Dispatchers.IO){
+                reportRepository.getReportByTaskId(taskId,token)
+            }
+            result.onSuccess {
+                _reportByTaskIdFlow.value = EmpTaskRegState.Success(it)
+            }.onFailure {
+                _reportByTaskIdFlow.value = when(it){
+                    is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
+                    else -> EmpTaskRegState.Failure(Exception("Error during getting report by taskId: Check your connection"))
                 }
             }
         }.onFailure {
