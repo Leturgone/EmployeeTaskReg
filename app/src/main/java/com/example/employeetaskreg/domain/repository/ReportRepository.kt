@@ -13,4 +13,6 @@ interface ReportRepository {
 
     suspend fun markReport(reportId: Int, status:Boolean, authToken: String): Result<Unit>
 
+    suspend fun getReportByTaskId(taskId:Int,authToken: String):Result<Report>
+
 }
