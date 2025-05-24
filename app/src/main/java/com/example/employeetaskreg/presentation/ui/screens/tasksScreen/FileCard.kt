@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.example.employeetaskreg.presentation.ui.components.PdfActivityResultContract
 
 @Composable
-fun FileCard(fileFunc:String,onFileSelected: (Uri?) -> Unit? = {}){
+fun FileCard(fileFunc:String, onFileSelected: (Uri?) -> Unit = {}){
 
     val pdfLauncher = rememberLauncherForActivityResult(PdfActivityResultContract()) { uri ->
         onFileSelected(uri) // Отправляем URI выбранного файла
