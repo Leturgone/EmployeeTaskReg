@@ -11,4 +11,6 @@ interface ReportRepository {
 
     suspend fun downloadReport(reportId:Int,authToken:String):Result<ByteArray>
 
+    suspend fun markReport(reportId: Int, status:Boolean, authToken: String): Result<Unit>
+
 }
