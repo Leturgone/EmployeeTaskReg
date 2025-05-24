@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -40,23 +43,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.employeetaskreg.R
+import com.example.employeetaskreg.domain.model.Report
 import com.example.employeetaskreg.domain.model.Task
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.employeeScreen.AvatarNameSec
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.DownloadFileCard
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.FileCard
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.localDateToMillis
+import com.example.employeetaskreg.presentation.ui.theme.GreenSoft
 import com.example.employeetaskreg.presentation.viewmodel.ReportViewModel
 import com.example.employeetaskreg.presentation.viewmodel.TasksViewModel
-import kotlinx.coroutines.launch
 import java.io.File
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskCard(task: Task,role:String,
+fun TaskCard(task: Task,
+             role:String,
              taskViewModel: TasksViewModel = hiltViewModel(),
              reportViewModel: ReportViewModel = hiltViewModel()) {
+
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
@@ -71,9 +77,14 @@ fun TaskCard(task: Task,role:String,
     var downloadFileTitle by remember { mutableStateOf(downloadFile) }
 
     val downloadTask = taskViewModel.downloadTask.collectAsState()
+    val reportByTask = reportViewModel.reportByTaskIdFlow.collectAsState()
 
     var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit){
+        reportViewModel.getReportByTaskId(task.id)
+    }
 
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -117,6 +128,7 @@ fun TaskCard(task: Task,role:String,
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             onDismissRequest = {
                 taskViewModel.resetDownloadState()
+                reportViewModel.resetAddReportState()
                 showBottomSheet = false
             },
             sheetState = sheetState
@@ -143,13 +155,12 @@ fun TaskCard(task: Task,role:String,
                         }
                         EmpTaskRegState.Loading -> CircularProgressIndicator()
                         is EmpTaskRegState.Success -> {
-                            LaunchedEffect(Unit) {
-                                scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                    if (!sheetState.isVisible) {
-                                        showBottomSheet = false
-                                    }
-                                }
-                            }
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = "okIcon",
+                                modifier = Modifier.size(35.dp),
+                                tint = GreenSoft
+                            )
                         }
 
                         EmpTaskRegState.Waiting -> null
@@ -241,28 +252,52 @@ fun TaskCard(task: Task,role:String,
                                 modifier = Modifier.fillMaxWidth(),
                                 contentAlignment = Alignment.Center
                             ) {
-                                ExtendedFloatingActionButton(
-                                    containerColor = MaterialTheme.colorScheme.primary,
-                                    text = { Text(text = stringResource(id = R.string.create_resp)) },
-                                    icon = {
-                                        Icon(
-                                            imageVector = Icons.Default.MailOutline,
-                                            contentDescription = "createRespButton"
+                                when(reportByTask.value){
+                                    is EmpTaskRegState.Failure -> {
+                                        ExtendedFloatingActionButton(
+                                            containerColor = MaterialTheme.colorScheme.primary,
+                                            text = { Text(text = stringResource(id = R.string.create_resp)) },
+                                            icon = {
+                                                Icon(
+                                                    imageVector = Icons.Default.MailOutline,
+                                                    contentDescription = "createRespButton"
+                                                )
+                                            },
+                                            onClick = {
+                                                if (task.directorId != null && task.employeeId != null) {
+                                                    reportViewModel.addReport(
+                                                        reportDate = LocalDate.now().localDateToMillis()
+                                                            .toString(),
+                                                        documentName = null,
+                                                        taskId = task.id,
+                                                        directorId = task.directorId,
+                                                        employeeId = task.employeeId
+                                                    )
+                                                }
+                                            }
                                         )
-                                    },
-                                    onClick = {
-                                        if (task.directorId != null && task.employeeId != null) {
-                                            reportViewModel.addReport(
-                                                reportDate = LocalDate.now().localDateToMillis()
-                                                    .toString(),
-                                                documentName = null,
-                                                taskId = task.id,
-                                                directorId = task.directorId,
-                                                employeeId = task.employeeId
-                                            )
-                                        }
                                     }
-                                )
+                                    EmpTaskRegState.Loading -> CircularProgressIndicator()
+                                    is EmpTaskRegState.Success -> {
+                                        ExtendedFloatingActionButton(
+                                            containerColor = MaterialTheme.colorScheme.primary,
+                                            text = { Text(text = stringResource(id = R.string.update_report)) },
+                                            icon = {
+                                                Icon(
+                                                    imageVector = Icons.Default.Update,
+                                                    contentDescription = "updateRespButton"
+                                                )
+                                            },
+                                            onClick = {
+                                                reportViewModel.updateReport(
+                                                    (reportByTask.value as EmpTaskRegState.Success<Report>).result.id
+                                                )
+                                            }
+                                        )
+                                    }
+                                    EmpTaskRegState.Waiting -> null
+                                }
+
                             }
                         }
                     }
