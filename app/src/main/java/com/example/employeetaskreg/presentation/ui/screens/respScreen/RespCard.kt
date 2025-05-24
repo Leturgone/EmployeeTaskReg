@@ -9,14 +9,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -199,14 +203,11 @@ fun RespCard(response:Report,role:String,
                                     }
                                     EmpTaskRegState.Loading -> CircularProgressIndicator()
                                     is EmpTaskRegState.Success -> {
-                                        Text(
-                                            text = "Изменено",
-                                            fontSize = 20.sp,
-                                            fontWeight = FontWeight.Bold,
-                                            color = Color.Black,
-                                            textAlign = TextAlign.Start,
-                                            modifier = Modifier.padding(10.dp)
-                                                .width(300.dp)
+                                        Icon(
+                                            imageVector = Icons.Default.Check,
+                                            contentDescription = "okIcon",
+                                            modifier = Modifier.size(35.dp),
+                                            tint = GreenSoft
                                         )
                                     }
                                     EmpTaskRegState.Waiting -> null
