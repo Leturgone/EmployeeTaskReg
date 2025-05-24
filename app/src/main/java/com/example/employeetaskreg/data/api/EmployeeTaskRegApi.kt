@@ -114,12 +114,15 @@ interface EmployeeTaskRegApi {
         @Path("taskId") taskId: String
     ): ResponseBody
 
+    @PATCH("/markReport/{reportId}/{status}")
+    suspend fun markReportById(
+        @Header("Authorization") token: String,
+        @Path("reportId") reportId: String,
+        @Path("status") status: Boolean
+    )
+
     @GET("/getReport/{reportId}")
     suspend fun getReportById()
-
-
-    @PATCH("/markReport/{reportId}/{status}")
-    suspend fun markReportById()
 
     @GET("/getTask/{taskId}")
     suspend fun getTaskById()
