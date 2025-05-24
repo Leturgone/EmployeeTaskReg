@@ -60,4 +60,19 @@ class ReportRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegA
         }
     }
 
+    override suspend fun downloadReport(reportId: Int, authToken: String): Result<ByteArray> {
+        return try {
+            val responseBody = api.downloadReportById("Bearer $authToken",reportId.toString())
+            val byteArray = responseBody.bytes()
+            Result.success(byteArray)
+        }catch (e:HttpException){
+            Log.e("downloadReport",e.toString())
+            Result.failure(e)
+        }catch(e:Exception){
+            Log.e("downloadReport",e.toString())
+            Result.failure(e)
+        }
+    }
+
+
 }

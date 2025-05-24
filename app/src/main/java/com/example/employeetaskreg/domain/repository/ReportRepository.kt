@@ -9,4 +9,6 @@ interface ReportRepository {
 
     suspend fun addReport(report: AddReportRequest, file: File?, authToken:String):Result<Unit>
 
+    suspend fun downloadReport(reportId:Int,authToken:String):Result<ByteArray>
+
 }

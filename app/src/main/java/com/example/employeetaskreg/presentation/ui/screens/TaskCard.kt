@@ -43,6 +43,7 @@ import com.example.employeetaskreg.R
 import com.example.employeetaskreg.domain.model.Task
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.employeeScreen.AvatarNameSec
+import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.DownloadFileCard
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.FileCard
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.localDateToMillis
 import com.example.employeetaskreg.presentation.viewmodel.ReportViewModel
@@ -190,7 +191,7 @@ fun TaskCard(task: Task,role:String,reportViewModel: ReportViewModel = hiltViewM
                             .width(400.dp)
                     )
                     task.documentName?.let {
-                        FileCard(fileFunc = task.documentName, download = true) {
+                        DownloadFileCard(fileFunc = task.documentName){
                             //download
                         }
                     }
@@ -215,7 +216,7 @@ fun TaskCard(task: Task,role:String,reportViewModel: ReportViewModel = hiltViewM
                         }
 
                         "employee" -> {
-                            FileCard(fileFunc = fileTitle, download = false) {
+                            FileCard(fileFunc = fileTitle) {
                                 it?.let { fileTitle = it.lastPathSegment ?: loadFile }
                                 reportViewModel.setSelectedReportFileUri(it)
                             }

@@ -8,6 +8,7 @@ import com.example.employeetaskreg.domain.model.Report
 import com.example.employeetaskreg.domain.model.Task
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -101,11 +102,16 @@ interface EmployeeTaskRegApi {
         @Path("employeeId") employeeId: String
     ):Task
 
+    @GET("/getReport/{reportId}/download")
+    suspend fun downloadReportById(
+        @Header("Authorization") token: String,
+        @Path("reportId") reportId: String
+    ): ResponseBody
+
+
     @GET("/getReport/{reportId}")
     suspend fun getReportById()
 
-    @GET("/getReport/{reportId}/download")
-    suspend fun downloadReportById()
 
     @PATCH("/markReport/{reportId}/{status}")
     suspend fun markReportById()

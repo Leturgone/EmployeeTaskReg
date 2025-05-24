@@ -1,7 +1,5 @@
 package com.example.employeetaskreg.presentation.ui.screens.tasksScreen
 
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -22,15 +20,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.employeetaskreg.presentation.ui.components.PdfActivityResultContract
 
 @Composable
-fun FileCard(fileFunc:String, onFileSelected: (Uri?) -> Unit = {}){
-
-    val pdfLauncher = rememberLauncherForActivityResult(PdfActivityResultContract()) { uri ->
-        onFileSelected(uri) // Отправляем URI выбранного файла
-    }
-
+fun DownloadFileCard(fileFunc:String, onDownloadClicked: (Unit) -> Unit){
     Card(
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp),
@@ -38,7 +30,7 @@ fun FileCard(fileFunc:String, onFileSelected: (Uri?) -> Unit = {}){
             .fillMaxWidth()
             .height(73.dp)
             .clickable {
-                pdfLauncher.launch(Unit)
+                onDownloadClicked(Unit)
             },
         colors = CardDefaults.cardColors(
             containerColor = Color.White

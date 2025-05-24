@@ -65,8 +65,6 @@ fun RespScreen(
                 modifier = Modifier.padding(bottom = 16.dp, top = 16.dp)
             )
 
-
-
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -74,7 +72,7 @@ fun RespScreen(
                 items(respList.size) {
                     val resp = respList[it]
                     Spacer(modifier = Modifier.height(30.dp))
-                    RespCard(resp, role = role )
+                    RespCard(resp, role = role)
                 }
             }
         }

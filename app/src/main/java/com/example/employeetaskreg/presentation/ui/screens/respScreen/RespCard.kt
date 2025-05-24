@@ -21,6 +21,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,21 +35,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.domain.model.Report
+import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.employeeScreen.AvatarNameSec
-import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.FileCard
+import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.DownloadFileCard
 import com.example.employeetaskreg.presentation.ui.theme.DarkGray
 import com.example.employeetaskreg.presentation.ui.theme.GreenSoft
 import com.example.employeetaskreg.presentation.ui.theme.RedSoft
 import com.example.employeetaskreg.presentation.ui.theme.YellowSoft
+import com.example.employeetaskreg.presentation.viewmodel.ReportViewModel
 import kotlinx.coroutines.launch
+import java.io.File
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun RespCard(response:Report,role:String){
+fun RespCard(response:Report,role:String,
+             reportViewModel: ReportViewModel = hiltViewModel()){
 
     var responseStatusColor by remember { mutableStateOf(Color.Gray) }
+
+    val downloadFile = stringResource(id = R.string.download_order)
+    var fileTitle by remember { mutableStateOf(downloadFile) }
+
+    val downloadReport = reportViewModel.downloadReport.collectAsState()
+
 
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -97,6 +109,7 @@ fun RespCard(response:Report,role:String){
         ModalBottomSheet(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             onDismissRequest = {
+                reportViewModel.resetDownloadState()
                 showBottomSheet = false
             },
             sheetState = sheetState
@@ -134,8 +147,18 @@ fun RespCard(response:Report,role:String){
                         )
                     }
                 }
-                
-                FileCard(fileFunc = stringResource(id = R.string.download_order),download = true){}
+
+                DownloadFileCard(fileTitle){
+                    reportViewModel.downloadReport(response.id)
+                }
+
+                fileTitle = when(downloadReport.value){
+                    is EmpTaskRegState.Failure -> "Произошла ошибка при загрузке"
+                    EmpTaskRegState.Loading -> "Загрузка..."
+                    is EmpTaskRegState.Success -> (downloadReport.value as EmpTaskRegState.Success<File>).result.absolutePath
+                    EmpTaskRegState.Waiting -> downloadFile
+                }
+
                 when(role){
                     "director"->{Row(Modifier.fillMaxWidth()) {
                         Button(onClick = {
@@ -187,8 +210,6 @@ fun RespCard(response:Report,role:String){
                 }
                 
                 Spacer(modifier = Modifier.height(220.dp))
-
-
             }
 
         }
