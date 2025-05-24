@@ -16,4 +16,6 @@ interface TaskRepository {
 
     suspend fun addTask(task:AddTaskRequest, file: File?, authToken:String):Result<Unit>
 
+    suspend fun downloadTask(taskId:Int,authToken:String):Result<ByteArray>
+
 }
