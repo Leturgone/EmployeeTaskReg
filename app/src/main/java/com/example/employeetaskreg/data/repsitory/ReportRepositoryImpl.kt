@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class ReportRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegApi):ReportRepository {
+
     override suspend fun getReportList(authToken: String): Result<List<Report>> {
         return try {
             val response = api.getReports("Bearer $authToken").sortedBy { it.id }
@@ -74,5 +75,17 @@ class ReportRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegA
         }
     }
 
+    override suspend fun markReport(reportId: Int, status:Boolean, authToken: String): Result<Unit> {
+        return try {
+            val result = api.markReportById("Bearer $authToken",reportId.toString(),status)
+            Result.success(result)
+        }catch (e:HttpException){
+            Log.e("markReport",e.toString())
+            Result.failure(e)
+        }catch(e:Exception){
+            Log.e("markReport",e.toString())
+            Result.failure(e)
+        }
+    }
 
 }
