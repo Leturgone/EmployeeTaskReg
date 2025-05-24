@@ -5,7 +5,7 @@ import android.net.Uri
 import java.io.File
 
 interface FileRepository {
-    suspend fun uriToFile(context: Context,uri: Uri): File?
+    suspend fun uriToFile(context: Context,uri: Uri): Result<File>
 
     suspend fun byteArrayToFile(context: Context, byteArray: ByteArray, destinationFile: File): Result<File>
 
