@@ -15,4 +15,6 @@ interface ReportRepository {
 
     suspend fun getReportByTaskId(taskId:Int,authToken: String):Result<Report>
 
+    suspend fun updateReport(reportId:Int, file: File?, authToken:String):Result<Unit>
+
 }
