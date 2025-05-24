@@ -2,6 +2,7 @@ package com.example.employeetaskreg.presentation.viewmodel
 
 import android.app.Application
 import android.net.Uri
+import android.os.Environment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.employeetaskreg.data.api.dto.AddTaskRequest
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,11 +37,17 @@ class TasksViewModel @Inject constructor(
 
     private val _selectedFileUri = MutableStateFlow<Uri?>(null)
 
-    fun setSelectedTaskFileUri(uri: Uri?) {
+    private val _downloadTask = MutableStateFlow<EmpTaskRegState<File>>(EmpTaskRegState.Waiting)
+    val downloadTask: StateFlow<EmpTaskRegState<File>> = _downloadTask
+
+
+    fun setSelectedTaskFileUri(uri: Uri?)  = viewModelScope.launch{
         _selectedFileUri.value = uri
     }
 
-
+    fun resetDownloadState()  = viewModelScope.launch{
+        _downloadTask.value = EmpTaskRegState.Waiting
+    }
     fun getTaskList() = viewModelScope.launch {
         _taskListFlow.value = EmpTaskRegState.Loading
         val authResult = withContext(Dispatchers.IO){
@@ -93,6 +101,44 @@ class TasksViewModel @Inject constructor(
 
         }.onFailure {
             _addTaskFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+        }
+    }
+
+    fun downloadTask(taskId:Int) = viewModelScope.launch {
+        _downloadTask.value = EmpTaskRegState.Loading
+        val authResult = withContext(Dispatchers.IO){
+            authRepository.getTokenFromDataStorage()
+        }
+        authResult.onSuccess {token ->
+            val result = withContext(Dispatchers.IO){
+                taskRepository.downloadTask(taskId,token)
+            }
+            result.onSuccess {
+                val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                val destinationFile = File(downloadsDir, "task_${taskId}.pdf")
+                val fileResult = withContext(Dispatchers.IO) {
+                    fileRepository.byteArrayToFile(
+                        context = application.applicationContext,
+                        byteArray = it,
+                        destinationFile = destinationFile
+                    )
+                }
+                fileResult.onSuccess {
+                    _downloadTask.value = EmpTaskRegState.Success(it)
+                }.onFailure {
+                    _downloadTask.value = when(it){
+                        is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
+                        else -> EmpTaskRegState.Failure(Exception("Error during saving task file: Check your connection"))
+                    }
+                }
+            }.onFailure {
+                _downloadTask.value = when(it){
+                    is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
+                    else -> EmpTaskRegState.Failure(Exception("Error during download task file: Check your connection"))
+                }
+            }
+        }.onFailure {
+            _downloadTask.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
     }
 
