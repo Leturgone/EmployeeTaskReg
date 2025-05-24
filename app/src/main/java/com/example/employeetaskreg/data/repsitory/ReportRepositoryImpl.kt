@@ -101,4 +101,23 @@ class ReportRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegA
         }
     }
 
+    override suspend fun updateReport(reportId: Int, file: File?, authToken: String): Result<Unit> {
+        return try {
+            val requestFile = file?.asRequestBody("application/pdf".toMediaTypeOrNull())
+            val filePart = file?.let {
+                requestFile?.let {
+                    MultipartBody.Part.createFormData("file",file.name,requestFile)
+                }
+            }
+            val response = api.updateReport("Bearer $authToken",reportId.toString(),filePart)
+            Result.success(response)
+        }catch (e:HttpException){
+            Log.e("updateReport",e.toString())
+            Result.failure(e)
+        }catch(e:Exception){
+            Log.e("updateReport",e.toString())
+            Result.failure(e)
+        }
+    }
+
 }
