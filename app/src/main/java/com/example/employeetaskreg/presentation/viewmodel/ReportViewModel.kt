@@ -2,6 +2,8 @@ package com.example.employeetaskreg.presentation.viewmodel
 
 import android.app.Application
 import android.net.Uri
+import android.os.Environment
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.employeetaskreg.data.api.dto.AddReportRequest
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,6 +38,12 @@ class ReportViewModel @Inject constructor(
 
     private val _selectedFileUri = MutableStateFlow<Uri?>(null)
 
+    private val _downloadReport = MutableStateFlow<EmpTaskRegState<File>>(EmpTaskRegState.Waiting)
+    val downloadReport: StateFlow<EmpTaskRegState<File>> = _downloadReport
+
+    init {
+        Log.d("ReportViewModel", "ViewModel created")
+    }
     fun setSelectedReportFileUri(uri: Uri?) {
         _selectedFileUri.value = uri
     }
@@ -95,6 +104,44 @@ class ReportViewModel @Inject constructor(
 
         }.onFailure {
             _addReportFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+        }
+    }
+
+    fun downloadReport(reportId:Int) = viewModelScope.launch {
+        _downloadReport.value = EmpTaskRegState.Loading
+        val authResult = withContext(Dispatchers.IO){
+            authRepository.getTokenFromDataStorage()
+        }
+        authResult.onSuccess {token ->
+            val result = withContext(Dispatchers.IO){
+                reportRepository.downloadReport(reportId,token)
+            }
+            result.onSuccess {
+                val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                val destinationFile = File(downloadsDir, "report_${reportId}.pdf")
+                val fileResult = withContext(Dispatchers.IO) {
+                    fileRepository.byteArrayToFile(
+                        context = application.applicationContext,
+                        byteArray = it,
+                        destinationFile = destinationFile
+                    )
+                }
+                fileResult.onSuccess {
+                    _downloadReport.value = EmpTaskRegState.Success(it)
+                }.onFailure {
+                    _downloadReport.value = when(it){
+                        is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
+                        else -> EmpTaskRegState.Failure(Exception("Error during saving report: Check your connection"))
+                    }
+                }
+            }.onFailure {
+                _downloadReport.value = when(it){
+                    is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
+                    else -> EmpTaskRegState.Failure(Exception("Error during download report: Check your connection"))
+                }
+            }
+        }.onFailure {
+            _downloadReport.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
     }
 }
