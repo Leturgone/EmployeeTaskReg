@@ -40,4 +40,5 @@
     <string name="light">Светлая</string>
     <string name="already_have">Уже есть аккаунт?</string>
     <string name="update_search">Обновить</string>
+    <string name="update_report">Обновить отчет</string>
 </resources>
