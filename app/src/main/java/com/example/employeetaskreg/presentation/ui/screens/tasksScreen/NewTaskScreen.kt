@@ -230,7 +230,7 @@ fun NewTaskScreen(navController: NavHostController,
                 }
             }
             Spacer(modifier = Modifier.height(20.dp))
-            FileCard(fileFunc = fileTitle, download = false){
+            FileCard(fileFunc = fileTitle){
                 it?.let { fileTitle = it.lastPathSegment?: loadFile}
                 tasksViewModel.setSelectedTaskFileUri(it)
             }
