@@ -58,6 +58,10 @@ class ReportViewModel @Inject constructor(
         _markReport.value = EmpTaskRegState.Waiting
     }
 
+    fun resetAddReportState() = viewModelScope.launch {
+        _addReportFlow.value = EmpTaskRegState.Waiting
+    }
+
     fun getReportList() = viewModelScope.launch {
         _reportListFlow.value = EmpTaskRegState.Loading
 
@@ -204,6 +208,37 @@ class ReportViewModel @Inject constructor(
             }
         }.onFailure {
             _markReport.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+        }
+    }
+
+    fun updateReport(reportId:Int) = viewModelScope.launch{
+        _addReportFlow.value = EmpTaskRegState.Loading
+
+        val authResult = withContext(Dispatchers.IO){
+            authRepository.getTokenFromDataStorage()
+        }
+        authResult.onSuccess {token ->
+            val result = withContext(Dispatchers.IO){
+                var file:File? = null
+                val resFile = _selectedFileUri.value?.let {
+                    fileRepository.uriToFile(application.applicationContext,it)
+                }
+
+                resFile?.onSuccess { file = it}
+
+                reportRepository.updateReport(reportId,file,token)
+            }
+            result.onSuccess {
+                _addReportFlow.value = EmpTaskRegState.Success(it)
+            }.onFailure {
+                _addReportFlow.value = when(it){
+                    is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
+                    else -> EmpTaskRegState.Failure(Exception("Error during updating report: Check your connection"))
+                }
+            }
+
+        }.onFailure {
+            _addReportFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
     }
 }
