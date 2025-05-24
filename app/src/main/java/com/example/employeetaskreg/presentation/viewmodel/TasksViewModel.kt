@@ -82,9 +82,12 @@ class TasksViewModel @Inject constructor(
         }
         authResult.onSuccess {token ->
             val result = withContext(Dispatchers.IO){
-                val file = _selectedFileUri.value?.let {
+                var file:File? = null
+
+                val fileRes = _selectedFileUri.value?.let {
                     fileRepository.uriToFile(application.applicationContext,it)
                 }
+                fileRes?.onSuccess { file = it }
 
                 val task = AddTaskRequest(title, taskDesc, documentName,startDate, endDate, employeeId, directorId)
 

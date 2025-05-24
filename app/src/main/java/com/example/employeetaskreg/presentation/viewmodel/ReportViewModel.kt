@@ -84,9 +84,12 @@ class ReportViewModel @Inject constructor(
         }
         authResult.onSuccess {token ->
             val result = withContext(Dispatchers.IO){
-                val file = _selectedFileUri.value?.let {
+                var file:File? = null
+                val resFile = _selectedFileUri.value?.let {
                     fileRepository.uriToFile(application.applicationContext,it)
                 }
+
+               resFile?.onSuccess { file = it}
 
                 val report = AddReportRequest(
                     reportDate = reportDate,
