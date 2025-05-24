@@ -25,7 +25,8 @@ import androidx.compose.ui.unit.sp
 import com.example.employeetaskreg.presentation.ui.components.PdfActivityResultContract
 
 @Composable
-fun FileCard(fileFunc:String,download:Boolean,onFileSelected: (Uri?) -> Unit){
+fun FileCard(fileFunc:String,onFileSelected: (Uri?) -> Unit? = {}){
+
     val pdfLauncher = rememberLauncherForActivityResult(PdfActivityResultContract()) { uri ->
         onFileSelected(uri) // Отправляем URI выбранного файла
     }
@@ -37,11 +38,7 @@ fun FileCard(fileFunc:String,download:Boolean,onFileSelected: (Uri?) -> Unit){
             .fillMaxWidth()
             .height(73.dp)
             .clickable {
-                when(download){
-                    true -> {}
-                    false -> pdfLauncher.launch(Unit)
-                }
-
+                pdfLauncher.launch(Unit)
             },
         colors = CardDefaults.cardColors(
             containerColor = Color.White
