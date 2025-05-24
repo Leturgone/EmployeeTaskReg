@@ -100,4 +100,18 @@ class TaskRepositoryImpl @Inject constructor(private val api:EmployeeTaskRegApi)
         }
     }
 
+    override suspend fun downloadTask(taskId: Int, authToken: String): Result<ByteArray> {
+        return try {
+            val responseBody = api.downloadTaskById("Bearer $authToken",taskId.toString())
+            val byteArray = responseBody.bytes()
+            Result.success(byteArray)
+        }catch (e:HttpException){
+            Log.e("downloadTask",e.toString())
+            Result.failure(e)
+        }catch(e:Exception){
+            Log.e("downloadTask",e.toString())
+            Result.failure(e)
+        }
+    }
+
 }
