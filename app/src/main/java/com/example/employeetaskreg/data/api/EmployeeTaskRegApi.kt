@@ -108,6 +108,11 @@ interface EmployeeTaskRegApi {
         @Path("reportId") reportId: String
     ): ResponseBody
 
+    @GET("/getTask/{taskId}/download")
+    suspend fun downloadTaskById(
+        @Header("Authorization") token: String,
+        @Path("taskId") taskId: String
+    ): ResponseBody
 
     @GET("/getReport/{reportId}")
     suspend fun getReportById()
@@ -119,8 +124,7 @@ interface EmployeeTaskRegApi {
     @GET("/getTask/{taskId}")
     suspend fun getTaskById()
 
-    @GET("/getTask/{taskId}/download")
-    suspend fun downloadTaskById()
+
 
 
 
