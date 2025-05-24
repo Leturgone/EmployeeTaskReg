@@ -299,7 +299,7 @@ fun TaskCard(task: Task,
                                             }
                                         )
                                     }
-                                    EmpTaskRegState.Waiting -> TODO()
+                                    EmpTaskRegState.Waiting -> null
                                 }
 
                             }
