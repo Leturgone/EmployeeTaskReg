@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -111,6 +112,22 @@ fun RespCard(response:Report,role:String,
                     }
 
                 }
+            }
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .height(90.dp)
+                .padding(top = 8.dp)
+                .padding(end = 16.dp),
+                contentAlignment = Alignment.TopEnd){
+                Icon(imageVector = Icons.Filled.Circle,
+                    contentDescription ="StatusIcon",
+                    tint = when(response.status){
+                        "Ожидание" -> YellowSoft
+                        "Принято" -> GreenSoft
+                        else -> RedSoft
+                    }
+                )
+
             }
         }
     }
