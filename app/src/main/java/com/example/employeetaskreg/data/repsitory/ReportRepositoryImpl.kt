@@ -88,4 +88,17 @@ class ReportRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegA
         }
     }
 
+    override suspend fun getReportByTaskId(taskId: Int, authToken: String): Result<Report> {
+        return try {
+            val result = api.getReportByTaskId("Bearer $authToken",taskId.toString())
+            Result.success(result)
+        }catch (e:HttpException){
+            Log.e("getReportByTaskId",e.toString())
+            Result.failure(e)
+        }catch(e:Exception){
+            Log.e("getReportByTaskId",e.toString())
+            Result.failure(e)
+        }
+    }
+
 }
