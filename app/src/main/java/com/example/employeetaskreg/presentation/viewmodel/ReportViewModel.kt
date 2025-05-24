@@ -44,8 +44,12 @@ class ReportViewModel @Inject constructor(
     init {
         Log.d("ReportViewModel", "ViewModel created")
     }
-    fun setSelectedReportFileUri(uri: Uri?) {
+    fun setSelectedReportFileUri(uri: Uri?)  = viewModelScope.launch{
         _selectedFileUri.value = uri
+    }
+
+    fun resetDownloadState()  = viewModelScope.launch{
+        _downloadReport.value = EmpTaskRegState.Waiting
     }
     fun getReportList() = viewModelScope.launch {
         _reportListFlow.value = EmpTaskRegState.Loading
