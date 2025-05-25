@@ -88,7 +88,7 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun addReport(reportDate:String, documentName:String?,
+    fun addReport(documentName:String?,
                   taskId:Int,employeeId:Int,directorId:Int) = viewModelScope.launch{
         _addReportFlow.value = EmpTaskRegState.Loading
 
@@ -105,7 +105,6 @@ class ReportViewModel @Inject constructor(
                resFile?.onSuccess { file = it}
 
                 val report = AddReportRequest(
-                    reportDate = reportDate,
                     documentName = documentName,
                     taskId = taskId,
                     employeeId = employeeId,
@@ -229,7 +228,7 @@ class ReportViewModel @Inject constructor(
             }.onFailure {
                 _reportFlow.value = when(it){
                     is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
-                    else -> EmpTaskRegState.Failure(Exception("Error during getting report by taskId: Check your connection"))
+                    else -> EmpTaskRegState.Failure(Exception("Error during getting report by Id: Check your connection"))
                 }
             }
         }.onFailure {
