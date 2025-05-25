@@ -191,7 +191,7 @@ fun ProfileScreen(navController: NavHostController,
                         EmpTaskRegState.Waiting -> 0
                     }
                     Text(
-                        text = "${stringResource(id = R.string.tasks_solved)}: $taskCount",
+                        text = "${stringResource(id = R.string.tasks_solved)} $taskCount",
                         style = MaterialTheme.typography.headlineSmall,
                         fontWeight = FontWeight.Normal,
                         fontSize = 25.sp,
