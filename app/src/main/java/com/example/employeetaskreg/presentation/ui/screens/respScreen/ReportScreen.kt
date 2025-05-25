@@ -34,12 +34,12 @@ import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
 import com.example.employeetaskreg.presentation.viewmodel.ReportViewModel
 
 @Composable
-fun RespScreen(
+fun ReportScreen(
     profileViewModel:ProfileViewModel,
-    respViewModel: ReportViewModel = hiltViewModel()){
+    reportViewModel: ReportViewModel = hiltViewModel()){
 
     val profileState = profileViewModel.profileFlow.collectAsState()
-    val respListState = respViewModel.reportListFlow.collectAsState()
+    val respListState = reportViewModel.reportListFlow.collectAsState()
 
     var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
@@ -93,7 +93,7 @@ fun RespScreen(
                     }
                 }
                 LaunchedEffect(Unit){
-                    respViewModel.getReportList()
+                    reportViewModel.getReportList()
                 }
 
                 when(respListState.value){
