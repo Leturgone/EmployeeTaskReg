@@ -160,7 +160,7 @@ fun NewTaskScreen(navController: NavHostController,
                                     Log.d("SelectedDate", "${datePickerState.selectedDateMillis}")
                                 }
                             ) {
-                                Text("Confirm")
+                                Text(stringResource(id = R.string.confirm))
                             }
                         }) {
                         DatePicker(state = datePickerState)
@@ -208,7 +208,7 @@ fun NewTaskScreen(navController: NavHostController,
                         }
                         Spacer(modifier = Modifier.width(90.dp))
                         Column() {
-                            Text(text = "До ${convertMillisToDate(endDateMills)}",fontSize = 16.sp)
+                            Text(text = "${stringResource(id = R.string.before)} ${convertMillisToDate(endDateMills)}",fontSize = 16.sp)
                             Spacer(modifier = Modifier.height(8.dp))
                             FloatingActionButton(
                                 containerColor = MaterialTheme.colorScheme.primary,

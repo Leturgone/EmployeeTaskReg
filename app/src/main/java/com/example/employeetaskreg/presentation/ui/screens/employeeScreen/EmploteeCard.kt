@@ -27,11 +27,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.employeetaskreg.R
 import com.example.employeetaskreg.domain.model.Task
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.TaskCard
@@ -48,8 +50,9 @@ fun EmployeeCard(employeeName:String, employeeId:Int, setListItem:Boolean = fals
     val employee = viewModel.employeeFlow.collectAsState()
 
     val employeeCurrentTask = viewModel.employeeCurrentTaskFlow.collectAsState()
+    val taskResolvedText = stringResource(id = R.string.tasks_solved)
 
-    var taskCountText by remember { mutableStateOf("Задач решено: ") }
+    var taskCountText by remember { mutableStateOf(taskResolvedText) }
 
     var showBottomSheet by remember { mutableStateOf(false) }
     Card(
@@ -62,7 +65,7 @@ fun EmployeeCard(employeeName:String, employeeId:Int, setListItem:Boolean = fals
                     clickFun?.let {
                         clickFun.invoke()
                     }
-                    if (!setListItem){
+                    if (!setListItem) {
                         showBottomSheet = true
                     }
                 }
@@ -99,7 +102,7 @@ fun EmployeeCard(employeeName:String, employeeId:Int, setListItem:Boolean = fals
                 when(employee.value){
                     is EmpTaskRegState.Failure -> {
                         Text(
-                            text = "Не удалось загрузить данные о сотруднике: $employeeName",
+                            text = "${stringResource(id = R.string.cant_load_info_about_emp)} $employeeName",
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Medium,
                             color = Color.Black,
@@ -120,10 +123,10 @@ fun EmployeeCard(employeeName:String, employeeId:Int, setListItem:Boolean = fals
                                 .width(200.dp)
                         )
                         taskCountText = when(taskCount.value){
-                            is EmpTaskRegState.Failure -> "Не найдено количество решенных задач"
-                            EmpTaskRegState.Loading -> "Загрузка..."
-                            is EmpTaskRegState.Success -> "Задач решено: ${(taskCount.value as EmpTaskRegState.Success<Int>).result}"
-                            EmpTaskRegState.Waiting -> "Задач решено: "
+                            is EmpTaskRegState.Failure -> stringResource(id = R.string.task_count_not_found)
+                            EmpTaskRegState.Loading -> stringResource(id = R.string.loading)
+                            is EmpTaskRegState.Success -> "${stringResource(id = R.string.tasks_solved)} ${(taskCount.value as EmpTaskRegState.Success<Int>).result}"
+                            EmpTaskRegState.Waiting -> "${stringResource(id = R.string.tasks_solved)} "
                         }
                         Text(
                             text = taskCountText,
@@ -135,7 +138,7 @@ fun EmployeeCard(employeeName:String, employeeId:Int, setListItem:Boolean = fals
                                 .width(300.dp)
                         )
                         Text(
-                            text = "Текущая задача",
+                            text = stringResource(id = R.string.current_tasks),
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Medium,
                             color = Color.Black,
@@ -146,7 +149,7 @@ fun EmployeeCard(employeeName:String, employeeId:Int, setListItem:Boolean = fals
                         when(employeeCurrentTask.value){
                             is EmpTaskRegState.Failure -> {
                                 Text(
-                                    text = "Нет текущей задачи",
+                                    text = stringResource(id = R.string.no_current_task),
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.Medium,
                                     color = Color.Black,

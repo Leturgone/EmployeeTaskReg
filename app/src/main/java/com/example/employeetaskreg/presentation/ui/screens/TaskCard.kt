@@ -102,7 +102,7 @@ fun TaskCard(task: Task,
             Box(modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.TopStart){
                 Text(
-                    text = "Задча ${task.id}",
+                    text = "${stringResource(id = R.string.task)} ${task.id}",
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top = 16.dp, start = 16.dp),
                     fontSize = 16.sp
@@ -183,7 +183,7 @@ fun TaskCard(task: Task,
                         EmpTaskRegState.Waiting -> null
                     }
                     Text(
-                        text = "Задча ${task.id}",
+                        text = "${stringResource(id = R.string.task)} ${task.id}",
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black,
@@ -214,7 +214,7 @@ fun TaskCard(task: Task,
                             .width(200.dp)
                     )
                     Text(
-                        text = "Описание",
+                        text = stringResource(id = R.string.desc),
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black,
@@ -232,7 +232,8 @@ fun TaskCard(task: Task,
                             .width(200.dp)
                     )
                     Text(
-                        text = "Срок: с ${task.startDate} по ${task.endDate}",
+                        text = "${stringResource(id = R.string.limit)} ${task.startDate} ${stringResource(
+                            id = R.string.to)} ${task.endDate}",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Normal,
                         color = Color.Black,
@@ -247,8 +248,8 @@ fun TaskCard(task: Task,
                     }
 
                     downloadFileTitle = when(downloadTask.value){
-                        is EmpTaskRegState.Failure -> "Произошла ошибка при загрузке"
-                        EmpTaskRegState.Loading -> "Загрузка..."
+                        is EmpTaskRegState.Failure -> stringResource(id = R.string.error_while_loading)
+                        EmpTaskRegState.Loading -> stringResource(id = R.string.loading)
                         is EmpTaskRegState.Success -> (downloadTask.value as EmpTaskRegState.Success<File>).result.absolutePath
                         EmpTaskRegState.Waiting -> downloadFile
                     }

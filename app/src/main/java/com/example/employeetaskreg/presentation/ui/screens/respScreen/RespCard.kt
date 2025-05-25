@@ -90,7 +90,7 @@ fun RespCard(response:Report,role:String,
             Box(modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.TopStart){
                 Text(
-                    text = "Ответ по задаче ${response.taskId}",
+                    text = "${stringResource(id = R.string.resp_for_task)} ${response.taskId}",
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(top = 16.dp, start = 16.dp),
                     fontSize = 16.sp
@@ -154,7 +154,7 @@ fun RespCard(response:Report,role:String,
                         .padding(16.dp),
                     Arrangement.SpaceEvenly , Alignment.Start) {
                     Text(
-                        text = "Ответ по задаче ${response.taskId}",
+                        text = "${stringResource(id = R.string.resp_for_task)} ${response.taskId}",
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.Black,
@@ -186,8 +186,8 @@ fun RespCard(response:Report,role:String,
                     }
 
                     fileTitle = when(downloadReport.value){
-                        is EmpTaskRegState.Failure -> "Произошла ошибка при загрузке"
-                        EmpTaskRegState.Loading -> "Загрузка..."
+                        is EmpTaskRegState.Failure -> stringResource(id = R.string.error_while_loading)
+                        EmpTaskRegState.Loading -> stringResource(id = R.string.loading)
                         is EmpTaskRegState.Success -> (downloadReport.value as EmpTaskRegState.Success<File>).result.absolutePath
                         EmpTaskRegState.Waiting -> downloadFile
                     }
