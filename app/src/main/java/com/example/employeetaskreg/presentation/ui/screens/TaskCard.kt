@@ -8,11 +8,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Update
@@ -49,14 +47,12 @@ import com.example.employeetaskreg.domain.repository.EmpTaskRegState
 import com.example.employeetaskreg.presentation.ui.screens.employeeScreen.AvatarNameSec
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.DownloadFileCard
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.FileCard
-import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.localDateToMillis
 import com.example.employeetaskreg.presentation.ui.theme.GreenSoft
 import com.example.employeetaskreg.presentation.ui.theme.RedSoft
 import com.example.employeetaskreg.presentation.ui.theme.YellowSoft
 import com.example.employeetaskreg.presentation.viewmodel.ReportViewModel
 import com.example.employeetaskreg.presentation.viewmodel.TasksViewModel
 import java.io.File
-import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,10 +78,6 @@ fun TaskCard(task: Task,
 
     var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
-
-    LaunchedEffect(Unit){
-        reportViewModel.getReportByTaskId(task.id)
-    }
 
     Card(
         shape = RoundedCornerShape(8.dp),
@@ -141,6 +133,7 @@ fun TaskCard(task: Task,
         }
     }
     if (showBottomSheet) {
+
         ModalBottomSheet(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             onDismissRequest = {
@@ -150,6 +143,13 @@ fun TaskCard(task: Task,
             },
             sheetState = sheetState
         ) {
+            val taskFlow = taskViewModel.taskFlow.collectAsState()
+
+            LaunchedEffect(Unit){
+                taskViewModel.getTaskById(task.id)
+                reportViewModel.getReportByTaskId(task.id)
+            }
+
             Box {
                 CustomToastMessage(
                     message = errorMessage,
@@ -163,100 +163,36 @@ fun TaskCard(task: Task,
                         .padding(16.dp), Arrangement.SpaceEvenly,
                     Alignment.Start
                 ) {
-                    when (addReportState.value) {
+                    when (taskFlow.value) {
                         is EmpTaskRegState.Failure -> {
-                            LaunchedEffect(addReportState.value) {
+                            LaunchedEffect(taskFlow.value) {
                                 showToast = true
-                                errorMessage = (addReportState.value as EmpTaskRegState.Failure).exception.toString()
+                                errorMessage =
+                                    (taskFlow.value as EmpTaskRegState.Failure).exception.toString()
                             }
                         }
                         EmpTaskRegState.Loading -> CircularProgressIndicator()
                         is EmpTaskRegState.Success -> {
-                            Icon(
-                                imageVector = Icons.Default.Check,
-                                contentDescription = "okIcon",
-                                modifier = Modifier.size(35.dp),
-                                tint = GreenSoft
-                            )
-                        }
+                            val loadedTask = (taskFlow.value as EmpTaskRegState.Success<Task>).result
+                            when (addReportState.value) {
+                                is EmpTaskRegState.Failure -> {
+                                    LaunchedEffect(addReportState.value) {
+                                        showToast = true
+                                        errorMessage = (addReportState.value as EmpTaskRegState.Failure).exception.toString()
+                                    }
+                                }
+                                EmpTaskRegState.Loading -> CircularProgressIndicator()
+                                is EmpTaskRegState.Success -> {
+                                    LaunchedEffect(Unit){
+                                        taskViewModel.getTaskById(task.id)
+                                        reportViewModel.resetAddReportState()
+                                    }
+                                }
 
-                        EmpTaskRegState.Waiting -> null
-                    }
-                    Text(
-                        text = "${stringResource(id = R.string.task)} ${task.id}",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier
-                            .width(200.dp)
-                    )
-                    Text(
-                        text = task.title,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = Color.Black,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier
-                            .width(200.dp)
-                    )
-                    Text(
-                        text = task.status,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = when(task.status){
-                            "В процессе" -> YellowSoft
-                            "Завершена" -> GreenSoft
-                            else -> RedSoft
-                                                 },
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier
-                            .width(200.dp)
-                    )
-                    Text(
-                        text = stringResource(id = R.string.desc),
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier
-                            .width(300.dp)
-                    )
-                    Text(
-                        text = task.taskDesc,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = Color.Black,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier
-                            .width(200.dp)
-                    )
-                    Text(
-                        text = "${stringResource(id = R.string.limit)} ${task.startDate} ${stringResource(
-                            id = R.string.to)} ${task.endDate}",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Normal,
-                        color = Color.Black,
-                        textAlign = TextAlign.Start,
-                        modifier = Modifier
-                            .width(400.dp)
-                    )
-                    task.documentName?.let {
-                        DownloadFileCard(fileFunc = downloadFileTitle){
-                            taskViewModel.downloadTask(task.id)
-                        }
-                    }
-
-                    downloadFileTitle = when(downloadTask.value){
-                        is EmpTaskRegState.Failure -> stringResource(id = R.string.error_while_loading)
-                        EmpTaskRegState.Loading -> stringResource(id = R.string.loading)
-                        is EmpTaskRegState.Success -> (downloadTask.value as EmpTaskRegState.Success<File>).result.absolutePath
-                        EmpTaskRegState.Waiting -> downloadFile
-                    }
-                    when (role) {
-                        "director" -> {
+                                EmpTaskRegState.Waiting -> null
+                            }
                             Text(
-                                text = stringResource(id = R.string.worker),
+                                text = "${stringResource(id = R.string.task)} ${loadedTask.id}",
                                 fontSize = 25.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.Black,
@@ -264,73 +200,147 @@ fun TaskCard(task: Task,
                                 modifier = Modifier
                                     .width(200.dp)
                             )
-                            task.employeeName?.let {
-                                AvatarNameSec(
-                                    avatar = it.substringAfter(" ").replace(".", ""),
-                                    name = it, modifier = Modifier
-                                )
+                            Text(
+                                text = loadedTask.title,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.Black,
+                                textAlign = TextAlign.Start,
+                                modifier = Modifier
+                                    .width(200.dp)
+                            )
+                            Text(
+                                text = loadedTask.status,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = when(loadedTask.status){
+                                    "В процессе" -> YellowSoft
+                                    "Завершена" -> GreenSoft
+                                    else -> RedSoft
+                                },
+                                textAlign = TextAlign.Start,
+                                modifier = Modifier
+                                    .width(200.dp)
+                            )
+                            Text(
+                                text = stringResource(id = R.string.desc),
+                                fontSize = 25.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black,
+                                textAlign = TextAlign.Start,
+                                modifier = Modifier
+                                    .width(300.dp)
+                            )
+                            Text(
+                                text = loadedTask.taskDesc,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.Black,
+                                textAlign = TextAlign.Start,
+                                modifier = Modifier
+                                    .width(200.dp)
+                            )
+                            Text(
+                                text = "${stringResource(id = R.string.limit)} ${loadedTask.startDate} ${stringResource(
+                                    id = R.string.to)} ${loadedTask.endDate}",
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.Black,
+                                textAlign = TextAlign.Start,
+                                modifier = Modifier
+                                    .width(400.dp)
+                            )
+                            loadedTask.documentName?.let {
+                                DownloadFileCard(fileFunc = downloadFileTitle){
+                                    taskViewModel.downloadTask(loadedTask.id)
+                                }
                             }
 
-                        }
-
-                        "employee" -> {
-                            FileCard(fileFunc = fileTitle) {
-                                it?.let { fileTitle = it.lastPathSegment ?: loadFile }
-                                reportViewModel.setSelectedReportFileUri(it)
+                            downloadFileTitle = when(downloadTask.value){
+                                is EmpTaskRegState.Failure -> stringResource(id = R.string.error_while_loading)
+                                EmpTaskRegState.Loading -> stringResource(id = R.string.loading)
+                                is EmpTaskRegState.Success -> (downloadTask.value as EmpTaskRegState.Success<File>).result.absolutePath
+                                EmpTaskRegState.Waiting -> downloadFile
                             }
-                            Spacer(modifier = Modifier.height(20.dp))
-                            Box(
-                                modifier = Modifier.fillMaxWidth(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                when(reportByTask.value){
-                                    is EmpTaskRegState.Failure -> {
-                                        ExtendedFloatingActionButton(
-                                            containerColor = MaterialTheme.colorScheme.primary,
-                                            text = { Text(text = stringResource(id = R.string.create_resp)) },
-                                            icon = {
-                                                Icon(
-                                                    imageVector = Icons.Default.MailOutline,
-                                                    contentDescription = "createRespButton"
-                                                )
-                                            },
-                                            onClick = {
-                                                if (task.directorId != null && task.employeeId != null) {
-                                                    reportViewModel.addReport(
-                                                        reportDate = LocalDate.now().localDateToMillis()
-                                                            .toString(),
-                                                        documentName = null,
-                                                        taskId = task.id,
-                                                        directorId = task.directorId,
-                                                        employeeId = task.employeeId
-                                                    )
-                                                }
-                                            }
+                            when (role) {
+                                "director" -> {
+                                    Text(
+                                        text = stringResource(id = R.string.worker),
+                                        fontSize = 25.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color.Black,
+                                        textAlign = TextAlign.Start,
+                                        modifier = Modifier
+                                            .width(200.dp)
+                                    )
+                                    loadedTask.employeeName?.let {
+                                        AvatarNameSec(
+                                            avatar = it.substringAfter(" ").replace(".", ""),
+                                            name = it, modifier = Modifier
                                         )
                                     }
-                                    EmpTaskRegState.Loading -> CircularProgressIndicator()
-                                    is EmpTaskRegState.Success -> {
-                                        ExtendedFloatingActionButton(
-                                            containerColor = MaterialTheme.colorScheme.primary,
-                                            text = { Text(text = stringResource(id = R.string.update_report)) },
-                                            icon = {
-                                                Icon(
-                                                    imageVector = Icons.Default.Update,
-                                                    contentDescription = "updateRespButton"
-                                                )
-                                            },
-                                            onClick = {
-                                                reportViewModel.updateReport(
-                                                    (reportByTask.value as EmpTaskRegState.Success<Report>).result.id
-                                                )
-                                            }
-                                        )
-                                    }
-                                    EmpTaskRegState.Waiting -> null
+
                                 }
 
+                                "employee" -> {
+                                    FileCard(fileFunc = fileTitle) {
+                                        it?.let { fileTitle = it.lastPathSegment ?: loadFile }
+                                        reportViewModel.setSelectedReportFileUri(it)
+                                    }
+                                    Spacer(modifier = Modifier.height(20.dp))
+                                    Box(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        when(reportByTask.value){
+                                            is EmpTaskRegState.Failure -> {
+                                                ExtendedFloatingActionButton(
+                                                    containerColor = MaterialTheme.colorScheme.primary,
+                                                    text = { Text(text = stringResource(id = R.string.create_resp)) },
+                                                    icon = {
+                                                        Icon(
+                                                            imageVector = Icons.Default.MailOutline,
+                                                            contentDescription = "createRespButton"
+                                                        )
+                                                    },
+                                                    onClick = {
+                                                        if (loadedTask.directorId != null && loadedTask.employeeId != null) {
+                                                            reportViewModel.addReport(
+                                                                documentName = null,
+                                                                taskId = loadedTask.id,
+                                                                directorId = loadedTask.directorId,
+                                                                employeeId = loadedTask.employeeId
+                                                            )
+                                                        }
+                                                    }
+                                                )
+                                            }
+                                            EmpTaskRegState.Loading -> CircularProgressIndicator()
+                                            is EmpTaskRegState.Success -> {
+                                                ExtendedFloatingActionButton(
+                                                    containerColor = MaterialTheme.colorScheme.primary,
+                                                    text = { Text(text = stringResource(id = R.string.update_report)) },
+                                                    icon = {
+                                                        Icon(
+                                                            imageVector = Icons.Default.Update,
+                                                            contentDescription = "updateRespButton"
+                                                        )
+                                                    },
+                                                    onClick = {
+                                                        reportViewModel.updateReport(
+                                                            (reportByTask.value as EmpTaskRegState.Success<Report>).result.id
+                                                        )
+                                                    }
+                                                )
+                                            }
+                                            EmpTaskRegState.Waiting -> null
+                                        }
+
+                                    }
+                                }
                             }
                         }
+                        EmpTaskRegState.Waiting -> null
                     }
                     Spacer(modifier = Modifier.height(220.dp))
                 }
