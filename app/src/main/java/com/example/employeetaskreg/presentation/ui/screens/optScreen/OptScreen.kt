@@ -13,10 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,14 +23,18 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.employeetaskreg.R
+import com.example.employeetaskreg.presentation.viewmodel.AppThemeViewModel
 import com.example.employeetaskreg.presentation.viewmodel.AuthViewModel
 import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
 
 @Composable
 fun OptScreen(navController: NavHostController,
               profileViewModel:ProfileViewModel,
+              themeViewModel: AppThemeViewModel,
               authViewModel: AuthViewModel = hiltViewModel()) {
-    var switchState by remember { mutableStateOf(true) }
+
+    val isDarkTheme = themeViewModel.isDarkMode.collectAsState()
+
     Column {
         Box(modifier = Modifier.fillMaxWidth()){
             Text(
@@ -87,11 +88,17 @@ fun OptScreen(navController: NavHostController,
                     .align(Alignment.BottomStart)
                     .padding(start = 16.dp, top = 16.dp),
                 verticalAlignment = Alignment.CenterVertically) {
-                Switch(checked =switchState ,
-                    onCheckedChange = {switchState = it} )
+                Switch(checked =isDarkTheme.value ,
+                    onCheckedChange = {
+                        themeViewModel.switchTheme()
+                    }
+                )
                 Spacer(modifier = Modifier.width(20.dp))
                 Text(
-                    text = "${stringResource(id = R.string.light)} ",
+                    text = when(isDarkTheme.value){
+                        true -> "${stringResource(id = R.string.dark)} "
+                        false -> "${stringResource(id = R.string.light)} "
+                    },
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Normal,
                     fontSize = 25.sp,

@@ -1,7 +1,5 @@
 package com.example.employeetaskreg.domain.model
 
-import java.time.LocalDate
-
 data class Task(
     val id:Int,
     val title:String,

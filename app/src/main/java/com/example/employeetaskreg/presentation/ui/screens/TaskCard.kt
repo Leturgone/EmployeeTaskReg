@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.Card
@@ -31,7 +32,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,6 +51,8 @@ import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.DownloadF
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.FileCard
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.localDateToMillis
 import com.example.employeetaskreg.presentation.ui.theme.GreenSoft
+import com.example.employeetaskreg.presentation.ui.theme.RedSoft
+import com.example.employeetaskreg.presentation.ui.theme.YellowSoft
 import com.example.employeetaskreg.presentation.viewmodel.ReportViewModel
 import com.example.employeetaskreg.presentation.viewmodel.TasksViewModel
 import java.io.File
@@ -64,7 +66,6 @@ fun TaskCard(task: Task,
              reportViewModel: ReportViewModel = hiltViewModel()) {
 
     val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
 
     val loadFile = stringResource(id = R.string.upload_order)
     var fileTitle by remember { mutableStateOf(loadFile) }
@@ -120,6 +121,22 @@ fun TaskCard(task: Task,
                             name = it, modifier =Modifier)
                     }
                 }
+            }
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .height(90.dp)
+                .padding(top = 8.dp)
+                .padding(end = 16.dp),
+                contentAlignment = Alignment.TopEnd){
+                Icon(imageVector = Icons.Filled.Circle,
+                    contentDescription ="StatusIcon",
+                    tint = when(task.status){
+                        "В процессе" -> YellowSoft
+                        "Завершена" -> GreenSoft
+                        else -> RedSoft
+                    }
+                )
+
             }
         }
     }
@@ -179,6 +196,19 @@ fun TaskCard(task: Task,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Normal,
                         color = Color.Black,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .width(200.dp)
+                    )
+                    Text(
+                        text = task.status,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Normal,
+                        color = when(task.status){
+                            "В процессе" -> YellowSoft
+                            "Завершена" -> GreenSoft
+                            else -> RedSoft
+                                                 },
                         textAlign = TextAlign.Start,
                         modifier = Modifier
                             .width(200.dp)
