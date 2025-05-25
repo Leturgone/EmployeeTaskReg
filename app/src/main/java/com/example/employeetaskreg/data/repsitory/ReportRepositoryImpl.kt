@@ -12,9 +12,6 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 import java.io.File
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class ReportRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegApi):ReportRepository {
@@ -45,17 +42,10 @@ class ReportRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegA
         }
     }
 
-    private fun convertMillisToDate(millis: Long): String {
-        val formatter = DateTimeFormatter.ofPattern("yyy-MM-dd")
-            .withZone(ZoneId.systemDefault())
-        return formatter.format(Instant.ofEpochMilli(millis))
-    }
-
     override suspend fun addReport(report: AddReportRequest, file: File?, authToken: String): Result<Unit> {
         return try {
-            val reportDateFormat = convertMillisToDate(report.reportDate.toLong())
-            val reportWithDateAndFile = report.copy(documentName = file?.name, reportDate = reportDateFormat)
-            val reportJson = Gson().toJson(reportWithDateAndFile)
+            val reportWithFile = report.copy(documentName = file?.name)
+            val reportJson = Gson().toJson(reportWithFile)
             val reportRequestBody = reportJson.toRequestBody("application/json".toMediaTypeOrNull())
             val requestFile = file?.asRequestBody("application/pdf".toMediaTypeOrNull())
             val filePart = file?.let {
