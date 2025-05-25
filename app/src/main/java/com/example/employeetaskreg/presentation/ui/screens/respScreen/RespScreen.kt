@@ -72,7 +72,7 @@ fun RespScreen(
                 items(respList.size) {
                     val resp = respList[it]
                     Spacer(modifier = Modifier.height(30.dp))
-                    RespCard(resp, role = role)
+                    ReportCard(resp, role = role)
                 }
             }
         }
