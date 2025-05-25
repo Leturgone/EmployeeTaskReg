@@ -46,6 +46,8 @@ class ReportViewModel @Inject constructor(
     private val _reportByTaskIdFlow = MutableStateFlow<EmpTaskRegState<Report>>(EmpTaskRegState.Waiting)
     val reportByTaskIdFlow:StateFlow<EmpTaskRegState<Report>> = _reportByTaskIdFlow
 
+    private val _reportFlow = MutableStateFlow<EmpTaskRegState<Report>>(EmpTaskRegState.Waiting)
+    val reportFlow: StateFlow<EmpTaskRegState<Report>> = _reportFlow
     fun setSelectedReportFileUri(uri: Uri?)  = viewModelScope.launch{
         _selectedFileUri.value = uri
     }
@@ -86,7 +88,7 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun addReport(reportDate:String, documentName:String?,
+    fun addReport(documentName:String?,
                   taskId:Int,employeeId:Int,directorId:Int) = viewModelScope.launch{
         _addReportFlow.value = EmpTaskRegState.Loading
 
@@ -103,7 +105,6 @@ class ReportViewModel @Inject constructor(
                resFile?.onSuccess { file = it}
 
                 val report = AddReportRequest(
-                    reportDate = reportDate,
                     documentName = documentName,
                     taskId = taskId,
                     employeeId = employeeId,
@@ -207,7 +208,31 @@ class ReportViewModel @Inject constructor(
                 }
             }
         }.onFailure {
-            _markReport.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+            _reportByTaskIdFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+        }
+    }
+
+    fun getReportById(reportId: Int) = viewModelScope.launch {
+        _reportFlow.value = EmpTaskRegState.Loading
+
+        val authResult = withContext(Dispatchers.IO){
+            authRepository.getTokenFromDataStorage()
+        }
+
+        authResult.onSuccess {token ->
+            val result = withContext(Dispatchers.IO){
+                reportRepository.getReportById(reportId,token)
+            }
+            result.onSuccess {
+                _reportFlow.value = EmpTaskRegState.Success(it)
+            }.onFailure {
+                _reportFlow.value = when(it){
+                    is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
+                    else -> EmpTaskRegState.Failure(Exception("Error during getting report by Id: Check your connection"))
+                }
+            }
+        }.onFailure {
+            _reportFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
     }
 

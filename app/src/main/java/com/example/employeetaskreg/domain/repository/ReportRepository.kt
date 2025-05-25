@@ -7,6 +7,7 @@ import java.io.File
 interface ReportRepository {
     suspend fun getReportList(authToken:String):Result<List<Report>>
 
+    suspend fun getReportById(reportId:Int,authToken:String):Result<Report>
     suspend fun addReport(report: AddReportRequest, file: File?, authToken:String):Result<Unit>
 
     suspend fun downloadReport(reportId:Int,authToken:String):Result<ByteArray>

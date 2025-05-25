@@ -75,7 +75,7 @@ fun SearchSec(searchViewModel: SearchViewModel,
             trailingIcon = {
                 if (textFieldState.text.isNotEmpty()) {
                     Text(
-                        text = "Очистить",
+                        text = stringResource(id = R.string.clear),
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
                         modifier = Modifier
                             .clickable {
@@ -102,7 +102,7 @@ fun SearchSec(searchViewModel: SearchViewModel,
         if (expanded) {
             when (searchHistoryState.value) {
                 is EmpTaskRegState.Loading -> {
-                    Text("Loading search history...")
+                    Text(stringResource(id = R.string.loading_search_history))
                 }
 
                 is EmpTaskRegState.Success -> {
@@ -110,7 +110,7 @@ fun SearchSec(searchViewModel: SearchViewModel,
                         (searchHistoryState.value as EmpTaskRegState.Success<List<String>>).result
                     if (history.isNotEmpty()) {
                         Text(
-                            text = "Очистить историю",
+                            text = stringResource(id = R.string.clear_search_history),
                             color = MaterialTheme.colorScheme.onSecondaryContainer,
                             modifier = Modifier
                                 .clickable {
@@ -135,16 +135,16 @@ fun SearchSec(searchViewModel: SearchViewModel,
                             }
                         }
                     } else {
-                        Text("История поиска пуста.")
+                        Text(stringResource(id = R.string.search_history_empty))
                     }
                 }
 
                 is EmpTaskRegState.Failure -> {
-                    Text("Не удалось загрузить историю поиска")
+                    Text(stringResource(id = R.string.cant_load_search_history))
                 }
 
                 else -> {
-                    Text("Загрузка истории...")
+                    Text(stringResource(id = R.string.loading_search_history))
                 }
             }
         }

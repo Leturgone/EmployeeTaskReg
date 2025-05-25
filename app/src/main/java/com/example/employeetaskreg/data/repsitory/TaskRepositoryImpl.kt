@@ -31,6 +31,19 @@ class TaskRepositoryImpl @Inject constructor(private val api:EmployeeTaskRegApi)
         }
     }
 
+    override suspend fun getTaskById(taskId: Int, authToken: String): Result<Task> {
+        return try {
+            val result = api.getTaskById("Bearer $authToken", taskId.toString())
+            Result.success(result)
+        }catch (e: HttpException){
+            Log.e("getTaskById",e.toString())
+            Result.failure(e)
+        }catch(e:Exception){
+            Log.e("getTaskById",e.toString())
+            Result.failure(e)
+        }
+    }
+
     private fun convertMillisToDate(millis: Long): String {
         val formatter = DateTimeFormatter.ofPattern("yyy-MM-dd")
             .withZone(ZoneId.systemDefault())
@@ -39,7 +52,7 @@ class TaskRepositoryImpl @Inject constructor(private val api:EmployeeTaskRegApi)
 
     override suspend fun getTaskList(authToken: String): Result<List<Task>> {
         return try {
-            val response = api.getTasks("Bearer $authToken").sortedBy { it.id }
+            val response = api.getTasks("Bearer $authToken").sortedBy { it.id }.reversed()
             Result.success(response)
         }catch (e:HttpException){
             Log.e("getTaskList",e.toString())

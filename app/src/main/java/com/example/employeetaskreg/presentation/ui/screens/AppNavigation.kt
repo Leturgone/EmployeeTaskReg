@@ -12,7 +12,7 @@ import com.example.employeetaskreg.presentation.ui.screens.logRegScreen.LogScree
 import com.example.employeetaskreg.presentation.ui.screens.logRegScreen.RegScreen
 import com.example.employeetaskreg.presentation.ui.screens.optScreen.OptScreen
 import com.example.employeetaskreg.presentation.ui.screens.profileScreen.ProfileScreen
-import com.example.employeetaskreg.presentation.ui.screens.respScreen.RespScreen
+import com.example.employeetaskreg.presentation.ui.screens.respScreen.ReportScreen
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.NewTaskScreen
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.SetEmployeeScreen
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.TaskScreen
@@ -44,7 +44,7 @@ fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController,
         composable("set_employee") { SetEmployeeScreen(navController)  }
         composable("opt") { OptScreen(navController, themeViewModel = themeViewModel, profileViewModel = profileViewModel) }
         composable("emp_list"){ EmployeesScreen() }
-        composable("resp"){ RespScreen(profileViewModel) }
+        composable("resp"){ ReportScreen(profileViewModel) }
         composable("profile"){ ProfileScreen(navController,profileViewModel) }
     }
 }

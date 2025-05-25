@@ -1,7 +1,6 @@
 package com.example.employeetaskreg.data.api.dto
 
 data class AddReportRequest(
-    val reportDate:String,
     val documentName:String? = "",
     val status:String = "Ожидание",
     val taskId:Int,

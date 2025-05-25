@@ -137,14 +137,15 @@ interface EmployeeTaskRegApi {
     )
 
     @GET("/getReport/{reportId}")
-    suspend fun getReportById()
+    suspend fun getReportById(
+        @Header("Authorization") token: String,
+        @Path("reportId") reportId: String,
+    ):Report
 
     @GET("/getTask/{taskId}")
-    suspend fun getTaskById()
-
-
-
-
-
+    suspend fun getTaskById(
+        @Header("Authorization") token: String,
+        @Path("taskId") taskId: String,
+    ):Task
 
 }
