@@ -11,6 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -22,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.employeetaskreg.presentation.ui.screens.AppNavigation
 import com.example.employeetaskreg.presentation.ui.screens.BottomNavigationBar
 import com.example.employeetaskreg.presentation.ui.theme.EmployeeTaskRegTheme
+import com.example.employeetaskreg.presentation.viewmodel.AppThemeViewModel
 import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,15 +47,19 @@ class MainActivity : ComponentActivity() {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            EmployeeTaskRegTheme {
+            val themeViewModel: AppThemeViewModel = hiltViewModel()
+            val isDarkTheme = themeViewModel.isDarkMode.collectAsState()
+
+            EmployeeTaskRegTheme(darkTheme = isDarkTheme.value) {
                 SetBarColor(color = MaterialTheme.colorScheme.background)
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen()
+                    MainScreen(themeViewModel)
                 }
             }
         }
@@ -62,7 +68,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun MainScreen(){
+fun MainScreen(themeViewModel: AppThemeViewModel) {
     val navController = rememberNavController()
     //Получение текущего состояния экрана
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
@@ -76,7 +82,7 @@ fun MainScreen(){
         }
     ) {
             innerPadding ->
-        AppNavigation(innerPadding = innerPadding, navController = navController,profileViewModel)
+        AppNavigation(innerPadding = innerPadding, navController = navController,themeViewModel,profileViewModel)
 
     }
 }

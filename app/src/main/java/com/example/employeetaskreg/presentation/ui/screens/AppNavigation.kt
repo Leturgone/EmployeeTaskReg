@@ -16,11 +16,14 @@ import com.example.employeetaskreg.presentation.ui.screens.respScreen.RespScreen
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.NewTaskScreen
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.SetEmployeeScreen
 import com.example.employeetaskreg.presentation.ui.screens.tasksScreen.TaskScreen
+import com.example.employeetaskreg.presentation.viewmodel.AppThemeViewModel
 import com.example.employeetaskreg.presentation.viewmodel.ProfileViewModel
 
 
 @Composable
-fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController, profileViewModel: ProfileViewModel){
+fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController,
+                  themeViewModel: AppThemeViewModel,
+                  profileViewModel: ProfileViewModel){
     NavHost(
         navController = navController,
         startDestination = "reg",
@@ -39,7 +42,7 @@ fun AppNavigation(innerPadding: PaddingValues, navController: NavHostController,
             val dirId = it.arguments?.getString("directorId")?.toInt()
             NewTaskScreen(navController,employeeName = empName,employeeId =empId, directorId = dirId) }
         composable("set_employee") { SetEmployeeScreen(navController)  }
-        composable("opt") { OptScreen(navController, profileViewModel = profileViewModel) }
+        composable("opt") { OptScreen(navController, themeViewModel = themeViewModel, profileViewModel = profileViewModel) }
         composable("emp_list"){ EmployeesScreen() }
         composable("resp"){ RespScreen(profileViewModel) }
         composable("profile"){ ProfileScreen(navController,profileViewModel) }
