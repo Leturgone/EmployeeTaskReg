@@ -18,7 +18,7 @@ class ReportRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegA
 
     override suspend fun getReportList(authToken: String): Result<List<Report>> {
         return try {
-            val response = api.getReports("Bearer $authToken").sortedBy { it.id }
+            val response = api.getReports("Bearer $authToken").sortedBy { it.id }.reversed()
             Result.success(response)
         }catch (e: HttpException){
             Log.e("getReportList",e.toString())

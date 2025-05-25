@@ -52,7 +52,7 @@ class TaskRepositoryImpl @Inject constructor(private val api:EmployeeTaskRegApi)
 
     override suspend fun getTaskList(authToken: String): Result<List<Task>> {
         return try {
-            val response = api.getTasks("Bearer $authToken").sortedBy { it.id }
+            val response = api.getTasks("Bearer $authToken").sortedBy { it.id }.reversed()
             Result.success(response)
         }catch (e:HttpException){
             Log.e("getTaskList",e.toString())
