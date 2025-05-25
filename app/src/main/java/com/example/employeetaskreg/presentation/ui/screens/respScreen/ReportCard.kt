@@ -156,10 +156,10 @@ fun ReportCard(report:Report, role:String,
                     Arrangement.SpaceEvenly , Alignment.Start) {
                     when (reportFlow.value) {
                         is EmpTaskRegState.Failure -> {
-                            LaunchedEffect(markReport.value) {
+                            LaunchedEffect(reportFlow.value) {
                                 showToast = true
                                 errorMessage =
-                                    (markReport.value as EmpTaskRegState.Failure).exception.toString()
+                                    (reportFlow.value as EmpTaskRegState.Failure).exception.toString()
                             }
                         }
 
@@ -279,12 +279,11 @@ fun ReportCard(report:Report, role:String,
                                     }
                                 }
                             }
-
-                            Spacer(modifier = Modifier.height(220.dp))
                         }
 
                         EmpTaskRegState.Waiting -> null
                     }
+                    Spacer(modifier = Modifier.height(220.dp))
                 }
 
             }
