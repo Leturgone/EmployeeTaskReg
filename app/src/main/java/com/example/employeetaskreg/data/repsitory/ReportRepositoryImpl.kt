@@ -32,6 +32,19 @@ class ReportRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegA
         }
     }
 
+    override suspend fun getReportById(reportId: Int, authToken: String): Result<Report> {
+        return try {
+            val result = api.getReportById("Bearer $authToken",reportId.toString())
+            Result.success(result)
+        }catch (e: HttpException){
+            Log.e("getReportById",e.toString())
+            Result.failure(e)
+        }catch(e:Exception){
+            Log.i("getReportById",e.toString())
+            Result.failure(e)
+        }
+    }
+
     private fun convertMillisToDate(millis: Long): String {
         val formatter = DateTimeFormatter.ofPattern("yyy-MM-dd")
             .withZone(ZoneId.systemDefault())
