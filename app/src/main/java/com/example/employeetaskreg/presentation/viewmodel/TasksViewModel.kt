@@ -28,8 +28,10 @@ class TasksViewModel @Inject constructor(
     private val application: Application,
     private val taskRepository: TaskRepository):ViewModel() {
 
-    private val _taskListFlow = MutableStateFlow<EmpTaskRegState<List<Task>>>(EmpTaskRegState.Waiting)
+    private val _taskFlow = MutableStateFlow<EmpTaskRegState<Task>>(EmpTaskRegState.Waiting)
+    val taskFlow: StateFlow<EmpTaskRegState<Task>> = _taskFlow
 
+    private val _taskListFlow = MutableStateFlow<EmpTaskRegState<List<Task>>>(EmpTaskRegState.Waiting)
     val taskListFlow: StateFlow<EmpTaskRegState<List<Task>>> = _taskListFlow
 
     private val _addTaskFlow = MutableStateFlow<EmpTaskRegState<Unit>>(EmpTaskRegState.Waiting)
@@ -48,6 +50,31 @@ class TasksViewModel @Inject constructor(
     fun resetDownloadState()  = viewModelScope.launch{
         _downloadTask.value = EmpTaskRegState.Waiting
     }
+
+    fun getTaskById(taskId: Int) = viewModelScope.launch {
+        _taskFlow.value = EmpTaskRegState.Loading
+        val authResult = withContext(Dispatchers.IO){
+            authRepository.getTokenFromDataStorage()
+        }
+        authResult.onSuccess {token ->
+            val result = withContext(Dispatchers.IO){
+                taskRepository.getTaskById(taskId,token)
+            }
+            result.onSuccess {
+                _taskFlow.value = EmpTaskRegState.Success(it)
+            }.onFailure {
+                _taskFlow.value = when(it){
+                    is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
+                    else -> EmpTaskRegState.Failure(Exception("Error during getting task by id: Check your connection"))
+                }
+            }
+
+        }.onFailure {
+            _taskFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+        }
+    }
+
+
     fun getTaskList() = viewModelScope.launch {
         _taskListFlow.value = EmpTaskRegState.Loading
         val authResult = withContext(Dispatchers.IO){
@@ -71,6 +98,7 @@ class TasksViewModel @Inject constructor(
             _taskListFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
     }
+
 
     fun addTask(title:String, taskDesc:String, documentName:String?,
                 startDate:String, endDate:String,
@@ -106,6 +134,7 @@ class TasksViewModel @Inject constructor(
             _addTaskFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
     }
+
 
     fun downloadTask(taskId:Int) = viewModelScope.launch {
         _downloadTask.value = EmpTaskRegState.Loading
