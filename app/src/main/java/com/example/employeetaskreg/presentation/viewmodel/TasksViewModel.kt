@@ -53,6 +53,9 @@ class TasksViewModel @Inject constructor(
     fun resetDownloadState()  = viewModelScope.launch{
         _downloadTask.value = EmpTaskRegState.Waiting
     }
+    fun resetDeleteState()  = viewModelScope.launch{
+        _deleteTaskFlow.value = EmpTaskRegState.Waiting
+    }
 
     fun getTaskById(taskId: Int) = viewModelScope.launch {
         _taskFlow.value = EmpTaskRegState.Loading
@@ -88,7 +91,9 @@ class TasksViewModel @Inject constructor(
                 taskRepository.deleteTask(taskId,token)
             }
             result.onSuccess {
+                getTaskList()
                 _deleteTaskFlow.value = EmpTaskRegState.Success(it)
+                resetDeleteState()
             }.onFailure {
                 _deleteTaskFlow.value = when(it){
                     is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
