@@ -124,6 +124,7 @@ fun SearchSec(searchViewModel: SearchViewModel,
                                 val historyElement = history[it]
                                 Text(
                                     text = historyElement,
+                                    color = MaterialTheme.colorScheme.onSecondaryContainer,
                                     modifier = Modifier
                                         .padding(8.dp)
                                         .clickable {
