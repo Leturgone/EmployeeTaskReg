@@ -48,6 +48,10 @@ class ReportViewModel @Inject constructor(
 
     private val _reportFlow = MutableStateFlow<EmpTaskRegState<Report>>(EmpTaskRegState.Waiting)
     val reportFlow: StateFlow<EmpTaskRegState<Report>> = _reportFlow
+
+    private val _deleteReportFlow = MutableStateFlow<EmpTaskRegState<Unit>>(EmpTaskRegState.Waiting)
+    val deleteReportFlow: StateFlow<EmpTaskRegState<Unit>> = _deleteReportFlow
+
     fun setSelectedReportFileUri(uri: Uri?)  = viewModelScope.launch{
         _selectedFileUri.value = uri
     }
@@ -55,7 +59,9 @@ class ReportViewModel @Inject constructor(
     fun resetDownloadState()  = viewModelScope.launch{
         _downloadReport.value = EmpTaskRegState.Waiting
     }
-
+    fun resetDeleteState() = viewModelScope.launch {
+        _deleteReportFlow.value = EmpTaskRegState.Waiting
+    }
     fun resetMarkState() = viewModelScope.launch {
         _markReport.value = EmpTaskRegState.Waiting
     }
@@ -233,6 +239,31 @@ class ReportViewModel @Inject constructor(
             }
         }.onFailure {
             _reportFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+        }
+    }
+
+    fun deleteTaskById(reportId: Int) = viewModelScope.launch {
+        _deleteReportFlow.value = EmpTaskRegState.Loading
+        val authResult = withContext(Dispatchers.IO){
+            authRepository.getTokenFromDataStorage()
+        }
+        authResult.onSuccess {token ->
+            val result = withContext(Dispatchers.IO){
+                reportRepository.deleteReport(reportId,token)
+            }
+            result.onSuccess {
+                getReportList()
+                _deleteReportFlow.value = EmpTaskRegState.Success(it)
+                resetDeleteState()
+            }.onFailure {
+                _deleteReportFlow.value = when(it){
+                    is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
+                    else -> EmpTaskRegState.Failure(Exception("Error during deleting report by id: Check your connection"))
+                }
+            }
+
+        }.onFailure {
+            _deleteReportFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
     }
 

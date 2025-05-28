@@ -43,7 +43,7 @@ fun ReportScreen(
 
     var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
-    var respList by remember { mutableStateOf(emptyList<Report>()) }
+
     var role by remember { mutableStateOf("") }
 
     Box {
@@ -64,17 +64,29 @@ fun ReportScreen(
                 fontSize = 25.sp,
                 modifier = Modifier.padding(bottom = 16.dp, top = 16.dp)
             )
-
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(respList.size) {
-                    val resp = respList[it]
-                    Spacer(modifier = Modifier.height(30.dp))
-                    ReportCard(resp, role = role)
+            when(respListState.value){
+                is EmpTaskRegState.Failure -> LaunchedEffect(respListState.value) {
+                    showToast = true
+                    errorMessage = (respListState.value as EmpTaskRegState.Failure).exception.toString()
                 }
+                EmpTaskRegState.Loading -> CircularProgressIndicator()
+                is EmpTaskRegState.Success -> {
+                    val respList = (respListState.value as EmpTaskRegState.Success<List<Report>>).result
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(respList.size) {
+                            val resp = respList[it]
+                            Spacer(modifier = Modifier.height(30.dp))
+                            ReportCard(resp, role = role)
+                        }
+                    }
+                }
+                EmpTaskRegState.Waiting -> null
             }
+
+
         }
         when(profileState.value){
             is EmpTaskRegState.Failure -> LaunchedEffect(profileState.value) {
@@ -95,17 +107,6 @@ fun ReportScreen(
                 LaunchedEffect(Unit){
                     reportViewModel.getReportList()
                 }
-
-                when(respListState.value){
-                    is EmpTaskRegState.Failure -> LaunchedEffect(respListState.value) {
-                        showToast = true
-                        errorMessage = (respListState.value as EmpTaskRegState.Failure).exception.toString()
-                    }
-                    EmpTaskRegState.Loading -> CircularProgressIndicator()
-                    is EmpTaskRegState.Success -> respList = (respListState.value as EmpTaskRegState.Success<List<Report>>).result
-                    EmpTaskRegState.Waiting -> null
-                }
-
 
             }
             EmpTaskRegState.Waiting -> null

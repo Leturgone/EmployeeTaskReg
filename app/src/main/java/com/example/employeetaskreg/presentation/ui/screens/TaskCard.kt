@@ -188,8 +188,8 @@ fun TaskCard(task: Task,
                                 }
                                 EmpTaskRegState.Loading -> CircularProgressIndicator()
                                 is EmpTaskRegState.Success -> {
-                                    LaunchedEffect(Unit){
-                                        taskViewModel.getTaskById(task.id)
+                                    LaunchedEffect(addReportState.value){
+                                        taskViewModel.getTaskList()
                                         reportViewModel.resetAddReportState()
                                     }
                                 }
@@ -210,9 +210,9 @@ fun TaskCard(task: Task,
                                     Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.TopEnd){
                                         when(deleteTask.value){
                                             is EmpTaskRegState.Failure -> {
-                                                LaunchedEffect(addReportState.value) {
+                                                LaunchedEffect(deleteTask.value) {
                                                     showToast = true
-                                                    errorMessage = (addReportState.value as EmpTaskRegState.Failure).exception.toString()
+                                                    errorMessage = (deleteTask.value as EmpTaskRegState.Failure).exception.toString()
                                                 }
 
                                             }

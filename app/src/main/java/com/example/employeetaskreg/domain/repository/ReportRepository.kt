@@ -18,4 +18,5 @@ interface ReportRepository {
 
     suspend fun updateReport(reportId:Int, file: File?, authToken:String):Result<Unit>
 
+    suspend fun deleteReport(reportId:Int,authToken:String):Result<Unit>
 }

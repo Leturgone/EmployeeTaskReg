@@ -155,5 +155,10 @@ interface EmployeeTaskRegApi {
         @Path("taskId") taskId: String,
     )
 
+    @DELETE("/deleteReport/{reportId}")
+    suspend fun deleteReportById(
+        @Header("Authorization") token: String,
+        @Path("reportId") taskId: String,
+    )
 
 }
