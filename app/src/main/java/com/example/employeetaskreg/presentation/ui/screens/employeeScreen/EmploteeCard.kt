@@ -163,6 +163,7 @@ fun EmployeeCard(employeeName:String, employeeId:Int, setListItem:Boolean = fals
                                 TaskCard(
                                     task = (employeeCurrentTask.value as EmpTaskRegState.Success<Task>).result,
                                     role = "director",
+                                    noDelete = true
                                 )
                             }
                             EmpTaskRegState.Waiting -> null
