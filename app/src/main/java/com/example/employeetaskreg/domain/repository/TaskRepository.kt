@@ -20,4 +20,6 @@ interface TaskRepository {
 
     suspend fun downloadTask(taskId:Int,authToken:String):Result<ByteArray>
 
+    suspend fun deleteTask(taskId:Int,authToken:String):Result<Unit>
+
 }
