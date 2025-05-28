@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -20,6 +21,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -63,6 +65,7 @@ fun ReportCard(report:Report, role:String,
     var fileTitle by remember { mutableStateOf(downloadFile) }
 
     val downloadReport = reportViewModel.downloadReport.collectAsState()
+    val deleteReport = reportViewModel.deleteReportFlow.collectAsState()
 
     val markReport = reportViewModel.markReport.collectAsState()
 
@@ -132,6 +135,7 @@ fun ReportCard(report:Report, role:String,
         ModalBottomSheet(
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             onDismissRequest = {
+                reportViewModel.resetDeleteState()
                 reportViewModel.resetDownloadState()
                 reportViewModel.resetMarkState()
                 showBottomSheet = false
@@ -167,16 +171,56 @@ fun ReportCard(report:Report, role:String,
                         is EmpTaskRegState.Success -> {
                             val loadedReport =
                                 (reportFlow.value as EmpTaskRegState.Success<Report>).result
+                            Box {
+                                Text(
+                                    text = "${stringResource(id = R.string.resp_for_task)} ${loadedReport.taskId}",
+                                    fontSize = 25.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black,
+                                    textAlign = TextAlign.Start,
+                                    modifier = Modifier
+                                        .width(500.dp)
+                                )
+                                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.TopEnd){
+                                    when(deleteReport.value){
+                                        is EmpTaskRegState.Failure -> {
+                                            LaunchedEffect(deleteReport.value) {
+                                                showToast = true
+                                                errorMessage = (deleteReport.value as EmpTaskRegState.Failure).exception.toString()
+                                            }
 
-                            Text(
-                                text = "${stringResource(id = R.string.resp_for_task)} ${loadedReport.taskId}",
-                                fontSize = 25.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black,
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier
-                                    .width(500.dp)
-                            )
+                                        }
+                                        EmpTaskRegState.Loading -> CircularProgressIndicator()
+                                        is EmpTaskRegState.Success -> {
+                                            Text(
+                                                text = stringResource(R.string.deleted),
+                                                fontSize = 20.sp,
+                                                fontWeight = FontWeight.Normal,
+                                                color = GreenSoft,
+                                                textAlign = TextAlign.Start,
+                                                modifier = Modifier
+                                                    .width(200.dp)
+                                            )
+                                        }
+                                        EmpTaskRegState.Waiting -> {
+                                            when (role) {
+                                                "employee" -> {
+                                                    IconButton(onClick = {
+                                                        reportViewModel.deleteTaskById(loadedReport.id)
+                                                    }) {
+                                                        Icon(
+                                                            imageVector = Icons.Default.Delete,
+                                                            contentDescription = "deleteTaskButton",
+                                                            modifier = Modifier,
+                                                            tint = RedSoft
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                             Text(
                                 text = loadedReport.status,
                                 fontSize = 20.sp,
