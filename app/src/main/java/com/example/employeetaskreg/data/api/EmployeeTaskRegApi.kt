@@ -10,6 +10,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Multipart
@@ -147,5 +148,12 @@ interface EmployeeTaskRegApi {
         @Header("Authorization") token: String,
         @Path("taskId") taskId: String,
     ):Task
+
+    @DELETE("/deleteTask/{taskId}")
+    suspend fun deleteTaskById(
+        @Header("Authorization") token: String,
+        @Path("taskId") taskId: String,
+    )
+
 
 }

@@ -37,6 +37,9 @@ class TasksViewModel @Inject constructor(
     private val _addTaskFlow = MutableStateFlow<EmpTaskRegState<Unit>>(EmpTaskRegState.Waiting)
     val addTaskFlow: StateFlow<EmpTaskRegState<Unit>> = _addTaskFlow
 
+    private val _deleteTaskFlow = MutableStateFlow<EmpTaskRegState<Unit>>(EmpTaskRegState.Waiting)
+    val deleteTaskFlow: StateFlow<EmpTaskRegState<Unit>> = _deleteTaskFlow
+
     private val _selectedFileUri = MutableStateFlow<Uri?>(null)
 
     private val _downloadTask = MutableStateFlow<EmpTaskRegState<File>>(EmpTaskRegState.Waiting)
@@ -49,6 +52,9 @@ class TasksViewModel @Inject constructor(
 
     fun resetDownloadState()  = viewModelScope.launch{
         _downloadTask.value = EmpTaskRegState.Waiting
+    }
+    fun resetDeleteState()  = viewModelScope.launch{
+        _deleteTaskFlow.value = EmpTaskRegState.Waiting
     }
 
     fun getTaskById(taskId: Int) = viewModelScope.launch {
@@ -74,6 +80,31 @@ class TasksViewModel @Inject constructor(
         }
     }
 
+
+    fun deleteTaskById(taskId: Int) = viewModelScope.launch {
+        _deleteTaskFlow.value = EmpTaskRegState.Loading
+        val authResult = withContext(Dispatchers.IO){
+            authRepository.getTokenFromDataStorage()
+        }
+        authResult.onSuccess {token ->
+            val result = withContext(Dispatchers.IO){
+                taskRepository.deleteTask(taskId,token)
+            }
+            result.onSuccess {
+                getTaskList()
+                _deleteTaskFlow.value = EmpTaskRegState.Success(it)
+                resetDeleteState()
+            }.onFailure {
+                _deleteTaskFlow.value = when(it){
+                    is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
+                    else -> EmpTaskRegState.Failure(Exception("Error during deleting task by id: Check your connection"))
+                }
+            }
+
+        }.onFailure {
+            _deleteTaskFlow.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
+        }
+    }
 
     fun getTaskList() = viewModelScope.launch {
         _taskListFlow.value = EmpTaskRegState.Loading
@@ -173,5 +204,7 @@ class TasksViewModel @Inject constructor(
             _downloadTask.value = EmpTaskRegState.Failure(Exception("No token found. Please login first."))
         }
     }
+
+
 
 }

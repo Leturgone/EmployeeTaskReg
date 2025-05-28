@@ -52,7 +52,6 @@ fun TaskScreen(navController: NavHostController,
 
     var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
-    var taskList by remember { mutableStateOf(emptyList<Task>()) }
     var role by remember { mutableStateOf("") }
 
     Box {
@@ -73,18 +72,29 @@ fun TaskScreen(navController: NavHostController,
                 fontSize = 25.sp,
                 modifier = Modifier.padding(bottom = 16.dp, top = 16.dp)
             )
-
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(taskList.size) {
-                    val task = taskList[it]
-                    Spacer(modifier = Modifier.height(30.dp))
-                    TaskCard(task,role)
-
+            when(taskListState.value){
+                is EmpTaskRegState.Failure -> LaunchedEffect(taskListState.value) {
+                    showToast = true
+                    errorMessage = (taskListState.value as EmpTaskRegState.Failure).exception.toString()
                 }
+                EmpTaskRegState.Loading -> CircularProgressIndicator()
+                is EmpTaskRegState.Success -> {
+                    val taskList = (taskListState.value as EmpTaskRegState.Success<List<Task>>).result
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(taskList.size) {
+                            val task = taskList[it]
+                            Spacer(modifier = Modifier.height(30.dp))
+                            TaskCard(task,role)
+
+                        }
+                    }
+                }
+                EmpTaskRegState.Waiting -> null
             }
+
         }
         when(profileState.value){
             is EmpTaskRegState.Failure -> LaunchedEffect(profileState.value) {
@@ -119,17 +129,6 @@ fun TaskScreen(navController: NavHostController,
                 LaunchedEffect(Unit){
                     tasksViewModel.getTaskList()
                 }
-
-                when(taskListState.value){
-                    is EmpTaskRegState.Failure -> LaunchedEffect(taskListState.value) {
-                        showToast = true
-                        errorMessage = (taskListState.value as EmpTaskRegState.Failure).exception.toString()
-                    }
-                    EmpTaskRegState.Loading -> CircularProgressIndicator()
-                    is EmpTaskRegState.Success -> taskList = (taskListState.value as EmpTaskRegState.Success<List<Task>>).result
-                    EmpTaskRegState.Waiting -> null
-                }
-
 
             }
             EmpTaskRegState.Waiting -> null

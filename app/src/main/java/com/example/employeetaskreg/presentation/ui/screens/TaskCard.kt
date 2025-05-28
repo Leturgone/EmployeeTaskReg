@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material3.Card
@@ -20,6 +21,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -58,6 +60,7 @@ import java.io.File
 @Composable
 fun TaskCard(task: Task,
              role:String,
+             noDelete:Boolean = false,
              taskViewModel: TasksViewModel = hiltViewModel(),
              reportViewModel: ReportViewModel = hiltViewModel()) {
 
@@ -74,6 +77,7 @@ fun TaskCard(task: Task,
     var downloadFileTitle by remember { mutableStateOf(downloadFile) }
 
     val downloadTask = taskViewModel.downloadTask.collectAsState()
+    val deleteTask = taskViewModel.deleteTaskFlow.collectAsState()
     val reportByTask = reportViewModel.reportByTaskIdFlow.collectAsState()
 
     var showToast by remember { mutableStateOf(false) }
@@ -138,6 +142,7 @@ fun TaskCard(task: Task,
             containerColor = MaterialTheme.colorScheme.secondaryContainer,
             onDismissRequest = {
                 taskViewModel.resetDownloadState()
+                taskViewModel.resetDeleteState()
                 reportViewModel.resetAddReportState()
                 showBottomSheet = false
             },
@@ -191,15 +196,59 @@ fun TaskCard(task: Task,
 
                                 EmpTaskRegState.Waiting -> null
                             }
-                            Text(
-                                text = "${stringResource(id = R.string.task)} ${loadedTask.id}",
-                                fontSize = 25.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.Black,
-                                textAlign = TextAlign.Start,
-                                modifier = Modifier
-                                    .width(200.dp)
-                            )
+                            Box{
+                                Text(
+                                    text = "${stringResource(id = R.string.task)} ${loadedTask.id}",
+                                    fontSize = 25.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.Black,
+                                    textAlign = TextAlign.Start,
+                                    modifier = Modifier
+                                        .width(200.dp)
+                                )
+                                if(!noDelete){
+                                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.TopEnd){
+                                        when(deleteTask.value){
+                                            is EmpTaskRegState.Failure -> {
+                                                LaunchedEffect(addReportState.value) {
+                                                    showToast = true
+                                                    errorMessage = (addReportState.value as EmpTaskRegState.Failure).exception.toString()
+                                                }
+
+                                            }
+                                            EmpTaskRegState.Loading -> CircularProgressIndicator()
+                                            is EmpTaskRegState.Success -> {
+                                                Text(
+                                                    text = stringResource(R.string.deleted),
+                                                    fontSize = 20.sp,
+                                                    fontWeight = FontWeight.Normal,
+                                                    color = GreenSoft,
+                                                    textAlign = TextAlign.Start,
+                                                    modifier = Modifier
+                                                        .width(200.dp)
+                                                )
+                                            }
+                                            EmpTaskRegState.Waiting -> {
+                                                when (role) {
+                                                    "director" -> {
+                                                        IconButton(onClick = {
+                                                            taskViewModel.deleteTaskById(loadedTask.id)
+                                                        }) {
+                                                            Icon(
+                                                                imageVector = Icons.Default.Delete,
+                                                                contentDescription = "deleteTaskButton",
+                                                                modifier = Modifier,
+                                                                tint = RedSoft
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
                             Text(
                                 text = loadedTask.title,
                                 fontSize = 20.sp,

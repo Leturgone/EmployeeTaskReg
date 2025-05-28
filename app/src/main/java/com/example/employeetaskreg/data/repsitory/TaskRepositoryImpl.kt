@@ -127,4 +127,17 @@ class TaskRepositoryImpl @Inject constructor(private val api:EmployeeTaskRegApi)
         }
     }
 
+    override suspend fun deleteTask(taskId: Int, authToken: String): Result<Unit> {
+        return try {
+            val result = api.deleteTaskById("Bearer $authToken",taskId.toString())
+            Result.success(result)
+        }catch (e:HttpException){
+            Log.e("deleteTask",e.toString())
+            Result.failure(e)
+        }catch(e:Exception){
+            Log.e("deleteTask",e.toString())
+            Result.failure(e)
+        }
+    }
+
 }
