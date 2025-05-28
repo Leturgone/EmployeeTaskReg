@@ -123,4 +123,17 @@ class ReportRepositoryImpl @Inject constructor(private val api: EmployeeTaskRegA
         }
     }
 
+    override suspend fun deleteReport(reportId: Int, authToken: String): Result<Unit> {
+        return try {
+            val response = api.deleteReportById("Bearer $authToken",reportId.toString())
+            Result.success(response)
+        }catch (e: HttpException){
+            Log.e("deleteReport",e.toString())
+            Result.failure(e)
+        }catch(e:Exception){
+            Log.i("deleteReport",e.toString())
+            Result.failure(e)
+        }
+    }
+
 }
