@@ -242,7 +242,7 @@ class ReportViewModel @Inject constructor(
         }
     }
 
-    fun deleteTaskById(reportId: Int) = viewModelScope.launch {
+    fun deleteReportById(reportId: Int) = viewModelScope.launch {
         _deleteReportFlow.value = EmpTaskRegState.Loading
         val authResult = withContext(Dispatchers.IO){
             authRepository.getTokenFromDataStorage()
@@ -252,9 +252,7 @@ class ReportViewModel @Inject constructor(
                 reportRepository.deleteReport(reportId,token)
             }
             result.onSuccess {
-                getReportList()
                 _deleteReportFlow.value = EmpTaskRegState.Success(it)
-                resetDeleteState()
             }.onFailure {
                 _deleteReportFlow.value = when(it){
                     is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
