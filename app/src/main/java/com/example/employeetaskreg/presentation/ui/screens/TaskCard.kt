@@ -227,6 +227,10 @@ fun TaskCard(task: Task,
                                                     modifier = Modifier
                                                         .width(200.dp)
                                                 )
+                                                LaunchedEffect(Unit){
+                                                    taskViewModel.resetDeleteState()
+                                                    taskViewModel.getTaskList()
+                                                }
                                             }
                                             EmpTaskRegState.Waiting -> {
                                                 when (role) {

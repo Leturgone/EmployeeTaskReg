@@ -201,12 +201,16 @@ fun ReportCard(report:Report, role:String,
                                                 modifier = Modifier
                                                     .width(200.dp)
                                             )
+                                            LaunchedEffect(Unit){
+                                                reportViewModel.resetDeleteState()
+                                                reportViewModel.getReportList()
+                                            }
                                         }
                                         EmpTaskRegState.Waiting -> {
                                             when (role) {
                                                 "employee" -> {
                                                     IconButton(onClick = {
-                                                        reportViewModel.deleteTaskById(loadedReport.id)
+                                                        reportViewModel.deleteReportById(loadedReport.id)
                                                     }) {
                                                         Icon(
                                                             imageVector = Icons.Default.Delete,
@@ -315,6 +319,7 @@ fun ReportCard(report:Report, role:String,
                                                     reportViewModel.getReportById(loadedReport.id)
                                                     reportViewModel.resetMarkState()
                                                     reportViewModel.resetDownloadState()
+                                                    reportViewModel.getReportList()
                                                 }
                                             }
                                             EmpTaskRegState.Waiting -> null
