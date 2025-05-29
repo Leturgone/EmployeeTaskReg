@@ -91,9 +91,7 @@ class TasksViewModel @Inject constructor(
                 taskRepository.deleteTask(taskId,token)
             }
             result.onSuccess {
-                getTaskList()
                 _deleteTaskFlow.value = EmpTaskRegState.Success(it)
-                resetDeleteState()
             }.onFailure {
                 _deleteTaskFlow.value = when(it){
                     is HttpException -> EmpTaskRegState.Failure(Exception("${it.code()} - ${it.message()}"))
