@@ -28,7 +28,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.employeetaskreg.R
 import com.example.employeetaskreg.domain.model.CompanyWorker
 import com.example.employeetaskreg.domain.repository.EmpTaskRegState
-import com.example.employeetaskreg.presentation.ui.screens.CustomToastMessage
 import com.example.employeetaskreg.presentation.viewmodel.EmployeesViewModel
 import com.example.employeetaskreg.presentation.viewmodel.SearchViewModel
 
@@ -38,7 +37,6 @@ fun EmployeesScreen(viewModel: EmployeesViewModel = hiltViewModel(),searchViewMo
     val employeeListState = viewModel.employeesListFlow.collectAsState()
     val searchText = searchViewModel.searchText.collectAsState()
 
-    var showToast by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
     var employeeList by remember { mutableStateOf(emptyList<CompanyWorker.Employee>()) }
 
@@ -48,11 +46,6 @@ fun EmployeesScreen(viewModel: EmployeesViewModel = hiltViewModel(),searchViewMo
     }
 
     Box(){
-        CustomToastMessage(
-            message = errorMessage,
-            isVisible = showToast,
-            onDismiss = { showToast = false },
-        )
 
         Column(
             modifier = Modifier
@@ -70,12 +63,8 @@ fun EmployeesScreen(viewModel: EmployeesViewModel = hiltViewModel(),searchViewMo
             SearchSec(searchViewModel)
             when(employeeListState.value){
                 is EmpTaskRegState.Failure -> {
-                    LaunchedEffect(employeeListState.value) {
-                        showToast = true
-                        errorMessage =
-                            (employeeListState.value as EmpTaskRegState.Failure).exception.toString()
-
-                    }
+                    errorMessage =
+                        (employeeListState.value as EmpTaskRegState.Failure).exception.toString()
                     Column {
                         Text(text = errorMessage)
                         Button(onClick = { viewModel.searchEmployeeByName(searchText.value) }, ) {
