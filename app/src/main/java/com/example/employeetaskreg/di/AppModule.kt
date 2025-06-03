@@ -47,9 +47,9 @@ class AppModule {
         logging.setLevel(HttpLoggingInterceptor.Level.HEADERS)
 
         val client = OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS) // Увеличение времени ожидания соединения
-            .readTimeout(60, TimeUnit.SECONDS)    // Увеличение времени ожидания чтения данных
-            .writeTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(30, TimeUnit.SECONDS) // Увеличение времени ожидания соединения
+            .readTimeout(30, TimeUnit.SECONDS)    // Увеличение времени ожидания чтения данных
+            .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(logging)
             .build()
         val gson = GsonBuilder()
