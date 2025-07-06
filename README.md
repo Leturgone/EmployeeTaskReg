@@ -8,6 +8,20 @@ width="200" hspace="10" vspace="10">](app/src/main/ic_launcher-playstore.png)
 <br>
 <br><br><br><br><br><br>
 
+
+# Технологический стек
+
+- **Android** – ОС, на которой разработано приложение
+- **Android SDK 35** – Средство разработки приложения
+- **Kotlin** – Основной язык, на котором разработано прилжение
+- **Jetpack Compose** - набор инструментов для построения UI
+- **Clean Architecture**
+- **MVVM** - Архитектурный паттерн
+- **Retrofit** - для обращения к [EmployeeTaskRegApi](https://github.com/Leturgone/EmployeeTaskRegApi)
+- **Dagger Hilt** - для внедрения зависимостей (DI)  
+- **Coroutines + Flow**
+
+
 ## Функционал приложения
 
 | Начальник | Подчиненный |
@@ -40,27 +54,10 @@ width="200" hspace="10" vspace="10">](app/src/main/ic_launcher-playstore.png)
 - На доработке - Красный
 
 
-# Технологический стек
-
-<img src="/demo.gif" align="right" width="250" hspace="10" vspace="10"/>
-
-- **Android** – ОС, на которой разработано приложение
-- **Android SDK 35** – Средство разработки приложения
-- **Kotlin** – Основной язык, на котором разработано прилжение
-- **Jetpack Compose** - набор инструментов для построения UI
-- **Clean Architecture**
-- **MVVM** - Архитектурный паттерн
-- **Retrofit** - для обращения к [EmployeeTaskRegApi](https://github.com/Leturgone/EmployeeTaskRegApi)
-- **Dagger Hilt** - для внедрения зависимостей (DI)  
-- **Coroutines + Flow**
-
-<br><br><br><br><br><br>
-<br><br><br><br><br><br>
+## Интерфейс приложения
 
 
-
-
-# Установка
+## Установка
 1. Скачать apk из последнего релиза;
 2. Установить на устройство.
 3. Запустить сервер следуя [инструкции](https://github.com/Leturgone/EmployeeTaskRegApi/blob/main/README.md)
