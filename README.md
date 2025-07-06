@@ -10,7 +10,7 @@ width="200" hspace="10" vspace="10">](app/src/main/ic_launcher-playstore.png)
 
 ## Функционал приложения
 
-<img src="/demo.gif" align="right" width="220" hspace="10" vspace="10"/>
+<img src="/demo.gif" align="right" width="200" hspace="10" vspace="10"/>
 
 
 | Начальник | Подчиненный |
