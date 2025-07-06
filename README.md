@@ -10,9 +10,6 @@ width="200" hspace="10" vspace="10">](app/src/main/ic_launcher-playstore.png)
 
 ## Функционал приложения
 
-<img src="/demo.gif" align="right" width="200" hspace="10" vspace="10"/>
-
-
 | Начальник | Подчиненный |
 | --- | --- |
 | Просматривть информацию о задачах | Просматривть информацию о задачах |
@@ -36,6 +33,7 @@ width="200" hspace="10" vspace="10">](app/src/main/ic_launcher-playstore.png)
 
 <br>
 
+
 Статус помечается цветами:
 - Принято/Выполнено - Зеленый
 - Ожтдание проверки - Желтый
@@ -43,6 +41,9 @@ width="200" hspace="10" vspace="10">](app/src/main/ic_launcher-playstore.png)
 
 
 # Технологический стек
+
+<img src="/demo.gif" align="right" width="250" hspace="10" vspace="10"/>
+
 - **Android** – ОС, на которой разработано приложение
 - **Android SDK 35** – Средство разработки приложения
 - **Kotlin** – Основной язык, на котором разработано прилжение
@@ -52,6 +53,12 @@ width="200" hspace="10" vspace="10">](app/src/main/ic_launcher-playstore.png)
 - **Retrofit** - для обращения к [EmployeeTaskRegApi](https://github.com/Leturgone/EmployeeTaskRegApi)
 - **Dagger Hilt** - для внедрения зависимостей (DI)  
 - **Coroutines + Flow**
+
+<br><br><br><br><br><br>
+<br><br><br><br><br><br>
+
+
+
 
 # Установка
 1. Скачать apk из последнего релиза;
